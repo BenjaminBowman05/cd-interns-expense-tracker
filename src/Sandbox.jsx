@@ -1,11 +1,11 @@
-
+import PurchaseRequestForm from "./components/PurchaseRequestForm";
 
 const Sandbox = () => {
-    return(
-        <>
-        
-        </>
-    )
-}
+  return (
+    <>
+      <PurchaseRequestForm />
+    </>
+  );
+};
 
-export default Sandbox
+export default Sandbox;
