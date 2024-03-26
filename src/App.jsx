@@ -5,7 +5,6 @@ import './App.css'
 import Sandbox from './Sandbox'
 
 function App() {
-  const [count, setCount] = useState(0)
 
   return (
     <>
