@@ -17,12 +17,7 @@ const PurchaseRequestForm = () => {
     currDate: "",
     items: "",
     purpose: "",
-    programs: [
-      {
-        program: "",
-        cost: 0,
-      },
-    ],
+    programs: [],
     total: 0,
     dateNeeded: "",
     signatures: {
@@ -59,6 +54,14 @@ const PurchaseRequestForm = () => {
 
   const appendProgram = (event) => {
     setSelectedPrograms([...selectedPrograms, event.target.textContent]);
+    setFormInfo({
+      ...formInfo,
+      programs: [
+        ...formInfo.programs,
+        { program: event.target.textContent, cost: 0 },
+      ],
+    });
+    console.log(formInfo);
   };
 
   const deleteProgram = (event) => {
