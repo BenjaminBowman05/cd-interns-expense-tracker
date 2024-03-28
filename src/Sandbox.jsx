@@ -1,9 +1,8 @@
-import PurchaseRequestForm from "./components/PurchaseRequestForm";
-
+import ExpenseRequestForm from "./components/ExpenseRequestForm";
 const Sandbox = () => {
   return (
     <>
-      <PurchaseRequestForm />
+      <ExpenseRequestForm />
     </>
   );
 };
