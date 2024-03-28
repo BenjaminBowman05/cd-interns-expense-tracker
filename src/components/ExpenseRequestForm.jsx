@@ -6,6 +6,7 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
+import ListGroup from "react-bootstrap/ListGroup";
 
 import { useState } from "react";
 
@@ -32,6 +33,14 @@ const PurchaseRequestForm = () => {
     },
   });
 
+  const [selectedPrograms, setSelectedPrograms] = useState([]);
+  const [programs, setPrograms] = useState([
+    "Program 1",
+    "Program 2",
+    "Program 3",
+    "Program 4asdasdsadas",
+  ]);
+
   const handleInputChange = (event, fieldName, parentField = null) => {
     //let inputs = document.getElementsByClassName("form-control");
     console.log(formInfo);
@@ -46,6 +55,16 @@ const PurchaseRequestForm = () => {
     } else {
       setFormInfo({ ...formInfo, [fieldName]: event.target.value });
     }
+  };
+
+  const appendProgram = (event) => {
+    setSelectedPrograms([...selectedPrograms, event.target.textContent]);
+  };
+
+  const deleteProgram = (event) => {
+    let array = [...selectedPrograms];
+    array.splice(event.target.id - 1, 1);
+    setSelectedPrograms(array);
   };
 
   return (
@@ -96,7 +115,7 @@ const PurchaseRequestForm = () => {
             />
           </Col>
         </Row>
-        <Row className="purpose mb-3">
+        <Row className="purpose">
           <Col>
             <FloatingLabel controlId="floatingInput" label="Purpose Of Request">
               <Form.Control
@@ -108,20 +127,43 @@ const PurchaseRequestForm = () => {
             </FloatingLabel>
           </Col>
         </Row>
-        <Row className="programs mb-3">
+        <Row className="selectedPrograms">
+          <ul className="selectedPrograms-List">
+            {selectedPrograms.map((program, index) => (
+              <li key={index + 1} id={index + 1}>
+                <InputGroup className="mt-3">
+                  <InputGroup.Text>{program} cost: </InputGroup.Text>
+                  <Form.Control as="input" />
+                  <Button
+                    onClick={deleteProgram}
+                    variant="outline-danger"
+                    id={index + 1}
+                  >
+                    X
+                  </Button>
+                </InputGroup>
+              </li>
+            ))}
+          </ul>
+        </Row>
+        <Row className="program-dropdown mb-3">
           <Col>
             <InputGroup>
-            <InputGroup.Text>Programs</InputGroup.Text>
+              <InputGroup.Text>Programs</InputGroup.Text>
               <Dropdown>
-                <Dropdown.Toggle variant="outline-info">
-                </Dropdown.Toggle>
+                <Dropdown.Toggle variant="outline-info"></Dropdown.Toggle>
 
                 <Dropdown.Menu>
-                  <Dropdown.ItemText>Programs</Dropdown.ItemText>
-                  <Dropdown.Item as="button">Program 1</Dropdown.Item>
-                  <Dropdown.Item as="button">Program 2</Dropdown.Item>
-                  <Dropdown.Item as="button">Program 3</Dropdown.Item>
-                  <Dropdown.Item as="button">Program 4</Dropdown.Item>
+                  {programs.map((program, index) => (
+                    <Dropdown.Item
+                      key={index + 1}
+                      id={index + 1}
+                      as="button"
+                      onClick={appendProgram}
+                    >
+                      {program}
+                    </Dropdown.Item>
+                  ))}
                 </Dropdown.Menu>
               </Dropdown>
             </InputGroup>
