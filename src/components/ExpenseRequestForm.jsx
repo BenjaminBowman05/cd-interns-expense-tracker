@@ -65,9 +65,16 @@ const PurchaseRequestForm = () => {
   };
 
   const deleteProgram = (event) => {
-    let array = [...selectedPrograms];
-    array.splice(event.target.id - 1, 1);
-    setSelectedPrograms(array);
+    /**Delete program from UI */
+    let array1 = [...selectedPrograms];
+    array1.splice(event.target.id - 1, 1);
+    setSelectedPrograms(array1);
+
+    /**Delete program from Object */
+    let array2 = [...formInfo.programs];
+    array2.splice(event.target.id - 1, 1);
+    setFormInfo({ ...formInfo, programs: array2 });
+    console.log(formInfo);
   };
 
   return (
