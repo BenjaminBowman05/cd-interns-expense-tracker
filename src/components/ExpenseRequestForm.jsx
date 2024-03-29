@@ -36,19 +36,38 @@ const PurchaseRequestForm = () => {
     "Program 4asdasdsadas",
   ]);
 
-  const handleInputChange = (event, fieldName, parentField = null) => {
+  const handleInputChange = (
+    event,
+    fieldName,
+    parentField = null,
+    index = null
+  ) => {
     //let inputs = document.getElementsByClassName("form-control");
+
+    /**
+     * Good Luck!
+     */
+
     console.log(formInfo);
-    if (parentField) {
-      setFormInfo({
-        ...formInfo,
-        [parentField]: {
-          ...formInfo[parentField],
-          [fieldName]: event.target.value,
-        },
-      });
+    if (parentField !== null && index !== null) {
+      let array = [...formInfo[parentField]];
+      array[index] = {
+        ...array[index],
+        cost: event.target.value,
+      };
+      setFormInfo({ ...formInfo, [parentField]: array });
     } else {
-      setFormInfo({ ...formInfo, [fieldName]: event.target.value });
+      if (parentField && !index) {
+        setFormInfo({
+          ...formInfo,
+          [parentField]: {
+            ...formInfo[parentField],
+            [fieldName]: event.target.value,
+          },
+        });
+      } else {
+        setFormInfo({ ...formInfo, [fieldName]: event.target.value });
+      }
     }
   };
 
@@ -143,7 +162,13 @@ const PurchaseRequestForm = () => {
               <li key={index + 1} id={index + 1}>
                 <InputGroup className="mt-3">
                   <InputGroup.Text>{program} cost: </InputGroup.Text>
-                  <Form.Control as="input" />
+                  <Form.Control
+                    as="input"
+                    type="number"
+                    onChange={(e) =>
+                      handleInputChange(e, "cost", "programs", index)
+                    }
+                  />
                   <Button
                     onClick={deleteProgram}
                     variant="outline-danger"
@@ -158,11 +183,10 @@ const PurchaseRequestForm = () => {
         </Row>
         <Row className="program-dropdown mb-3">
           <Col>
-            <InputGroup>
+            <InputGroup size="lg">
               <InputGroup.Text>Programs</InputGroup.Text>
               <Dropdown>
                 <Dropdown.Toggle variant="outline-info"></Dropdown.Toggle>
-
                 <Dropdown.Menu>
                   {programs.map((program, index) => (
                     <Dropdown.Item
