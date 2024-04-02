@@ -1,8 +1,10 @@
-import ExpenseRequestForm from "./components/ExpenseRequestForm";
+
+import FileUploadTest from "./components/FileUploadTest";
 const Sandbox = () => {
+
   return (
     <>
-      <ExpenseRequestForm />
+      <FileUploadTest />
     </>
   );
 };
