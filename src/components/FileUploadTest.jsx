@@ -8,7 +8,7 @@ const FileUploadTest = () => {
 
     // Allowing file type
     var allowedExtensions =
-      /(\.doc|\.docx|\.odt|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd)$/i;
+      /(\.doc|\.docx|\.odt|\.pdf|\.tex|\.txt|\.rtf|\.wps|\.wks|\.wpd|\.png|\.jpg|\.jpeg)$/i;
 
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
@@ -20,25 +20,74 @@ const FileUploadTest = () => {
 
   const handleFileSelect = (event) => {
     let valid = validateFile();
-    var isPdf = /(\.pdf)$/i;
+    var isPdf = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
     var fileInput = document.getElementById("file");
     var filePath = fileInput.value;
-    document.getElementById("fileContent").textContent = "";
+    let fileContent = document.getElementById("fileContent");
+    fileContent.textContent = "";
 
-    if (valid && !isPdf.exec(filePath)) {
-      const reader = new FileReader();
-      reader.onload = handleFileLoad;
-      reader.readAsText(event.target.files[0]);
+    if (valid) {
+      if (isPdf.exec(filePath)) {
+        console.log(event.target.files);
+        const reader = new FileReader();
+        reader.onload = handleFileLoadPdf;
+        reader.readAsDataURL(event.target.files[0]);
+      } else {
+        const reader = new FileReader();
+        reader.onload = handleFileLoadText;
+        reader.readAsText(event.target.files[0]);
+      }
     }
   };
 
-  const handleFileLoad = (event) => {
+  const handleFileLoadText = (event) => {
     console.log(event);
-    document.getElementById("fileContent").textContent = event.target.result;
+    document.getElementById("modal-body").textContent = event.target.result;
   };
 
+  const handleFileLoadPdf = (event) => {
+    console.log(event);
+    document.getElementById(
+      "modal-body"
+    ).innerHTML = `<embed src=${event.target.result} width="850px" height="850px" type="application/pdf"/>`;
+  };
+
+  /*
+  
+  
+  
+    // @param {Event} event
+    function handleSubmit(event) {
+      // @type {HTMLFormElement} 
+      const form = event.currentTarget;
+      const url = new URL(form.action);
+      const formData = new FormData(form);
+      const searchParams = new URLSearchParams(formData);
+  
+      /// @type {Parameters<fetch>[1]} 
+      const fetchOptions = {
+        method: form.method,
+      };
+  
+      if (form.method.toLowerCase() === "post") {
+        if (form.enctype === "multipart/form-data") {
+          fetchOptions.body = formData;
+        } else {
+          fetchOptions.body = searchParams;
+        }
+      } else {
+        url.search = searchParams;
+      }
+  
+      fetch(url, fetchOptions);
+  
+      event.preventDefault();
+    }
+  
+  */
+
   return (
-    <div >
+    <form>
       <Form.Control
         onChange={handleFileSelect}
         accept=".pdf, .txt, .doc, .docx"
@@ -46,8 +95,7 @@ const FileUploadTest = () => {
         as="input"
         type="file"
       ></Form.Control>
-      <p id="fileContent"></p>
-    </div>
+    </form>
   );
 };
 

@@ -1,10 +1,9 @@
-
 import FileUploadTest from "./components/FileUploadTest";
+import PurchaseTracker from "./components/PurchaseTracker";
 const Sandbox = () => {
-
   return (
     <>
-      <FileUploadTest />
+      <PurchaseTracker />
     </>
   );
 };
