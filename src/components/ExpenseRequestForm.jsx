@@ -6,7 +6,6 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import ListGroup from "react-bootstrap/ListGroup";
 
 import { useState } from "react";
 
@@ -17,7 +16,7 @@ const PurchaseRequestForm = () => {
     currDate: "",
     items: "",
     purpose: "",
-    programs: [],
+    expensePrograms: [],
     total: 0,
     dateNeeded: "",
     signatures: {
@@ -29,6 +28,8 @@ const PurchaseRequestForm = () => {
   });
 
   const [selectedPrograms, setSelectedPrograms] = useState([]);
+  const [id, setId] = useState(1);
+  const [expenseId, setExpenseId] = useState(1);
   const [programs, setPrograms] = useState([
     "Program 1",
     "Program 2",
@@ -42,8 +43,6 @@ const PurchaseRequestForm = () => {
     parentField = null,
     index = null
   ) => {
-    //let inputs = document.getElementsByClassName("form-control");
-
     /**
      * Good Luck!
      */
@@ -73,11 +72,13 @@ const PurchaseRequestForm = () => {
 
   const appendProgram = (event) => {
     setSelectedPrograms([...selectedPrograms, event.target.textContent]);
+    setId(id + 1);
+    setExpenseId(expenseId + 1)
     setFormInfo({
       ...formInfo,
-      programs: [
-        ...formInfo.programs,
-        { program: event.target.textContent, cost: 0 },
+      expensePrograms: [
+        ...formInfo.expensePrograms,
+        { id: id, expenseId: expenseId, programName: event.target.textContent, cost: 0 }, //Set inital cost to 0
       ],
     });
     console.log(formInfo);
@@ -90,9 +91,9 @@ const PurchaseRequestForm = () => {
     setSelectedPrograms(array1);
 
     /**Delete program from Object */
-    let array2 = [...formInfo.programs];
+    let array2 = [...formInfo.expensePrograms];
     array2.splice(event.target.id - 1, 1);
-    setFormInfo({ ...formInfo, programs: array2 });
+    setFormInfo({ ...formInfo, expensePrograms: array2 });
     console.log(formInfo);
   };
 
@@ -166,7 +167,7 @@ const PurchaseRequestForm = () => {
                     as="input"
                     type="number"
                     onChange={(e) =>
-                      handleInputChange(e, "cost", "programs", index)
+                      handleInputChange(e, "cost", "expensePrograms", index)
                     }
                   />
                   <Button
