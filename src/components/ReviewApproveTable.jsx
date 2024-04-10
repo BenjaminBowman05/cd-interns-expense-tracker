@@ -7,70 +7,43 @@ import FormPopUp from './FormPopUp';
 
 const ReviewApproveTable = () => {
 
-
-
     //Obj array filled via backend
-    const [request, setRequest] = useState([{
-        id: 1,
-        firstName: "Benjamin",
-        lastName: "Cruz",
-        currDate: "2024/03/29",
-        items: "Balls, Pens",
-        purpose: "Kids need money",
-        programs: ["Kids", "Adults"],
-        total: 1000,
-        dateNeeded: "2024/04/01",
-        status: "Pending...",
-        signatures: {
-            requestor: "Nicolas Blackson",
-            requestorSupervisor: "Jeff Lawrence",
-            DOO: "",
-            CEO: "Stephanie Eldridge",
-        },
-    }]);
+    const [request, setRequest] = useState([
+        {
+            id: 1,
+            firstName: "Benjamin",
+            lastName: "Cruz",
+            currDate: "2024/03/29",
+            items: "Balls, Pens",
+            purpose: "Kids need money",
+            programs: [{program: "Kids", cost: 900}, {program: "Adults", cost: 100}],
+            total: 1000,
+            dateNeeded: "2024/04/01",
+            status: "Pending...",
+            signatures: {
+                requestor: "Nicolas Blackson",
+                requestorSupervisor: "Jeff Lawrence",
+                DOO: "",
+                CEO: "Stephanie Eldridge",
+            },
+        }
+    ]);
 
+    
+
+    //showModal used in conjunction with the view button
     const [showModal, setShowModal] = useState(false);
-    const [modalObj, setModalObj] = useState({
-        id: 0,
-        firstName: "",
-        lastName: "",
-        currDate: "",
-        items: "",
-        purpose: "",
-        programs: [],
-        total: 0,
-        dateNeeded: "",
-        signatures: {
-            requestor: "",
-            requestorSupervisor: "",
-            DOO: "",
-            CEO: "",
-        },
-    });
+
+    //Used as a temp storage to send a obj to the popup
+    const [modalObj, setModalObj] = useState({});
 
     //Method is responsible looking through array and finding obj with matching id and altering approval
-    const setChecked = (id) => {
-        // console.log(e);
+    const setChecked = (btnVal, id) => {
         const updateRequest = request.map((req) => {
             if (req.id === id) {
-                if (req.status == "Pending..." || req.status == "Denied") {
+                if (btnVal == "Approved" && req.status != btnVal) {
                     return { ...req, status: "Approved" };
-                }
-                return { ...req, status: "Pending..." };
-            } else {
-                return req;
-            }
-        });
-        // console.log(request);
-
-        //sets the array with updated value
-        setRequest(updateRequest);
-    };
-
-    const denyCheck = (id) => {
-        const updateRequest = request.map((req) => {
-            if (req.id === id) {
-                if (req.status == "Pending..." || req.status == "Approved") {
+                } else if (btnVal == "Denied" && req.status != btnVal) {
                     return { ...req, status: "Denied" };
                 }
                 return { ...req, status: "Pending..." };
@@ -78,12 +51,12 @@ const ReviewApproveTable = () => {
                 return req;
             }
         });
-        // console.log(request);
 
         //sets the array with updated value
         setRequest(updateRequest);
     };
 
+    //Temp Method with placeholder content is linked to the confirmation button will handle updating the status of expenses
     const confirmationHandle = (status) => {
         window.alert("The Request status is " + status);
     };
@@ -123,7 +96,7 @@ const ReviewApproveTable = () => {
                             <td>{requestInfo.id}</td>
                             <td>${requestInfo.total}</td>
                             <td>{requestInfo.programs.map((program) => (
-                                <p key={program} className="m-0">{program}</p>
+                                <p key={program.program} className="m-0">{program.program}</p>
                             ))}</td>
                             <td>{requestInfo.purpose}</td>
                             <td>{requestInfo.signatures.requestor}</td>
@@ -152,7 +125,7 @@ const ReviewApproveTable = () => {
                                         type="checkbox"
                                         variant="outline-success"
                                         checked={requestInfo.status === "Approved"}
-                                        onClick={() => setChecked(requestInfo.id)}
+                                        onClick={() => setChecked("Approved", requestInfo.id)}
                                     >
                                         {requestInfo.status === "Approved" ? "Approved" : "Approve"}
                                     </ToggleButton>
@@ -165,7 +138,7 @@ const ReviewApproveTable = () => {
                                         type="checkbox"
                                         variant="outline-danger"
                                         checked={requestInfo.status === "Denied"}
-                                        onClick={() => denyCheck(requestInfo.id)}
+                                        onClick={() => setChecked("Denied", requestInfo.id)}
                                     >
                                         {requestInfo.status === "Denied" ? "Denied" : "Deny"}
                                     </ToggleButton>
@@ -188,9 +161,12 @@ const ReviewApproveTable = () => {
                         </tr>
                     ))}
                 </tbody>
-            </Table> 
-            {showModal ? <FormPopUp show={showModal} close={() => setShowModal(false)} data={modalObj} />: ""}
-            
+            </Table>
+            {/* Makes a call to the popup component but it will only call if showModal is true and with the
+            call it sends a variable called show with the value of showModal and close using the set method of showModal
+            Then sends the obj that was clicked on to be used*/}
+            {showModal ? <FormPopUp show={showModal} close={() => setShowModal(false)} data={modalObj} /> : ""}
+
         </>
     )
 }
