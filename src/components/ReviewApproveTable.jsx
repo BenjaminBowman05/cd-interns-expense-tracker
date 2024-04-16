@@ -2,8 +2,11 @@ import Table from 'react-bootstrap/Table';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import Button from 'react-bootstrap/Button';
 import ToggleButton from 'react-bootstrap/ToggleButton';
+import ToggleButtonGroup from 'react-bootstrap/ToggleButtonGroup';
 import { useState, useEffect } from "react";
-import FormPopUp from './FormPopUp';
+import FormPopUp from './Modals/FormPopUp';
+import ApproveModal from './Modals/ApproveModal';
+import DenyModal from './Modals/DenyModal';
 
 const ReviewApproveTable = () => {
 
@@ -13,26 +16,41 @@ const ReviewApproveTable = () => {
             id: 1,
             firstName: "Benjamin",
             lastName: "Cruz",
-            currDate: "2024/03/29",
+            dateOfExpense: "2024/03/29",
+            lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
             items: "Balls, Pens",
             purpose: "Kids need money",
-            programs: [{program: "Kids", cost: 900}, {program: "Adults", cost: 100}],
+            expensePrograms: [
+                { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
+                { id: 2, programName: "Adults", cost: 100, expenseId: 2 }
+            ],
             total: 1000,
             dateNeeded: "2024/04/01",
-            status: "Pending...",
-            signatures: {
-                requestor: "Nicolas Blackson",
-                requestorSupervisor: "Jeff Lawrence",
-                DOO: "",
-                CEO: "Stephanie Eldridge",
-            },
-        }
+            // status: "Pending...",
+            requester: true,
+            requesterSupervisor: false,
+            userId: 1,
+            doo: false,
+            ceo: false,
+        },
     ]);
 
-    
+
 
     //showModal used in conjunction with the view button
     const [showModal, setShowModal] = useState(false);
+
+    const [showApproval, setShowApproval] = useState(false);
+    const handleApprovalShow = () => {
+        setShowApproval(false);
+        window.alert("Approved");
+    };
+
+    const [showDeny, setShowDeny] = useState(false);
+    const handleDenyShow = () => {
+            setShowDeny(false);
+            window.alert("Denial has been sent")
+    };
 
     //Used as a temp storage to send a obj to the popup
     const [modalObj, setModalObj] = useState({});
@@ -41,12 +59,11 @@ const ReviewApproveTable = () => {
     const setChecked = (btnVal, id) => {
         const updateRequest = request.map((req) => {
             if (req.id === id) {
-                if (btnVal == "Approved" && req.status != btnVal) {
-                    return { ...req, status: "Approved" };
-                } else if (btnVal == "Denied" && req.status != btnVal) {
-                    return { ...req, status: "Denied" };
+                if (btnVal == "Approved") {
+                    return { ...req, requesterSupervisor: true };
+                } else if (btnVal == "Denied") {
+                    return { ...req, requesterSupervisor: false };
                 }
-                return { ...req, status: "Pending..." };
             } else {
                 return req;
             }
@@ -57,17 +74,26 @@ const ReviewApproveTable = () => {
     };
 
     //Temp Method with placeholder content is linked to the confirmation button will handle updating the status of expenses
-    const confirmationHandle = (status) => {
-        window.alert("The Request status is " + status);
-    };
+    const confirmationHandle = (status, id) => {
+        retrieveModalObj(id);
+        if (status) {
+            setShowApproval(true);
+        } else {
+            setShowDeny(true);
+        }
 
-    const modalHandle = (id) => {
+    };
+    const retrieveModalObj = (id) => {
         const updateRequest = request.map((req) => {
             if (req.id === id) {
                 return req;
             }
         });
         setModalObj(updateRequest);
+    }
+
+    const modalHandle = (id) => {
+        retrieveModalObj(id);
         setShowModal(true);
     };
 
@@ -81,9 +107,7 @@ const ReviewApproveTable = () => {
                         <th>Expense</th>
                         <th>Program</th>
                         <th>Description</th>
-                        <th>Signed</th>
                         <th>Date</th>
-                        <th>Status</th>
                         <th>View</th>
                         <th>Decision</th>
                         <th>Confirmation</th>
@@ -91,26 +115,24 @@ const ReviewApproveTable = () => {
                 </thead>
                 <tbody>
                     {/* Outputs table rows for each obj display information */}
-                    {request.map((requestInfo) => (
-                        <tr key={requestInfo.id}>
-                            <td>{requestInfo.id}</td>
-                            <td>${requestInfo.total}</td>
-                            <td>{requestInfo.programs.map((program) => (
-                                <p key={program.program} className="m-0">{program.program}</p>
+                    {request.map((data) => (
+                        <tr key={data.id}>
+                            <td>{data.id}</td>
+                            <td>${data.total}</td>
+                            <td>{data.expensePrograms.map((program) => (
+                                <p key={program.programName} className="m-0">{program.programName}</p>
                             ))}</td>
-                            <td>{requestInfo.purpose}</td>
-                            <td>{requestInfo.signatures.requestor}</td>
-                            <td>{requestInfo.currDate}</td>
-                            <td>{requestInfo.status}</td>
+                            <td>{data.purpose}</td>
+                            <td>{data.dateOfExpense}</td>
                             {/* View Button will open a version of expense form that is populated with obj data */}
                             <td>
                                 <ButtonGroup className="mb-2 " size="sm">
                                     <Button
                                         className="mb-2"
-                                        id={"View: " + requestInfo.id}
+                                        id={"View: " + data.id}
                                         type="button"
                                         variant="outline-light"
-                                        onClick={() => modalHandle(requestInfo.id)}
+                                        onClick={() => modalHandle(data.id)}
                                     >
                                         View
                                     </Button>
@@ -118,41 +140,37 @@ const ReviewApproveTable = () => {
                             </td>
                             {/* Approval Button */}
                             <td>
-                                <ButtonGroup className="mb-2 " size="sm">
+                                <ToggleButtonGroup type="radio" name="actions" className="mb-2 " size="sm">
                                     <ToggleButton
-                                        className="mb-2"
-                                        id={"Approve: " + requestInfo.id}
-                                        type="checkbox"
+                                        className="mb-2 me-2"
+                                        id={"Approve: " + data.id}
                                         variant="outline-success"
-                                        checked={requestInfo.status === "Approved"}
-                                        onClick={() => setChecked("Approved", requestInfo.id)}
+                                        onClick={() => setChecked("Approved", data.id)}
+                                        value={"approved"}
                                     >
-                                        {requestInfo.status === "Approved" ? "Approved" : "Approve"}
+                                        Approve
                                     </ToggleButton>
-                                </ButtonGroup>
-                                {/* Deny Button */}
-                                <ButtonGroup size="sm" className="ms-2 mb-2">
+                                    {/* Deny Button */}
                                     <ToggleButton
                                         className="mb-2"
-                                        id={"Deny: " + requestInfo.id}
-                                        type="checkbox"
+                                        id={"Deny: " + data.id}
                                         variant="outline-danger"
-                                        checked={requestInfo.status === "Denied"}
-                                        onClick={() => setChecked("Denied", requestInfo.id)}
+                                        value={"deny"}
+                                        onClick={() => setChecked("Denied", data.id)}
                                     >
-                                        {requestInfo.status === "Denied" ? "Denied" : "Deny"}
+                                        Deny
                                     </ToggleButton>
-                                </ButtonGroup>
+                                </ToggleButtonGroup>
                             </td>
                             {/* Confirm Button */}
                             <td>
                                 <ButtonGroup className="mb-2 " size="sm">
                                     <Button
                                         className="mb-2"
-                                        id={"Confirm: " + requestInfo.id}
+                                        id={"Confirm: " + data.id}
                                         type="button"
                                         variant="outline-secondary"
-                                        onClick={() => confirmationHandle(requestInfo.status)}
+                                        onClick={() => confirmationHandle(data.requesterSupervisor, data.id)}
                                     >
                                         Confirmation
                                     </Button>
@@ -166,6 +184,9 @@ const ReviewApproveTable = () => {
             call it sends a variable called show with the value of showModal and close using the set method of showModal
             Then sends the obj that was clicked on to be used*/}
             {showModal ? <FormPopUp show={showModal} close={() => setShowModal(false)} data={modalObj} /> : ""}
+
+            {showDeny ? <DenyModal show={showDeny} confirm={() => handleDenyShow()} close={() => setShowDeny(false)} data={modalObj} /> : ""}
+            {showApproval ? <ApproveModal show={showApproval} confirm={() => handleApprovalShow()} close={() => setShowApproval(false)} data={modalObj} /> : ""}
 
         </>
     )
