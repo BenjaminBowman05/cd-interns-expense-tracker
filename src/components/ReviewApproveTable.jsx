@@ -142,31 +142,24 @@ const ReviewApproveTable = () => {
   //showModal used in conjunction with the view button
   const [showModal, setShowModal] = useState(false);
 
-  //This handles the approval decision
-  const [showApproval, setShowApproval] = useState(false);
-  const handleApprovalShow = () => {
-    setShowApproval(false);
-    window.alert("Approved");
-  };
+    //This handles the approval decision
+    const [showConfirmation, setShowConfirmation] = useState(false);
 
-  //This handles the denial decision
-  const [showDeny, setShowDeny] = useState(false);
-  const handleDenyShow = () => {
-    setShowDeny(false);
-    window.alert("Denial has been sent");
-  };
+    //This handles the decision
+    const handleConfirmationShow = () => {
+        setShowConfirmation(false);
+        if (modalObj[0].requesterSupervisor) {
+            console.log("Approved");
+            // window.alert("Approved");
+        } else {
+            // window.alert("Denial has been sent")
+            console.log("Denied")
+        }
 
-  const [showReceipt, setShowReceipt] = useState(false);
+    };
 
-  //Temp Method with placeholder content is linked to the confirmation button will handle updating the status of expenses
-  const confirmationHandle = (status, id) => {
-    retrieveModalObj(id);
-    if (status) {
-      setShowApproval(true);
-    } else {
-      setShowDeny(true);
-    }
-  };
+    //Used as a temp storage to send a obj to the popup
+    const [modalObj, setModalObj] = useState();
 
   //Finds the obj tied to the view button clicked then stores it for later
   const retrieveModalObj = (id) => {
@@ -178,163 +171,109 @@ const ReviewApproveTable = () => {
     setModalObj(updateRequest);
   };
 
-  //Handles the modal for the view form
-  const modalHandle = (id) => {
-    retrieveModalObj(id);
-    setShowModal(true);
-  };
+    //Handles the modal for the view form
+    const modalHandle = (status, id) => {
+        retrieveModalObj(id);
+        if (status == "View") {
+            setShowModal(true);
+        } else {
+            setShowConfirmation(true)
+        }
+    };
 
-  return (
-    <>
-      {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-      <Table striped bordered hover variant="dark">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Expense</th>
-            <th>Program</th>
-            <th>Description</th>
-            <th>Date</th>
-            <th>View</th>
-            <th>Decision</th>
-            <th>Confirmation</th>
-            <th>Receipt</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Outputs table rows for each obj display information */}
-          {requests.map((data) => (
-            <tr key={data.id}>
-              <td>{data.id}</td>
-              <td>${data.total}</td>
-              <td>
-                {data.expensePrograms.map((program) => (
-                  <p key={program.programName} className="m-0">
-                    {program.programName}
-                  </p>
-                ))}
-              </td>
-              <td>{data.purpose}</td>
-              <td>{data.dateOfExpense}</td>
-              {/* View Button will open a version of expense form that is populated with obj data */}
-              <td>
-                <ButtonGroup className="mb-2 " size="sm">
-                  <Button
-                    className="mb-2"
-                    id={"View: " + data.id}
-                    type="button"
-                    variant="outline-light"
-                    onClick={() => modalHandle(data.id)}
-                  >
-                    View
-                  </Button>
-                </ButtonGroup>
-              </td>
-              {/* Approval Button */}
-              <td>
-                <ToggleButtonGroup
-                  type="radio"
-                  name="actions"
-                  className="mb-2 "
-                  size="sm"
-                >
-                  <ToggleButton
-                    className="mb-2 me-2"
-                    id={"Approve: " + data.id}
-                    variant="outline-success"
-                    onClick={() => setChecked("Approved", data.id)}
-                    value={"approved"}
-                  >
-                    Approve
-                  </ToggleButton>
-                  {/* Deny Button */}
-                  <ToggleButton
-                    className="mb-2"
-                    id={"Deny: " + data.id}
-                    variant="outline-danger"
-                    value={"deny"}
-                    onClick={() => setChecked("Denied", data.id)}
-                  >
-                    Deny
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </td>
-              {/* Confirm Button */}
-              <td>
-                <ButtonGroup className="mb-2 " size="sm">
-                  <Button
-                    className="mb-2"
-                    id={"Confirm: " + data.id}
-                    type="button"
-                    variant="outline-secondary"
-                    onClick={() =>
-                      confirmationHandle(data.requesterSupervisor, data.id)
-                    }
-                  >
-                    Confirmation
-                  </Button>
-                </ButtonGroup>
-              </td>
-              <td>
-                {files[data.id - 1] === undefined && (
-                  <Form.Control
-                    onChange={(e) => handleFileSelect(e, data.id)}
-                    accept=".pdf, .png, .jpeg, .jpg"
-                    id={`file-${data.id}`}
-                    as="input"
-                    type="file"
-                  ></Form.Control>
-                )}
-                {files[data.id - 1] === true && (
-                  <Button
-                    onClick={() => modalHandle(data.id)}
-                    variant="outline-info"
-                  >
-                    View Receipt
-                  </Button>
-                )}
-              </td>
-            </tr>
-          ))}
-        </tbody>
-      </Table>
-      {/* Makes a call to the popup component but it will only call if showModal is true and with the
+    return (
+        <>
+            <>
+                {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
+                <Table striped bordered hover variant="dark">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Expense</th>
+                            <th>Program</th>
+                            <th>Description</th>
+                            <th>Date</th>
+                            <th>View</th>
+                            <th>Decision</th>
+                            <th>Confirmation</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {/* Outputs table rows for each obj display information */}
+                        {request.map((data) => (
+                            <tr key={data.id}>
+                                <td>{data.id}</td>
+                                <td>${data.total}</td>
+                                <td>{data.expensePrograms.map((program) => (
+                                    <p key={program.programName} className="m-0">{program.programName}</p>
+                                ))}</td>
+                                <td>{data.purpose}</td>
+                                <td>{data.dateOfExpense}</td>
+                                {/* View Button will open a version of expense form that is populated with obj data */}
+                                <td>
+                                    <ButtonGroup className="mb-2 " size="sm">
+                                        <Button
+                                            className="mb-2"
+                                            id={"View: " + data.id}
+                                            type="button"
+                                            variant="outline-light"
+                                            onClick={() => modalHandle("View", data.id)}
+                                        >
+                                            View
+                                        </Button>
+                                    </ButtonGroup>
+                                </td>
+                                {/* Approval Button */}
+                                <td>
+                                    <ToggleButtonGroup type="radio" name="actions" className="mb-2 " size="sm">
+                                        <ToggleButton
+                                            className="mb-2 me-2"
+                                            id={"Approve: " + data.id}
+                                            variant="outline-success"
+                                            onClick={() => setChecked("Approved", data.id)}
+                                            value={"approved"}
+                                        >
+                                            Approve
+                                        </ToggleButton>
+                                        {/* Deny Button */}
+                                        <ToggleButton
+                                            className="mb-2"
+                                            id={"Deny: " + data.id}
+                                            variant="outline-danger"
+                                            value={"deny"}
+                                            onClick={() => setChecked("Denied", data.id)}
+                                        >
+                                            Deny
+                                        </ToggleButton>
+                                    </ToggleButtonGroup>
+                                </td>
+                                {/* Confirm Button */}
+                                <td>
+                                    <ButtonGroup className="mb-2 " size="sm">
+                                        <Button
+                                            className="mb-2"
+                                            id={"Confirm: " + data.id}
+                                            type="button"
+                                            variant="outline-secondary"
+                                            onClick={() => modalHandle(data.requesterSupervisor, data.id)}
+                                        >
+                                            Confirmation
+                                        </Button>
+                                    </ButtonGroup>
+                                </td>
+                            </tr>
+                        ))}
+                    </tbody>
+                </Table>
+            </>
+            {/* Makes a call to the popup component but it will only call if showModal is true and with the
             call it sends a variable called show with the value of showModal and close using the set method of showModal
             Then sends the obj that was clicked on to be used*/}
-      {showModal ? (
-        <FormPopUp
-          show={showModal}
-          close={() => setShowModal(false)}
-          data={modalObj}
-        />
-      ) : (
-        ""
-      )}
+            {showModal ? <FormPopUp show={showModal} close={() => setShowModal(false)} data={modalObj} /> : ""}
 
-      {showDeny ? (
-        <DenyModal
-          show={showDeny}
-          confirm={() => handleDenyShow()}
-          close={() => setShowDeny(false)}
-          data={modalObj}
-        />
-      ) : (
-        ""
-      )}
-      {showApproval ? (
-        <ApproveModal
-          show={showApproval}
-          confirm={() => handleApprovalShow()}
-          close={() => setShowApproval(false)}
-          data={modalObj}
-        />
-      ) : (
-        ""
-      )}
-
-      {}
-    </>
-  );
-};
+            {showConfirmation ? <ConfirmationModal show={showConfirmation} confirm={() => handleConfirmationShow()} close={() => setShowConfirmation(false)} data={modalObj} /> : ""}
+        </>
+    )
+}
 
 export default ReviewApproveTable;
