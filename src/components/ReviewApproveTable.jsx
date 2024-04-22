@@ -13,26 +13,26 @@ const ReviewApproveTable = () => {
 
     //Obj array filled via backend
     const [request, setRequest] = useState([
-        // {
-        //     id: 1,
-        //     firstName: "Benjamin",
-        //     lastName: "Cruz",
-        //     dateOfExpense: "2024/03/29",
-        //     lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
-        //     items: "Balls, Pens",
-        //     purpose: "Kids need money",
-        //     expensePrograms: [
-        //         { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
-        //         { id: 2, programName: "Adults", cost: 100, expenseId: 2 }
-        //     ],
-        //     total: 1000,
-        //     dateNeeded: "2024/04/01",
-        //     requester: true,
-        //     requesterSupervisor: false,
-        //     userId: 1,
-        //     doo: false,
-        //     ceo: false,
-        // },
+        {
+            id: 1,
+            firstName: "Benjamin",
+            lastName: "Cruz",
+            dateOfExpense: "2024/03/29",
+            lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
+            items: "Balls, Pens",
+            purpose: "Kids need money",
+            expensePrograms: [
+                { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
+                { id: 2, programName: "Adults", cost: 100, expenseId: 2 }
+            ],
+            total: 1000,
+            dateNeeded: "2024/04/01",
+            requester: true,
+            requesterSupervisor: false,
+            userId: 1,
+            doo: false,
+            ceo: false,
+        },
     ]);
 
     //The UseEffect calls a function
