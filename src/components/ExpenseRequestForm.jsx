@@ -19,12 +19,10 @@ const PurchaseRequestForm = () => {
     expensePrograms: [],
     total: 0,
     dateNeeded: "",
-    signatures: {
-      requestor: "",
-      requestorSupervisor: "",
-      DOO: "",
-      CEO: "",
-    },
+    requestor: true,
+    requestorSupervisor: false,
+    DOO: false,
+    CEO: false,
   });
 
   const [selectedPrograms, setSelectedPrograms] = useState([]);
@@ -36,6 +34,15 @@ const PurchaseRequestForm = () => {
     "Program 3",
     "Program 4asdasdsadas",
   ]);
+
+  const handleSignatures = (e, person) => {
+    if (e.target.value != "") {
+      setFormInfo({ ...formInfo, [person]: true });
+    } else {
+      setFormInfo({ ...formInfo, [person]: false });
+    }
+    console.log(formInfo);
+  };
 
   const handleInputChange = (
     event,
@@ -73,12 +80,17 @@ const PurchaseRequestForm = () => {
   const appendProgram = (event) => {
     setSelectedPrograms([...selectedPrograms, event.target.textContent]);
     setId(id + 1);
-    setExpenseId(expenseId + 1)
+    setExpenseId(expenseId + 1);
     setFormInfo({
       ...formInfo,
       expensePrograms: [
         ...formInfo.expensePrograms,
-        { id: id, expenseId: expenseId, programName: event.target.textContent, cost: 0 }, //Set inital cost to 0
+        {
+          id: id,
+          expenseId: expenseId,
+          programName: event.target.textContent,
+          cost: 0,
+        }, //Set inital cost to 0
       ],
     });
     console.log(formInfo);
@@ -234,10 +246,7 @@ const PurchaseRequestForm = () => {
             <FloatingLabel controlId="floatingInput" label="Requestor">
               <Form.Control
                 type="requestor"
-                value={formInfo.signatures.requestor}
-                onChange={(e) =>
-                  handleInputChange(e, "requestor", "signatures")
-                }
+                onChange={(e) => handleSignatures(e, "requestor")}
               />
             </FloatingLabel>
           </Col>
@@ -248,10 +257,7 @@ const PurchaseRequestForm = () => {
             >
               <Form.Control
                 type="requestorSupervisor"
-                value={formInfo.signatures.requestorSupervisor}
-                onChange={(e) =>
-                  handleInputChange(e, "requestorSupervisor", "signatures")
-                }
+                onChange={(e) => handleSignatures(e, "requestorSupervisor")}
               />
             </FloatingLabel>
           </Col>
@@ -260,18 +266,12 @@ const PurchaseRequestForm = () => {
               controlId="floatingInput"
               label="Director Of Operations"
             >
-              <Form.Control
-                value={formInfo.signatures.DOO}
-                onChange={(e) => handleInputChange(e, "DOO", "signatures")}
-              />
+              <Form.Control onChange={(e) => handleSignatures(e, "DOO")} />
             </FloatingLabel>
           </Col>
           <Col>
             <FloatingLabel controlId="floatingInput" label="CEO">
-              <Form.Control
-                value={formInfo.signatures.CEO}
-                onChange={(e) => handleInputChange(e, "CEO", "signatures")}
-              />
+              <Form.Control onChange={(e) => handleSignatures(e, "CEO")} />
             </FloatingLabel>
           </Col>
         </Row>
