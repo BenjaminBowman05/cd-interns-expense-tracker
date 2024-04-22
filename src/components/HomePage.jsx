@@ -1,5 +1,6 @@
 import Table from "react-bootstrap/Table";
 import ReviewApproveTable from "./ReviewApproveTable";
+import PurchaseTracker from "./PurchaseTracker";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -28,7 +29,7 @@ const HomePage = () => {
       doo: false,
       ceo: false,
       // Pass admin from user object. ADMIN WILL NOT BE STORED HERE. JUST FOR TESTING.
-      admin: true,
+      admin: false,
     },
   ]);
 
