@@ -7,50 +7,47 @@ import { useState, useEffect } from "react";
 import FormPopUp from './Modals/FormPopUp';
 import ApproveModal from './Modals/ApproveModal';
 import DenyModal from './Modals/DenyModal';
+import * as expenseService from '../services/ExpenseService.jsx';
 
 const ReviewApproveTable = () => {
 
     //Obj array filled via backend
     const [request, setRequest] = useState([
-        {
-            id: 1,
-            firstName: "Benjamin",
-            lastName: "Cruz",
-            dateOfExpense: "2024/03/29",
-            lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
-            items: "Balls, Pens",
-            purpose: "Kids need money",
-            expensePrograms: [
-                { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
-                { id: 2, programName: "Adults", cost: 100, expenseId: 2 }
-            ],
-            total: 1000,
-            dateNeeded: "2024/04/01",
-            // status: "Pending...",
-            requester: true,
-            requesterSupervisor: false,
-            userId: 1,
-            doo: false,
-            ceo: false,
-        },
+        // {
+        //     id: 1,
+        //     firstName: "Benjamin",
+        //     lastName: "Cruz",
+        //     dateOfExpense: "2024/03/29",
+        //     lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
+        //     items: "Balls, Pens",
+        //     purpose: "Kids need money",
+        //     expensePrograms: [
+        //         { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
+        //         { id: 2, programName: "Adults", cost: 100, expenseId: 2 }
+        //     ],
+        //     total: 1000,
+        //     dateNeeded: "2024/04/01",
+        //     requester: true,
+        //     requesterSupervisor: false,
+        //     userId: 1,
+        //     doo: false,
+        //     ceo: false,
+        // },
     ]);
 
+    //The UseEffect calls a function
+    useEffect(() => {
+        requestDataFromApi();
+    }, [])
 
-
-    //showModal used in conjunction with the view button
-    const [showModal, setShowModal] = useState(false);
-
-    const [showApproval, setShowApproval] = useState(false);
-    const handleApprovalShow = () => {
-        setShowApproval(false);
-        window.alert("Approved");
-    };
-
-    const [showDeny, setShowDeny] = useState(false);
-    const handleDenyShow = () => {
-            setShowDeny(false);
-            window.alert("Denial has been sent")
-    };
+    //The Function makes use of the expenseService function list to call all of the expenses from the back-end
+    //Then sets the empty objArray with all of the values from the back-end
+    function requestDataFromApi() {
+        expenseService.getAllExpenses()
+            .then(res => {
+                setRequest(res.data);
+            })
+    }
 
     //Used as a temp storage to send a obj to the popup
     const [modalObj, setModalObj] = useState({});
@@ -73,6 +70,23 @@ const ReviewApproveTable = () => {
         setRequest(updateRequest);
     };
 
+    //showModal used in conjunction with the view button
+    const [showModal, setShowModal] = useState(false);
+
+    //This handles the approval decision
+    const [showApproval, setShowApproval] = useState(false);
+    const handleApprovalShow = () => {
+        setShowApproval(false);
+        window.alert("Approved");
+    };
+
+    //This handles the denial decision
+    const [showDeny, setShowDeny] = useState(false);
+    const handleDenyShow = () => {
+            setShowDeny(false);
+            window.alert("Denial has been sent")
+    };
+
     //Temp Method with placeholder content is linked to the confirmation button will handle updating the status of expenses
     const confirmationHandle = (status, id) => {
         retrieveModalObj(id);
@@ -83,6 +97,8 @@ const ReviewApproveTable = () => {
         }
 
     };
+
+    //Finds the obj tied to the view button clicked then stores it for later
     const retrieveModalObj = (id) => {
         const updateRequest = request.map((req) => {
             if (req.id === id) {
@@ -92,6 +108,7 @@ const ReviewApproveTable = () => {
         setModalObj(updateRequest);
     }
 
+    //Handles the modal for the view form
     const modalHandle = (id) => {
         retrieveModalObj(id);
         setShowModal(true);

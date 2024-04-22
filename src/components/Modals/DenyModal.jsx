@@ -8,6 +8,7 @@ import Col from "react-bootstrap/Col";
 import { useState } from "react";
 
 const DenyModal = ({ show, confirm, close, data }) => {
+    //Temp could be replaced with a new obj slot
     const [reason, setReason] = useState("")
     return (
         <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
