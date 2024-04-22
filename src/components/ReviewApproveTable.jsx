@@ -8,6 +8,7 @@ import FormPopUp from './Modals/FormPopUp';
 import ConfirmationModal from './Modals/ConfirmationModal.jsx';
 import DenyModal from './Modals/DenyModal';
 import * as expenseService from '../services/ExpenseService.jsx';
+import * as expenseService from '../services/ExpenseService.jsx';
 
 const ReviewApproveTable = () => {
 

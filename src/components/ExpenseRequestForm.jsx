@@ -9,7 +9,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 
 import { useState } from "react";
 
-const ExpenseRequestForm = () => {
+const PurchaseRequestForm = () => {
   const [formInfo, setFormInfo] = useState({
     firstName: "",
     lastName: "",
@@ -283,4 +283,4 @@ const ExpenseRequestForm = () => {
   );
 };
 
-export default ExpenseRequestForm;
+export default PurchaseRequestForm;
