@@ -1,4 +1,5 @@
 import Table from "react-bootstrap/Table";
+import ReviewApprovedTable from "./ReviewApprovedTable";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -7,7 +8,7 @@ import Container from "react-bootstrap/Container";
 const HomePage = () => {
   const navBarData = [
     { label: "Home", url: "/" },
-    {label: "Purchase Request Form", url: "/"},
+    { label: "Purchase Request Form", url: "/" },
     {
       label: "Filters",
       submenu: [
@@ -72,10 +73,14 @@ const HomePage = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto" navbarScroll>{menuShow(navBarData)}</Nav>
+            <Nav className="me-auto" navbarScroll>
+              {menuShow(navBarData)}
+            </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      <ReviewApprovedTable />
     </>
   );
 };
