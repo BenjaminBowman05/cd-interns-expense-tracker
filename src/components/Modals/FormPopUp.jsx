@@ -108,12 +108,12 @@ const FormPopUp = ({ show, close, data }) => {
             </Col>
           </Row>
 
-          {/* <Row className="signatures mb-3">
+          <Row className="signatures mb-3">
             <Col>
               <FloatingLabel controlId="floatingInput" label="Requestor">
                 <Form.Control disabled
-                  value={data[0].signatures.requestor}
-                  placeholder={data[0].signatures.requestor}
+                  value={data[0].requester == true ? "Aproved" : "Pending"}
+                  placeholder={data[0].requester == true ? "Aproved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
@@ -123,8 +123,8 @@ const FormPopUp = ({ show, close, data }) => {
                 label="Requestor Supervisor"
               >
                 <Form.Control disabled
-                  value={data[0].signatures.requestorSupervisor}
-                  placeholder={data[0].signatures.requestorSupervisor}
+                  value={data[0].requestorSupervisor == true ? "Aproved" : "Pending"}
+                  placeholder={data[0].requestorSupervisor == true ? "Aproved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
@@ -134,21 +134,21 @@ const FormPopUp = ({ show, close, data }) => {
                 label="Director Of Operations"
               >
                 <Form.Control disabled
-                  value={data[0].signatures.DOO}
-                  placeholder={data[0].signatures.DOO}
+                  value={data[0].DOO == true ? "Aproved" : "Pending"}
+                  placeholder={data[0].DOO == true ? "Aproved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
             <Col>
               <FloatingLabel controlId="floatingInput" label="CEO">
                 <Form.Control disabled
-                  value={data[0].signatures.CEO}
-                  placeholder={data[0].signatures.CEO}
+                  value={data[0].CEO == true ? "Aproved" : "Pending"}
+                  placeholder={data[0].CEO == true ? "Aproved" : "Pending"}
                 />
 
               </FloatingLabel>
             </Col>
-          </Row> */}
+          </Row>
         </Container>
       </Modal.Body>
       {/* <Modal.Footer>
