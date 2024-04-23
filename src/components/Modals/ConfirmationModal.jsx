@@ -1,5 +1,5 @@
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
@@ -9,34 +9,44 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 
-const ConfirmationModal = ({ show, confirm, close, data }) => {
-  const [reason, setReason] = useState("")
+const ConfirmationModal = ({ show, confirm, close, data, reqId }) => {
+  const [reason, setReason] = useState("");
   return (
     <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
       <Modal.Header closeButton>
-        <Modal.Title>{data[0].requesterSupervisor ? "Approval" : "Denial"} Confirmation</Modal.Title>
+        <Modal.Title>
+          {data[reqId - 1].requesterSupervisor ? "Approval" : "Denial"}{" "}
+          Confirmation
+        </Modal.Title>
       </Modal.Header>
-      {data[0].requesterSupervisor ? "" : 
+      {data[reqId - 1].requesterSupervisor ? (
+        ""
+      ) : (
         <Modal.Body>
-                <Container fluid>
-                    <Row className="purpose">
-                        <Col>
-                            <FloatingLabel controlId="floatingInput" label="Reason for Denial">
-                                <Form.Control
-                                    value={reason}
-                                    placeholder={""}
-                                    onChange={(e) => setReason(e.target.value)}
-                                />
-                            </FloatingLabel>
-                        </Col>
-                    </Row>
-                </Container>
-            </Modal.Body>
-            }
+          <Container fluid>
+            <Row className="purpose">
+              <Col>
+                <FloatingLabel
+                  controlId="floatingInput"
+                  label="Reason for Denial"
+                >
+                  <Form.Control
+                    placeholder={""}
+                    onChange={(e) => {
+                      console.log(reason);
+                      setReason(e.target.value);
+                    }}
+                  />
+                </FloatingLabel>
+              </Col>
+            </Row>
+          </Container>
+        </Modal.Body>
+      )}
       <Modal.Footer>
-            <Button onClick={confirm}>Please Confirm</Button>
+        <Button onClick={(e) => confirm(reason)}>Please Confirm</Button>
       </Modal.Footer>
     </Modal>
   );
-}
+};
 export default ConfirmationModal;

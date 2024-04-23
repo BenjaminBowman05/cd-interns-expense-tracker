@@ -7,7 +7,7 @@ const ShowReceipt = ({ show, close, data, reqId }) => {
         <Modal.Title>Receipt</Modal.Title>
       </Modal.Header>
       <Modal.Body id="modal-body">
-        <embed src={data[reqId].receipt} width="500px" height="500px"></embed>
+        <embed src={data[reqId - 1].receipt} width="500px" height="500px"></embed>
       </Modal.Body>
       <Modal.Footer>
         <Button variant="outline-danger" onClick={close}>
