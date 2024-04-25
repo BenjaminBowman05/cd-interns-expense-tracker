@@ -6,6 +6,8 @@ import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
 import { useState } from "react";
+import { Button } from "react-bootstrap";
+import SettingsModal from "./Modals/SettingsModal";
 
 const HomePage = () => {
   const [request, setRequest] = useState([
@@ -32,6 +34,11 @@ const HomePage = () => {
       admin: false,
     },
   ]);
+
+  const [showSett, setShowSett] = useState(false);
+
+  function showSettings() { setShowSett(true); }
+  function closeSettings() {setShowSett(false); }
 
   // Create navBar Hiearchy
   const navBarData = [
@@ -66,6 +73,10 @@ const HomePage = () => {
         },
       ],
     },
+    {
+      label: "Inventory",
+      url: "/"
+    }
   ];
 
   const menuShow = (mItems) => {
@@ -81,8 +92,7 @@ const HomePage = () => {
           <NavDropdown
             title={item.label}
             key={index}
-            className="dropdown-menu-dark  
-                                   dropend"
+            className="dropdown-menu-dark dropend"
           >
             {menuShow(item.submenu)}
           </NavDropdown>
@@ -113,10 +123,20 @@ const HomePage = () => {
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto" navbarScroll>
               {menuShow(navBarData)}
+              <Button onClick={showSettings}> settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
+
+      {showSett ? (
+        <SettingsModal
+          show={showSett}
+          hide={() => setShowSett(false)}
+        />
+      ) : (
+        ""
+      )}
 
       <PurchaseTracker />
     </>
