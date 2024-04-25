@@ -1,6 +1,7 @@
 import Table from "react-bootstrap/Table";
-import ReviewApproveTable from "./ReviewApproveTable";
-import PurchaseTracker from "./PurchaseTracker";
+import ReviewApproveTable from "./ReviewApproveTable"; // !!!FOR ADMIN USE
+import PurchaseTracker from "./PurchaseTracker"; // !!!FOR USER USE
+import ExpenseRequestForm from "./ExpenseRequestForm.jsx";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -8,6 +9,8 @@ import Container from "react-bootstrap/Container";
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
+import * as userService from "../services/UserService.jsx";
+import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const [request, setRequest] = useState([
@@ -30,15 +33,13 @@ const HomePage = () => {
       userId: 1,
       doo: false,
       ceo: false,
-      // Pass admin from user object. ADMIN WILL NOT BE STORED HERE. JUST FOR TESTING.
-      admin: false,
     },
   ]);
 
   const [showSett, setShowSett] = useState(false);
-
   function showSettings() { setShowSett(true); }
-  function closeSettings() {setShowSett(false); }
+  
+  const [users, setUsers] = useState();
 
   // Create navBar Hiearchy
   const navBarData = [
@@ -79,11 +80,24 @@ const HomePage = () => {
     }
   ];
 
+  // get users to see if admin -> Probably a better way to do this
+  useEffect(() => {
+    requestUserDataFromApi();
+  }, []);
+
+  function requestUserDataFromApi() {
+    userService.getAllUsers().then((res) => {
+      setUsers(res.data);
+    });
+  }
+
   const menuShow = (mItems) => {
     // get admin boolean from object. WILL CHANGE THIS IS NOT PERMANENT
-    if (request[0].admin) {
-      console.log("AHHH");
-      addAdminView();
+    //
+    if (users != undefined) {
+      if (users[2].admin) {
+        addAdminView();
+      }
     }
 
     return mItems.map((item, index) => {
@@ -108,9 +122,9 @@ const HomePage = () => {
   };
 
   // will maybe change this not sure yet.
-  const addAdminView = () => {
+  function addAdminView() {
     navBarData.push({ label: "User View", url: "/" });
-  };
+  }
 
   return (
     <>
@@ -139,6 +153,7 @@ const HomePage = () => {
       )}
 
       <PurchaseTracker />
+      <ReviewApproveTable />
     </>
   );
 };

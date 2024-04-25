@@ -8,6 +8,8 @@ import { useState, useEffect } from "react";
 import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
+import * as userService from "../services/UserService.jsx";
+
 import Modal from "react-bootstrap/Modal";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
@@ -18,6 +20,7 @@ const ReviewApproveTable = () => {
   const [files, setFiles] = useState([]);
 
   const [show, setShow] = useState(false);
+  const [users, setUsers] = useState();
 
   //Obj array filled via backend
   const [requests, setRequests] = useState([
@@ -97,23 +100,41 @@ const ReviewApproveTable = () => {
   };
 
   //The UseEffect calls a function
+  /*
   useEffect(() => {
     requestDataFromApi();
   }, []);
+  */
+
+  useEffect(() => {
+    requestUserDataFromApi();
+  }, []);
+
+  // get user expenses. change array indexing value for different users. Will rework in the future.
+  function requestUserDataFromApi() {
+    userService.getAllUsers().then((res) => {
+      var result = res.data;
+      setUsers(result);
+      setRequests(result[0].userExpenses)
+    });
+  }
 
   //The Function makes use of the expenseService function list to call all of the expenses from the back-end
   //Then sets the empty objArray with all of the values from the back-end
+  /*
   function requestDataFromApi() {
     expenseService.getAllExpenses().then((res) => {
       setRequests(res.data);
     });
   }
+  */
 
   //Used as a temp storage to send a obj to the popup
   const [modalObj, setModalObj] = useState({});
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
+    let conf = document.getElementById(`Confirm-${id}`);
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -125,6 +146,10 @@ const ReviewApproveTable = () => {
         return req;
       }
     });
+
+    if (conf.classList.contains("disabled")) {
+      conf.classList.toggle("disabled");
+    }
 
     //sets the array with updated value
     setRequests(updateRequest);
@@ -148,7 +173,7 @@ const ReviewApproveTable = () => {
       console.log("Denied");
       const updateRequest = requests.map((req) => {
         if (req.id === modalId) {
-          return {...req, reason: reason};
+          return { ...req, reason: reason };
         } else {
           return req;
         }
@@ -225,7 +250,7 @@ const ReviewApproveTable = () => {
                   <ButtonGroup className="mb-2 " size="sm">
                     <Button
                       className="mb-2"
-                      id={"View: " + data.id}
+                      id={"View-" + data.id}
                       type="button"
                       variant="outline-light"
                       onClick={() => modalHandle("View", data.id)}
@@ -238,13 +263,13 @@ const ReviewApproveTable = () => {
                 <td>
                   <ToggleButtonGroup
                     type="radio"
-                    name="actions"
+                    name={"actions " + data.id}
                     className="mb-2 "
                     size="sm"
                   >
                     <ToggleButton
                       className="mb-2 me-2"
-                      id={"Approve: " + data.id}
+                      id={"Approve-" + data.id}
                       variant="outline-success"
                       onClick={() => setChecked("Approved", data.id)}
                       value={"approved"}
@@ -254,7 +279,7 @@ const ReviewApproveTable = () => {
                     {/* Deny Button */}
                     <ToggleButton
                       className="mb-2"
-                      id={"Deny: " + data.id}
+                      id={"Deny-" + data.id}
                       variant="outline-danger"
                       value={"deny"}
                       onClick={() => setChecked("Denied", data.id)}
@@ -267,8 +292,8 @@ const ReviewApproveTable = () => {
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">
                     <Button
-                      className="mb-2"
-                      id={"Confirm: " + data.id}
+                      className="mb-2 disabled"
+                      id={"Confirm-" + data.id}
                       type="button"
                       variant="outline-secondary"
                       onClick={() =>
