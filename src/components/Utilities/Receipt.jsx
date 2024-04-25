@@ -1,4 +1,9 @@
+import Form from "react-bootstrap/Form";
+import { useState } from "react";
+
 const Receipt = ({ requests }) => {
+  const [files, setFiles] = useState([]);
+  const [receipt, setReceipt] = useState("");
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
 
@@ -39,15 +44,18 @@ const Receipt = ({ requests }) => {
 
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
-    const newRequest = requests.map((request) => {
-      if (request.id === id) {
-        return { ...request, receipt: url };
-      }
-      return request;
-    });
-
-    setRequests(newRequest);
-    console.log(requests);
+    setReceipt(url);
+    
   };
+
+  return (
+    <Form.Control
+      onChange={handleFileSelect}
+      accept=".pdf, .png, .jpeg, .jpg"
+      id="file"
+      as="input"
+      type="file"
+    ></Form.Control>
+  );
 };
 export default Receipt;
