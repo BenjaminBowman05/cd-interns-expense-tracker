@@ -61,8 +61,8 @@ const HomePage = () => {
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/request">Request Form</Nav.Link>
               <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown title="TEST">
                   <NavDropdown.Item>TEST</NavDropdown.Item>
@@ -79,6 +79,7 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
+              <Button variant="transparent" size="md" onClick={showSettings}> settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
