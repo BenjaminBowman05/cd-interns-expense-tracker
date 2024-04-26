@@ -6,6 +6,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
+import { useState } from "react";
+import { Button } from "react-bootstrap";
+import SettingsModal from "./Modals/SettingsModal";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect } from "react";
 
@@ -33,6 +36,9 @@ const HomePage = () => {
     },
   ]);
 
+  const [showSett, setShowSett] = useState(false);
+  function showSettings() { setShowSett(true); }
+  
   const [users, setUsers] = useState();
 
   // get users to see if admin -> Probably a better way to do this
@@ -79,10 +85,16 @@ const HomePage = () => {
         </Container>
       </Navbar>
 
-      {/**
-       *
-       * Ternary operator to show admin table vs user table
-       */}
+      {showSett ? (
+        <SettingsModal
+          show={showSett}
+          hide={() => setShowSett(false)}
+        />
+      ) : (
+        ""
+      )}
+
+      <PurchaseTracker />
       <ReviewApproveTable />
     </>
   );

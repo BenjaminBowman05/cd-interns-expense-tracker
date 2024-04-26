@@ -72,9 +72,11 @@ const PurchaseTracker = () => {
       id: 1,
       expense: "$1000",
       program: "Kids",
+      item: "Baskets",
       description: "For the kids!",
       signedBy: "Nicolas",
       date: "3/27/2024",
+      dateNeeded: "4/5/2024",
       status: "Approved",
       receipt: "",
     },
@@ -82,9 +84,11 @@ const PurchaseTracker = () => {
       id: 2,
       expense: "$1000",
       program: "Kids",
+      item: "Rubber Balls",
       description: "For the kids!",
       signedBy: "Nicolas",
       date: "3/27/2024",
+      dateNeeded: "4/5/2024",
       status: "Pending...",
       receipt: "",
     },
@@ -92,9 +96,11 @@ const PurchaseTracker = () => {
       id: 3,
       expense: "$1000",
       program: "Kids",
+      item: "Pack of 15 Crayons",
       description: "For the kids!",
       signedBy: "Nicolas",
       date: "3/27/2024",
+      dateNeeded: "4/5/2024",
       status: "Pending...",
       receipt: "",
     },
@@ -128,15 +134,17 @@ const PurchaseTracker = () => {
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-      <Table striped bordered hover>
+      <Table striped bordered hover size="lg">
         <thead>
           <tr>
             <th>ID</th>
             <th>Expense</th>
             <th>Program</th>
+            <th>Item</th>
             <th>Description</th>
             <th>Signed</th>
             <th>Date</th>
+            <th>Date Needed</th>
             <th>Status</th>
             <th>Receipt</th>
           </tr>
@@ -149,9 +157,11 @@ const PurchaseTracker = () => {
                 <td>{requestInfo.id}</td>
                 <td>{requestInfo.expense}</td>
                 <td>{requestInfo.program}</td>
+                <td>{requestInfo.item}</td>
                 <td>{requestInfo.description}</td>
                 <td>{requestInfo.signedBy}</td>
                 <td>{requestInfo.date}</td>
+                <td>{requestInfo.dateNeeded}</td>
                 <td>{requestInfo.status}</td>
                 <td>
                   {files[requestInfo.id - 1] === undefined && (
