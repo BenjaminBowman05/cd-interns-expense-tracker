@@ -40,45 +40,6 @@ const HomePage = () => {
   
   const [users, setUsers] = useState();
 
-  // Create navBar Hiearchy
-  const navBarData = [
-    { label: "Home", url: "/" },
-    { label: "Purchase Request Form", url: "/" },
-    {
-      label: "Filters",
-      submenu: [
-        {
-          label: "Status",
-          url: "/",
-          submenu: [
-            { label: "Accepted", url: "/" },
-            { label: "Pending", url: "/" },
-          ],
-        },
-        {
-          label: "Date Created",
-          url: "/",
-          submenu: [
-            { label: "Latest", url: "/" },
-            { label: "Oldest", url: "/" },
-          ],
-        },
-        {
-          label: "Date Needed",
-          url: "/",
-          submenu: [
-            { label: "Latest", url: "/" },
-            { label: "Oldest", url: "/" },
-          ],
-        },
-      ],
-    },
-    {
-      label: "Inventory",
-      url: "/"
-    }
-  ];
-
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
     requestUserDataFromApi();
@@ -90,41 +51,6 @@ const HomePage = () => {
     });
   }
 
-  const menuShow = (mItems) => {
-    // get admin boolean from object. WILL CHANGE THIS IS NOT PERMANENT
-    //
-    if (users != undefined) {
-      if (users[2].admin) {
-        addAdminView();
-      }
-    }
-
-    return mItems.map((item, index) => {
-      if (item.submenu) {
-        return (
-          <NavDropdown
-            title={item.label}
-            key={index}
-            className="dropdown-menu-dark dropend"
-          >
-            {menuShow(item.submenu)}
-          </NavDropdown>
-        );
-      } else {
-        return (
-          <Nav.Link href={item.url} key={index}>
-            {item.label}
-          </Nav.Link>
-        );
-      }
-    });
-  };
-
-  // will maybe change this not sure yet.
-  function addAdminView() {
-    navBarData.push({ label: "User View", url: "/" });
-  }
-
   return (
     <>
       <Navbar expand="lg" fixed="top">
@@ -134,9 +60,25 @@ const HomePage = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto" navbarScroll>
-              {menuShow(navBarData)}
-              <Button className="btn bg-transparent" size="md" onClick={showSettings}> settings </Button>
+            <Nav className="me-auto">
+              <Nav.Link href="#home">Home</Nav.Link>
+              <Nav.Link href="#link">Link</Nav.Link>
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                <NavDropdown title="TEST">
+                  <NavDropdown.Item>TEST</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">
+                  Something
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">
+                  Separated link
+                </NavDropdown.Item>
+              </NavDropdown>
             </Nav>
           </Navbar.Collapse>
         </Container>

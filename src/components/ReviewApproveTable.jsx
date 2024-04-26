@@ -115,7 +115,7 @@ const ReviewApproveTable = () => {
     userService.getAllUsers().then((res) => {
       var result = res.data;
       setUsers(result);
-      setRequests(result[0].userExpenses)
+      setRequests(result[2].userExpenses)
     });
   }
 
@@ -222,7 +222,8 @@ const ReviewApproveTable = () => {
               <th>Expense</th>
               <th>Program</th>
               <th>Description</th>
-              <th>Date</th>
+              <th>Date Created</th>
+              <th>Date Needed</th>
               <th>View</th>
               <th>Decision</th>
               <th>Confirmation</th>
@@ -245,6 +246,7 @@ const ReviewApproveTable = () => {
                 </td>
                 <td>{data.purpose}</td>
                 <td>{data.dateOfExpense}</td>
+                <td>{data.dateNeeded}</td>
                 {/* View Button will open a version of expense form that is populated with obj data */}
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">
