@@ -6,7 +6,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
 import * as userService from "../services/UserService.jsx";
@@ -137,7 +136,7 @@ const HomePage = () => {
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto" navbarScroll>
               {menuShow(navBarData)}
-              <Button onClick={showSettings}> settings </Button>
+              <Button className="btn bg-transparent" size="md" onClick={showSettings}> settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>

@@ -215,7 +215,7 @@ const ReviewApproveTable = () => {
     <>
       <>
         {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-        <Table striped bordered hover variant="dark">
+        <Table striped bordered hover>
           <thead>
             <tr>
               <th>ID</th>
