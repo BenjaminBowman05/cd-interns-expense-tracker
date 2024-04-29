@@ -9,42 +9,42 @@ import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
 import Modal from "react-bootstrap/Modal";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
 const ReviewApproveTable = () => {
-  const [reqId, setReqId] = useState(0);
-  const [modalId, setModalId] = useState(0);
-  const [confText, setConfText] = useState("");
   const [files, setFiles] = useState([]);
 
   const [show, setShow] = useState(false);
 
   //Obj array filled via backend
   const [requests, setRequests] = useState([
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Cruz",
-      dateOfExpense: "2024/03/29",
-      lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
-      items: "Balls, Pens",
-      purpose: "Kids need money",
-      expensePrograms: [
-        { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
-        { id: 2, programName: "Adults", cost: 100, expenseId: 2 },
-      ],
-      total: 1000,
-      dateNeeded: "2024/04/01",
-      requester: true,
-      requesterSupervisor: false,
-      userId: 1,
-      doo: false,
-      ceo: false,
-      receipt: "",
-      reason: "",
-    },
+    // {
+    //   id: 1,
+    //   firstName: "Benjamin",
+    //   lastName: "Cruz",
+    //   dateOfExpense: "2024/03/29",
+    //   lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
+    //   items: "Balls, Pens",
+    //   purpose: "Kids need money",
+    //   expensePrograms: [
+    //     { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
+    //     { id: 2, programName: "Adults", cost: 100, expenseId: 2 },
+    //   ],
+    //   total: 1000,
+    //   dateNeeded: "2024/04/01",
+    //   requester: true,
+    //   requesterSupervisor: false,
+    //   userId: 1,
+    //   doo: false,
+    //   ceo: false,
+    //   receipt: "",
+    //   reason: "",
+    // },
   ]);
 
+  //validates files passed into table and obj
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
 
@@ -53,6 +53,7 @@ const ReviewApproveTable = () => {
     // Allowing file type
     var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
 
+    //If the give file is not part of the allowed extension it will remove it and throw error
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
       fileInput.value = "";
@@ -66,6 +67,7 @@ const ReviewApproveTable = () => {
     return true;
   };
 
+  //Handles the implentation of a file while calling the other file functions to verify and attach the url
   const handleFileSelect = (event, id) => {
     console.log(event);
     let valid = validateFile(id);
@@ -83,6 +85,7 @@ const ReviewApproveTable = () => {
     }
   };
 
+  //attaches the url of file to the request obj then updates array
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
     const newRequest = requests.map((request) => {
@@ -114,6 +117,8 @@ const ReviewApproveTable = () => {
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
+    let btn = document.getElementById(`Confirm-${id}`);
+
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -125,7 +130,7 @@ const ReviewApproveTable = () => {
         return req;
       }
     });
-
+    btn.classList.toggle('disabled');
     //sets the array with updated value
     setRequests(updateRequest);
   };
@@ -144,11 +149,10 @@ const ReviewApproveTable = () => {
     if (modalObj[modalId - 1].requesterSupervisor) {
       console.log("Approved");
     } else {
-      // window.alert("Denial has been sent")
       console.log("Denied");
       const updateRequest = requests.map((req) => {
         if (req.id === modalId) {
-          return {...req, reason: reason};
+          return { ...req, reason: reason };
         } else {
           return req;
         }
@@ -158,7 +162,10 @@ const ReviewApproveTable = () => {
     }
   };
 
+  //used to keep track of modal info being passed into view and confirmation
+  const [modalId, setModalId] = useState(0);
   //Finds the obj tied to the view button clicked then stores it for later
+
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
@@ -166,8 +173,12 @@ const ReviewApproveTable = () => {
         return req;
       }
     });
+
     setModalObj(updateRequest);
   };
+
+  //Id used for finding receipt for modal
+  const [reqId, setReqId] = useState(0);
 
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
@@ -181,14 +192,14 @@ const ReviewApproveTable = () => {
         setReqId(id);
         break;
 
-      default:
+      case "Confirm":
         setShowConfirmation(true);
     }
   };
 
   return (
     <>
-      <>
+      <div>
         {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
         <Table striped bordered hover variant="dark">
           <thead>
@@ -202,7 +213,7 @@ const ReviewApproveTable = () => {
               <th>Decision</th>
               <th>Confirmation</th>
               <th>Reciept</th>
-              <th>TEST</th>
+              {/* <th>TEST</th> */}
             </tr>
           </thead>
           <tbody>
@@ -212,11 +223,21 @@ const ReviewApproveTable = () => {
                 <td>{data.id}</td>
                 <td>${data.total}</td>
                 <td>
-                  {data.expensePrograms.map((program) => (
+                  <DropdownButton size="sm" title="Programs" variant="outline-light">
+                    {data.expensePrograms.map((program) => (
+                      <Dropdown.Item disabled
+                        key={program.programName}
+                        as="button"
+                      >
+                        {program.programName}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                  {/* {data.expensePrograms.map((program) => (
                     <p key={program.programName} className="m-0">
                       {program.programName}
                     </p>
-                  ))}
+                  ))} */}
                 </td>
                 <td>{data.purpose}</td>
                 <td>{data.dateOfExpense}</td>
@@ -238,7 +259,7 @@ const ReviewApproveTable = () => {
                 <td>
                   <ToggleButtonGroup
                     type="radio"
-                    name="actions"
+                    name={"actions " + data.id}
                     className="mb-2 "
                     size="sm"
                   >
@@ -267,18 +288,19 @@ const ReviewApproveTable = () => {
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">
                     <Button
-                      className="mb-2"
-                      id={"Confirm: " + data.id}
+                      className="mb-2 disabled"
+                      id={"Confirm-" + data.id}
                       type="button"
                       variant="outline-secondary"
                       onClick={() =>
-                        modalHandle(data.requesterSupervisor, data.id)
+                        modalHandle("Confirm", data.id)
                       }
                     >
                       Confirmation
                     </Button>
                   </ButtonGroup>
                 </td>
+                {/* File upload */}
                 <td>
                   {files[data.id - 1] === undefined && (
                     <Form.Control
@@ -298,14 +320,14 @@ const ReviewApproveTable = () => {
                     </Button>
                   )}
                 </td>
-                <td>
+                {/* <td>
                   <p>{data.reason}</p>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
         </Table>
-      </>
+      </div>
       {/* Makes a call to the popup component but it will only call if showModal is true and with the
             call it sends a variable called show with the value of showModal and close using the set method of showModal
             Then sends the obj that was clicked on to be used*/}
@@ -314,6 +336,7 @@ const ReviewApproveTable = () => {
           show={showModal}
           close={() => setShowModal(false)}
           data={modalObj}
+          reqId={modalId}
         />
       ) : (
         ""
