@@ -1,11 +1,15 @@
 import Table from "react-bootstrap/Table";
-import ReviewApproveTable from "./ReviewApproveTable";
-import PurchaseTracker from "./PurchaseTracker";
+import ReviewApproveTable from "./ReviewApproveTable"; // !!!FOR ADMIN USE
+import PurchaseTracker from "./PurchaseTracker"; // !!!FOR USER USE
+import ExpenseRequestForm from "./ExpenseRequestForm.jsx";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
+import { Button } from "react-bootstrap";
+import SettingsModal from "./Modals/SettingsModal";
+import * as userService from "../services/UserService.jsx";
+import { useState, useEffect } from "react";
 
 const HomePage = () => {
   const [request, setRequest] = useState([
@@ -28,79 +32,26 @@ const HomePage = () => {
       userId: 1,
       doo: false,
       ceo: false,
-      // Pass admin from user object. ADMIN WILL NOT BE STORED HERE. JUST FOR TESTING.
-      admin: false,
     },
   ]);
 
-  // Create navBar Hiearchy
-  const navBarData = [
-    { label: "Home", url: "/" },
-    { label: "Purchase Request Form", url: "/" },
-    {
-      label: "Filters",
-      submenu: [
-        {
-          label: "Status",
-          url: "/",
-          submenu: [
-            { label: "Accepted", url: "/" },
-            { label: "Pending", url: "/" },
-          ],
-        },
-        {
-          label: "Date Created",
-          url: "/",
-          submenu: [
-            { label: "Latest", url: "/" },
-            { label: "Oldest", url: "/" },
-          ],
-        },
-        {
-          label: "Date Needed",
-          url: "/",
-          submenu: [
-            { label: "Latest", url: "/" },
-            { label: "Oldest", url: "/" },
-          ],
-        },
-      ],
-    },
-  ];
+  const [showSett, setShowSett] = useState(false);
+  function showSettings() { setShowSett(true); }
+  
+  const [admin, setAdmin] = useState(false);
 
-  const menuShow = (mItems) => {
-    // get admin boolean from object. WILL CHANGE THIS IS NOT PERMANENT
-    if (request[0].admin) {
-      console.log("AHHH");
-      addAdminView();
-    }
+  const [users, setUsers] = useState();
 
-    return mItems.map((item, index) => {
-      if (item.submenu) {
-        return (
-          <NavDropdown
-            title={item.label}
-            key={index}
-            className="dropdown-menu-dark  
-                                   dropend"
-          >
-            {menuShow(item.submenu)}
-          </NavDropdown>
-        );
-      } else {
-        return (
-          <Nav.Link href={item.url} key={index}>
-            {item.label}
-          </Nav.Link>
-        );
-      }
+  // get users to see if admin -> Probably a better way to do this
+  useEffect(() => {
+    requestUserDataFromApi();
+  }, []);
+
+  function requestUserDataFromApi() {
+    userService.getAllUsers().then((res) => {
+      setUsers(res.data);
     });
-  };
-
-  // will maybe change this not sure yet.
-  const addAdminView = () => {
-    navBarData.push({ label: "User View", url: "/" });
-  };
+  }
 
   return (
     <>
@@ -111,14 +62,48 @@ const HomePage = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto" navbarScroll>
-              {menuShow(navBarData)}
+            <Nav className="me-auto">
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/request">Request Form</Nav.Link>
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                <NavDropdown title="TEST">
+                  <NavDropdown.Item>TEST</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">
+                  Something
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">
+                  Separated link
+                </NavDropdown.Item>
+              </NavDropdown>
+              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
-      <PurchaseTracker />
+      {showSett ? (
+        <SettingsModal
+          show = {showSett}
+          hide = {() => setShowSett(false)}
+          admin = {admin}
+          isAdmin = {() => {admin ? (setAdmin(false)) : (setAdmin(true))}}
+        />
+      ) : (
+        ""
+      )}
+
+      {admin ? (
+        <ReviewApproveTable />
+      ) : (
+        <PurchaseTracker />
+      )}
+    
     </>
   );
 };

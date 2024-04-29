@@ -1,5 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+
 const ShowReceipt = ({ show, close, data, reqId }) => {
   return (
     <Modal size="lg" show={show} onHide={close}>
