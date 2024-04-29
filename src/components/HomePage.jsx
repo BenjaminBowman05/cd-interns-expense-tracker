@@ -38,6 +38,8 @@ const HomePage = () => {
   const [showSett, setShowSett] = useState(false);
   function showSettings() { setShowSett(true); }
   
+  const [admin, setAdmin] = useState(false);
+
   const [users, setUsers] = useState();
 
   // get users to see if admin -> Probably a better way to do this
@@ -79,7 +81,7 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -87,15 +89,21 @@ const HomePage = () => {
 
       {showSett ? (
         <SettingsModal
-          show={showSett}
-          hide={() => setShowSett(false)}
+          show = {showSett}
+          hide = {() => setShowSett(false)}
+          admin = {admin}
+          isAdmin = {() => {admin ? (setAdmin(false)) : (setAdmin(true))}}
         />
       ) : (
         ""
       )}
 
-      <PurchaseTracker />
-      <ReviewApproveTable />
+      {admin ? (
+        <ReviewApproveTable />
+      ) : (
+        <PurchaseTracker />
+      )}
+    
     </>
   );
 };

@@ -2,7 +2,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 
-const SettingsModal = ({show, hide}) => {
+const SettingsModal = ({show, hide, admin, isAdmin}) => {
 
     const [theme, setTheme] = useState("")
 
@@ -26,11 +26,19 @@ const SettingsModal = ({show, hide}) => {
             setTheme("light")
             document.querySelector("html").setAttribute("data-bs-theme", "dark")
         }
-        
-        console.log()
+        admin = true;
     }
 
     const buttonVar = ("outline-" + theme);
+
+    function OI() {
+        if (admin === true) {
+            return "ON";
+        }
+        else {
+            return "OFF";
+        }
+    }
 
   return (
     <Modal size="lg" show={show} onHide={hide}>
@@ -38,7 +46,8 @@ const SettingsModal = ({show, hide}) => {
             <Modal.Title>Settings</Modal.Title>
         </Modal.Header>
         <Modal.Body id="modal-body">
-            Toggle Theme: <Button variant={buttonVar} onClick={changeTheme}> {theme} </Button>
+            <p>Toggle Theme: <Button variant={buttonVar} onClick={changeTheme}>{theme}</Button> </p>
+            <p>Admin View: <Button variant="transparent" onClick={isAdmin}>{OI()}</Button></p>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
     </Modal>
