@@ -11,6 +11,8 @@ import * as expenseService from "../services/ExpenseService.jsx";
 import * as userService from "../services/UserService.jsx";
 
 import Modal from "react-bootstrap/Modal";
+import Dropdown from 'react-bootstrap/Dropdown';
+import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
 const ReviewApproveTable = ({ requestsObj }) => {
@@ -29,6 +31,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
   
 
 
+  //validates files passed into table and obj
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
 
@@ -37,6 +40,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
     // Allowing file type
     var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
 
+    //If the give file is not part of the allowed extension it will remove it and throw error
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
       fileInput.value = "";
@@ -50,6 +54,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
     return true;
   };
 
+  //Handles the implentation of a file while calling the other file functions to verify and attach the url
   const handleFileSelect = (event, id) => {
     console.log(event);
     let valid = validateFile(id);
@@ -67,6 +72,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
     }
   };
 
+  //attaches the url of file to the request obj then updates array
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
     const newRequest = requests.map((request) => {
@@ -102,7 +108,8 @@ const ReviewApproveTable = ({ requestsObj }) => {
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
-    let conf = document.getElementById(`Confirm-${id}`);
+    let btn = document.getElementById(`Confirm-${id}`);
+
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -114,11 +121,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
         return req;
       }
     });
-
-    if (conf.classList.contains("disabled")) {
-      conf.classList.toggle("disabled");
-    }
-
+    btn.classList.toggle('disabled');
     //sets the array with updated value
     setRequests(updateRequest);
   };
@@ -137,10 +140,10 @@ const ReviewApproveTable = ({ requestsObj }) => {
     if (modalObj[modalId - 1].requesterSupervisor) {
       console.log("Approved");
     } else {
-      // window.alert("Denial has been sent")
       console.log("Denied");
       const updateRequest = requests.map((req) => {
         if (req.id === modalId) {
+          return { ...req, reason: reason };
           return { ...req, reason: reason };
         } else {
           return req;
@@ -151,7 +154,10 @@ const ReviewApproveTable = ({ requestsObj }) => {
     }
   };
 
+  //used to keep track of modal info being passed into view and confirmation
+  const [modalId, setModalId] = useState(0);
   //Finds the obj tied to the view button clicked then stores it for later
+
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
@@ -159,8 +165,12 @@ const ReviewApproveTable = ({ requestsObj }) => {
         return req;
       }
     });
+
     setModalObj(updateRequest);
   };
+
+  //Id used for finding receipt for modal
+  const [reqId, setReqId] = useState(0);
 
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
@@ -174,7 +184,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
         setReqId(id);
         break;
 
-      default:
+      case "Confirm":
         setShowConfirmation(true);
     }
   };
@@ -196,7 +206,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
               <th>Decision</th>
               <th>Confirmation</th>
               <th>Reciept</th>
-              <th>TEST</th>
+              {/* <th>TEST</th> */}
             </tr>
           </thead>
           <tbody>
@@ -206,11 +216,21 @@ const ReviewApproveTable = ({ requestsObj }) => {
                 <td>{data.id}</td>
                 <td>${data.total}</td>
                 <td>
-                  {data.expensePrograms.map((program) => (
+                  <DropdownButton size="sm" title="Programs" variant="outline-light">
+                    {data.expensePrograms.map((program) => (
+                      <Dropdown.Item disabled
+                        key={program.programName}
+                        as="button"
+                      >
+                        {program.programName}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton>
+                  {/* {data.expensePrograms.map((program) => (
                     <p key={program.programName} className="m-0">
                       {program.programName}
                     </p>
-                  ))}
+                  ))} */}
                 </td>
                 <td>{data.purpose}</td>
                 <td>{data.dateOfExpense}</td>
@@ -233,6 +253,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
                 <td>
                   <ToggleButtonGroup
                     type="radio"
+                    name={"actions " + data.id}
                     name={"actions " + data.id}
                     className="mb-2 "
                     size="sm"
@@ -264,16 +285,19 @@ const ReviewApproveTable = ({ requestsObj }) => {
                     <Button
                       className="mb-2 disabled"
                       id={"Confirm-" + data.id}
+                      className="mb-2 disabled"
+                      id={"Confirm-" + data.id}
                       type="button"
                       variant="outline-secondary"
                       onClick={() =>
-                        modalHandle(data.requesterSupervisor, data.id)
+                        modalHandle("Confirm", data.id)
                       }
                     >
                       Confirmation
                     </Button>
                   </ButtonGroup>
                 </td>
+                {/* File upload */}
                 <td>
                   {files[data.id - 1] === undefined && (
                     <Form.Control
@@ -293,9 +317,9 @@ const ReviewApproveTable = ({ requestsObj }) => {
                     </Button>
                   )}
                 </td>
-                <td>
+                {/* <td>
                   <p>{data.reason}</p>
-                </td>
+                </td> */}
               </tr>
             ))}
           </tbody>
@@ -308,6 +332,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
           show={showModal}
           close={() => setShowModal(false)}
           data={modalObj}
+          reqId={modalId}
         />
       ) : (
         ""

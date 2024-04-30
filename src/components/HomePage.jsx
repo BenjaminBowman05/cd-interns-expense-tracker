@@ -6,7 +6,6 @@ import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
-import { useState } from "react";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
 import * as userService from "../services/UserService.jsx";
@@ -54,20 +53,29 @@ const HomePage = () => {
                   </NavDropdown>
                 </Nav.Item>
               </NavDropdown>
-
-              <Nav.Link onClick={showSettings}>Settings</Nav.Link>
+              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
       </Navbar>
 
       {showSett ? (
-        <SettingsModal show={showSett} hide={() => setShowSett(false)} />
+        <SettingsModal
+          show = {showSett}
+          hide = {() => setShowSett(false)}
+          admin = {admin}
+          isAdmin = {() => {admin ? (setAdmin(false)) : (setAdmin(true))}}
+        />
       ) : (
         ""
       )}
 
-      {requests ? <ReviewApproveTable requestsObj={requests} /> : "Loading..."}
+      {admin ? (
+        <ReviewApproveTable />
+      ) : (
+        <PurchaseTracker />
+      )}
+    
     </>
   );
 };
