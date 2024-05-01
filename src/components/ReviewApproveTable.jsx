@@ -9,7 +9,6 @@ import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
 import * as userService from "../services/UserService.jsx";
-
 import Modal from "react-bootstrap/Modal";
 import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from "react-bootstrap/DropdownButton";
@@ -23,9 +22,6 @@ const ReviewApproveTable = ({ requestsObj }) => {
 
   //Obj array filled via backend
   const [requests, setRequests] = useState(requestsObj);
-
-  
-
 
   //validates files passed into table and obj
   const validateFile = (id) => {
@@ -60,7 +56,6 @@ const ReviewApproveTable = ({ requestsObj }) => {
       const reader = new FileReader();
       reader.onload = (e) => handleFileLoadPdf(e, id);
       reader.readAsDataURL(event.target.files[0]);
-
       const newFileState = [...files];
       newFileState[id - 1] = true;
       setFiles(newFileState);
