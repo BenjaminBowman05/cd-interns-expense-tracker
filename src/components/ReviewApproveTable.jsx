@@ -15,37 +15,17 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
-const ReviewApproveTable = () => {
+const ReviewApproveTable = ({ requestsObj }) => {
+  // make method to handle types of filters
   const [files, setFiles] = useState([]);
-
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState();
 
   //Obj array filled via backend
-  const [requests, setRequests] = useState([
-    // {
-    //   id: 1,
-    //   firstName: "Benjamin",
-    //   lastName: "Cruz",
-    //   dateOfExpense: "2024/03/29",
-    //   lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
-    //   items: "Balls, Pens",
-    //   purpose: "Kids need money",
-    //   expensePrograms: [
-    //     { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
-    //     { id: 2, programName: "Adults", cost: 100, expenseId: 2 },
-    //   ],
-    //   total: 1000,
-    //   dateNeeded: "2024/04/01",
-    //   requester: true,
-    //   requesterSupervisor: false,
-    //   userId: 1,
-    //   doo: false,
-    //   ceo: false,
-    //   receipt: "",
-    //   reason: "",
-    // },
-  ]);
+  const [requests, setRequests] = useState(requestsObj);
+
+  
+
 
   //validates files passed into table and obj
   const validateFile = (id) => {
@@ -108,19 +88,6 @@ const ReviewApproveTable = () => {
     requestDataFromApi();
   }, []);
   */
-
-  useEffect(() => {
-    requestUserDataFromApi();
-  }, []);
-
-  // get user expenses. change array indexing value for different users. Will rework in the future.
-  function requestUserDataFromApi() {
-    userService.getAllUsers().then((res) => {
-      var result = res.data;
-      setUsers(result);
-      setRequests(result[2].userExpenses)
-    });
-  }
 
   //The Function makes use of the expenseService function list to call all of the expenses from the back-end
   //Then sets the empty objArray with all of the values from the back-end
@@ -219,10 +186,10 @@ const ReviewApproveTable = () => {
   };
 
   return (
-    <>
-      <div>
+    <div>
+
         {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-        <Table striped bordered hover>
+        <Table striped bordered hover className="table">
           <thead>
             <tr>
               <th>ID</th>
@@ -350,7 +317,6 @@ const ReviewApproveTable = () => {
             ))}
           </tbody>
         </Table>
-      </div>
       {/* Makes a call to the popup component but it will only call if showModal is true and with the
             call it sends a variable called show with the value of showModal and close using the set method of showModal
             Then sends the obj that was clicked on to be used*/}
@@ -387,7 +353,7 @@ const ReviewApproveTable = () => {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 };
 
