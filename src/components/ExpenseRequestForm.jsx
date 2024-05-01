@@ -9,8 +9,11 @@ import Dropdown from "react-bootstrap/Dropdown";
 import * as expenseService from "../services/ExpenseService.jsx";
 import * as programService from "../services/ProgramService.jsx";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const PurchaseRequestForm = () => {
+
+  const navigate = useNavigate();
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
@@ -22,6 +25,7 @@ const PurchaseRequestForm = () => {
     dateNeeded: "",
     requester: true,
     userId: null,
+    recurring: false
   });
 
   //Array var that will hold the expense programs objs
@@ -42,6 +46,7 @@ const PurchaseRequestForm = () => {
     if (formInfo.firstName != "" && formInfo.lastName != "" && formInfo.items != "" && formInfo.purpose != ""
       && formInfo.total != 0 && formInfo.dateNeeded != "" && expensePrograms != []) {
 
+      console.log(formInfo)
       //Calls back-end to create expense for with the form info OBJ
       expenseService.createExpense(formInfo)
         .then(response => {
@@ -58,6 +63,7 @@ const PurchaseRequestForm = () => {
             programService.createProgram(newRequest[i])
               .then(response => {
                 // console.log(expenseService.getAllExpenses())
+                navigate(`/`);
               })
           }
           // console.log(expenseService.getAllExpenses())
@@ -112,7 +118,7 @@ const PurchaseRequestForm = () => {
   //most of the fields are using a controlled input to update on change
   return (
     <>
-      <Container fluid className="mb-5">
+      <Container fluid className="mb-3">
         <h1>Expense Request Form</h1>
       </Container>
       <Container fluid>
@@ -216,7 +222,16 @@ const PurchaseRequestForm = () => {
             </InputGroup>
           </Col>
         </Row>
-
+        <Row className="w-25 mx-auto mb-3">
+          <Col>
+            <Form.Check
+              type={"checkbox"}
+              id={`default-checkbox`}
+              label={`Is Recurring`}
+              onClick={() => {formInfo.recurring = !(formInfo.recurring);}}
+            />
+          </Col>
+        </Row>
         <Row className="dateNeeded mb-3">
           <Col>
             <FloatingLabel controlId="floatingInput" label="Date Needed">

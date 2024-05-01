@@ -283,7 +283,6 @@ const ReviewApproveTable = () => {
                   <ToggleButtonGroup
                     type="radio"
                     name={"actions " + data.id}
-                    name={"actions " + data.id}
                     className="mb-2 "
                     size="sm"
                   >
@@ -312,8 +311,6 @@ const ReviewApproveTable = () => {
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">
                     <Button
-                      className="mb-2 disabled"
-                      id={"Confirm-" + data.id}
                       className="mb-2 disabled"
                       id={"Confirm-" + data.id}
                       type="button"
