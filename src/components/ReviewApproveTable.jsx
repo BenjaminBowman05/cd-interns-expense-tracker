@@ -17,19 +17,13 @@ import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
 const ReviewApproveTable = ({ requestsObj }) => {
   // make method to handle types of filters
-  const [reqId, setReqId] = useState(0);
-  const [modalId, setModalId] = useState(0);
   const [confText, setConfText] = useState("");
   const [files, setFiles] = useState([]);
-
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState();
 
   //Obj array filled via backend
   const [requests, setRequests] = useState(requestsObj);
-
-  
-
 
   //validates files passed into table and obj
   const validateFile = (id) => {
@@ -254,7 +248,6 @@ const ReviewApproveTable = ({ requestsObj }) => {
                   <ToggleButtonGroup
                     type="radio"
                     name={"actions " + data.id}
-                    name={"actions " + data.id}
                     className="mb-2 "
                     size="sm"
                   >
@@ -283,8 +276,6 @@ const ReviewApproveTable = ({ requestsObj }) => {
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">
                     <Button
-                      className="mb-2 disabled"
-                      id={"Confirm-" + data.id}
                       className="mb-2 disabled"
                       id={"Confirm-" + data.id}
                       type="button"
