@@ -14,14 +14,14 @@ import Dropdown from 'react-bootstrap/Dropdown';
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
-const ReviewApproveTable = ({ requestsObj }) => {
+const ReviewApproveTable = () => {
   // make method to handle types of filters
   const [files, setFiles] = useState([]);
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState();
 
   //Obj array filled via backend
-  const [requests, setRequests] = useState(requestsObj);
+  const [requests, setRequests] = useState([]);
 
   //validates files passed into table and obj
   const validateFile = (id) => {
@@ -78,21 +78,17 @@ const ReviewApproveTable = ({ requestsObj }) => {
   };
 
   //The UseEffect calls a function
-  /*
   useEffect(() => {
     requestDataFromApi();
   }, []);
-  */
 
   //The Function makes use of the expenseService function list to call all of the expenses from the back-end
   //Then sets the empty objArray with all of the values from the back-end
-  /*
   function requestDataFromApi() {
     expenseService.getAllExpenses().then((res) => {
       setRequests(res.data);
     });
   }
-  */
 
   //Used as a temp storage to send a obj to the popup
   const [modalObj, setModalObj] = useState({});
@@ -188,11 +184,11 @@ const ReviewApproveTable = ({ requestsObj }) => {
           <thead>
             <tr>
               <th>ID</th>
-              <th>Expense</th>
+              {/* <th>Expense</th>
               <th>Program</th>
-              <th>Description</th>
+              <th>Description</th> */}
               <th>Date Created</th>
-              <th>Date Needed</th>
+              {/* <th>Date Needed</th> */}
               <th>View</th>
               <th>Decision</th>
               <th>Confirmation</th>
@@ -205,7 +201,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
             {requests.map((data) => (
               <tr key={data.id}>
                 <td>{data.id}</td>
-                <td>${data.total}</td>
+                {/* <td>${data.total}</td>
                 <td>
                   <DropdownButton size="sm" title="Programs" variant="outline-light">
                     {data.expensePrograms.map((program) => (
@@ -216,16 +212,16 @@ const ReviewApproveTable = ({ requestsObj }) => {
                         {program.programName}
                       </Dropdown.Item>
                     ))}
-                  </DropdownButton>
+                  </DropdownButton> */}
                   {/* {data.expensePrograms.map((program) => (
                     <p key={program.programName} className="m-0">
                       {program.programName}
                     </p>
                   ))} */}
-                </td>
-                <td>{data.purpose}</td>
+                {/* </td> */}
+                {/* <td>{data.purpose}</td> */}
                 <td>{data.dateOfExpense}</td>
-                <td>{data.dateNeeded}</td>
+                {/* <td>{data.dateNeeded}</td> */}
                 {/* View Button will open a version of expense form that is populated with obj data */}
                 <td>
                   <ButtonGroup className="mb-2 " size="sm">

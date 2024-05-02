@@ -12,28 +12,7 @@ import * as userService from "../services/UserService.jsx";
 import { useState, useEffect } from "react";
 
 const HomePage = () => {
-  const [request, setRequest] = useState([
-    {
-      id: 1,
-      firstName: "Benjamin",
-      lastName: "Cruz",
-      dateOfExpense: "2024/03/29",
-      lastUpdatedDateOfExpense: "2024-04-05T13:28:48.218904",
-      items: "Balls, Pens",
-      purpose: "Kids need money",
-      expensePrograms: [
-        { id: 1, programName: "Kids", cost: 900, expenseId: 1 },
-        { id: 2, programName: "Adults", cost: 100, expenseId: 2 },
-      ],
-      total: 1000,
-      dateNeeded: "2024/04/01",
-      requester: true,
-      requesterSupervisor: false,
-      userId: 1,
-      doo: false,
-      ceo: false,
-    },
-  ]);
+  const [request, setRequest] = useState([]);
 
   const [showSett, setShowSett] = useState(false);
   function showSettings() { setShowSett(true); }
@@ -48,6 +27,7 @@ const HomePage = () => {
   }, []);
 
   function requestUserDataFromApi() {
+    //All users ?????? big flaw should only get the current users info
     userService.getAllUsers().then((res) => {
       setUsers(res.data);
     });
@@ -101,7 +81,7 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker />
+        <PurchaseTracker requestObj={users.userExpenses}/>
       )}
     
     </>
