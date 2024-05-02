@@ -17,10 +17,7 @@ import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
 const ReviewApproveTable = ({ requestsObj }) => {
   // make method to handle types of filters
-  const [confText, setConfText] = useState("");
   const [files, setFiles] = useState([]);
-  const [show, setShow] = useState(false);
-  const [users, setUsers] = useState();
 
   //Obj array filled via backend
   const [requests, setRequests] = useState(requestsObj);
