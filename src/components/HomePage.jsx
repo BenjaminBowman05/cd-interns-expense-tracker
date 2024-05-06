@@ -9,12 +9,13 @@ import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
 import * as userService from "../services/UserService.jsx";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
   const [filterType, setFilterType] = useState("");
   const [users, setUsers] = useState();
   const [requests, setRequests] = useState();
+  const [admin, setAdmin] = useState(true);
 
   useEffect(() => {
     async function requestUserDataFromApi() {
@@ -53,7 +54,10 @@ const HomePage = () => {
                   </NavDropdown>
                 </Nav.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}>
+                {" "}
+                Settings{" "}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -61,21 +65,22 @@ const HomePage = () => {
 
       {showSett ? (
         <SettingsModal
-          show = {showSett}
-          hide = {() => setShowSett(false)}
-          admin = {admin}
-          isAdmin = {() => {admin ? (setAdmin(false)) : (setAdmin(true))}}
+          show={showSett}
+          hide={() => setShowSett(false)}
+          admin={admin}
+          isAdmin={() => {
+            admin ? setAdmin(false) : setAdmin(true);
+          }}
         />
       ) : (
         ""
       )}
 
-      {admin ? (
-        <ReviewApproveTable />
+      {admin && requests ? (
+        <ReviewApproveTable requestsObj={requests} />
       ) : (
         <PurchaseTracker />
       )}
-    
     </>
   );
 };

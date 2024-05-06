@@ -47,7 +47,7 @@ const SettingsModal = ({show, hide, admin, isAdmin}) => {
         </Modal.Header>
         <Modal.Body id="modal-body">
             <p>Toggle Theme: <Button variant={buttonVar} onClick={changeTheme}>{theme}</Button> </p>
-            <p>Admin View: <Button variant="transparent" onClick={isAdmin}>{OI()}</Button></p>
+            <p>Admin View: <Button variant={buttonVar} onClick={isAdmin}>{OI()}</Button></p>
         </Modal.Body>
         <Modal.Footer></Modal.Footer>
     </Modal>
