@@ -9,19 +9,14 @@ import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
 import * as userService from "../services/UserService.jsx";
-
 import Modal from "react-bootstrap/Modal";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
-const ReviewApproveTable = ({ requestsObj }) => {
+const ReviewApproveTable = () => {
   // make method to handle types of filters
-  const [reqId, setReqId] = useState(0);
-  const [modalId, setModalId] = useState(0);
-  const [confText, setConfText] = useState("");
   const [files, setFiles] = useState([]);
-
   const [show, setShow] = useState(false);
   const [users, setUsers] = useState();
 
@@ -61,7 +56,6 @@ const ReviewApproveTable = ({ requestsObj }) => {
       const reader = new FileReader();
       reader.onload = (e) => handleFileLoadPdf(e, id);
       reader.readAsDataURL(event.target.files[0]);
-
       const newFileState = [...files];
       newFileState[id - 1] = true;
       setFiles(newFileState);
@@ -84,21 +78,17 @@ const ReviewApproveTable = ({ requestsObj }) => {
   };
 
   //The UseEffect calls a function
-  /*
   useEffect(() => {
     requestDataFromApi();
   }, []);
-  */
 
   //The Function makes use of the expenseService function list to call all of the expenses from the back-end
   //Then sets the empty objArray with all of the values from the back-end
-  /*
   function requestDataFromApi() {
     expenseService.getAllExpenses().then((res) => {
       setRequests(res.data);
     });
   }
-  */
 
   //Used as a temp storage to send a obj to the popup
   const [modalObj, setModalObj] = useState({});

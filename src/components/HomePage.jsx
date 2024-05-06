@@ -12,25 +12,25 @@ import * as userService from "../services/UserService.jsx";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [filterType, setFilterType] = useState("");
-  const [users, setUsers] = useState();
-  const [requests, setRequests] = useState();
-  const [admin, setAdmin] = useState(true);
+  const [request, setRequest] = useState([]);
 
+  const [showSett, setShowSett] = useState(false);
+  function showSettings() { setShowSett(true); }
+  
+  const [admin, setAdmin] = useState(false);
+
+  const [users, setUsers] = useState();
+
+  // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
-    async function requestUserDataFromApi() {
-      let res = await userService.getAllUsers();
-      setUsers(res.data);
-      setRequests(res.data[0].userExpenses);
-    }
     requestUserDataFromApi();
   }, []);
 
-  // get user expenses. change array indexing value for different users. Will rework in the future.
-
-  const [showSett, setShowSett] = useState(false);
-  function showSettings() {
-    setShowSett(true);
+  function requestUserDataFromApi() {
+    //All users ?????? big flaw should only get the current users info
+    userService.getAllUsers().then((res) => {
+      setUsers(res.data);
+    });
   }
 
   return (
@@ -42,22 +42,26 @@ const HomePage = () => {
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto" variant="underline">
-              <Nav.Link href="#home">Home</Nav.Link>
-              <Nav.Link href="#link">Link</Nav.Link>
-              <NavDropdown title="Filters" id="basic-nav-dropdown">
-                <Nav.Item>
-                  <NavDropdown title="Date Created">
-                    <Nav.Item>
-                      <Nav.Link>Latest</Nav.Link>
-                    </Nav.Item>
-                  </NavDropdown>
-                </Nav.Item>
+            <Nav className="me-auto">
+              <Nav.Link href="/">Home</Nav.Link>
+              <Nav.Link href="/request">Request Form</Nav.Link>
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+                <NavDropdown title="TEST">
+                  <NavDropdown.Item>TEST</NavDropdown.Item>
+                </NavDropdown>
+                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.2">
+                  Another action
+                </NavDropdown.Item>
+                <NavDropdown.Item href="#action/3.3">
+                  Something
+                </NavDropdown.Item>
+                <NavDropdown.Divider />
+                <NavDropdown.Item href="#action/3.4">
+                  Separated link
+                </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}>
-                {" "}
-                Settings{" "}
-              </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}> settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -79,7 +83,7 @@ const HomePage = () => {
       {admin && requests ? (
         <ReviewApproveTable requestsObj={requests} />
       ) : (
-        <PurchaseTracker />
+        <PurchaseTracker requestObj={users.userExpenses}/>
       )}
     </>
   );

@@ -33,14 +33,6 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                     />
               </FloatingLabel>
             </Col>
-            <Col>
-              <FloatingLabel controlId="floatingInput" label="Date">
-              <Form.Control disabled
-                      value={data[reqId - 1].dateOfExpense}
-                      placeholder={data[reqId - 1].dateOfExpense}
-                    />
-              </FloatingLabel>
-            </Col>
           </Row>
           <Row className="itemsRequested mb-3">
             <Col>
