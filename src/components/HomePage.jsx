@@ -45,7 +45,7 @@ const HomePage = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
+              <NavDropdown title="Filters" id="basic-nav-dropdown">
                 <NavDropdown title="TEST">
                   <NavDropdown.Item>TEST</NavDropdown.Item>
                 </NavDropdown>
@@ -61,7 +61,7 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -81,7 +81,8 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker requestObj={users.userExpenses}/>
+        // <PurchaseTracker requestObj={users.userExpenses}/>
+        <PurchaseTracker />
       )}
     
     </>

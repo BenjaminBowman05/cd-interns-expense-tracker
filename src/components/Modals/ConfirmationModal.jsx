@@ -33,8 +33,12 @@ const ConfirmationModal = ({ show, confirm, close, data, reqId }) => {
                   <Form.Control
                     placeholder={""}
                     onChange={(e) => {
-                      console.log(reason);
-                      setReason(e.target.value);
+                      // setReason(e.target.value);
+                      data[reqId - 1].reason = e.target.value;
+                    }}
+                    onPaste={(e) => {
+                      // setReason(e.clipboardData.getData('text'));
+                      data[reqId - 1].reason = e.clipboardData.getData('text');
                     }}
                   />
                 </FloatingLabel>
