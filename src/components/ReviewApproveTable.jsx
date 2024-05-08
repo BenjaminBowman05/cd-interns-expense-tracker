@@ -14,7 +14,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 
-const ReviewApproveTable = () => {
+const ReviewApproveTable = ({ requestsObj }) => {
   // make method to handle types of filters
   const [files, setFiles] = useState([]);
 
@@ -168,27 +168,9 @@ const ReviewApproveTable = () => {
     }
   };
 
-  return (
-    <div>
-      {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-      <Table striped bordered hover className="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Expense</th>
-            <th>Program</th>
-            <th>Description</th>
-            <th>Date Created</th>
-            <th>Date Needed</th>
-            <th>View</th>
-            <th>Decision</th>
-            <th>Confirmation</th>
-            <th>Reciept</th>
-            {/* <th>TEST</th> */}
-          </tr>
-        </thead>
-        <tbody>
-          {/* Outputs table rows for each obj display information */}
+  /**
+   * <tbody>
+
           {requests.map((data) => (
             <tr key={data.id}>
               <td>{data.id}</td>
@@ -213,12 +195,11 @@ const ReviewApproveTable = () => {
                     <p key={program.programName} className="m-0">
                       {program.programName}
                     </p>
-                  ))} */}
+                  ))} 
               </td>
               <td>{data.purpose}</td>
               <td>{data.dateOfExpense}</td>
               <td>{data.dateNeeded}</td>
-              {/* View Button will open a version of expense form that is populated with obj data */}
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
@@ -232,7 +213,6 @@ const ReviewApproveTable = () => {
                   </Button>
                 </ButtonGroup>
               </td>
-              {/* Approval Button */}
               <td>
                 <ToggleButtonGroup
                   type="radio"
@@ -249,7 +229,6 @@ const ReviewApproveTable = () => {
                   >
                     Approve
                   </ToggleButton>
-                  {/* Deny Button */}
                   <ToggleButton
                     className="mb-2"
                     id={"Deny-" + data.id}
@@ -261,7 +240,6 @@ const ReviewApproveTable = () => {
                   </ToggleButton>
                 </ToggleButtonGroup>
               </td>
-              {/* Confirm Button */}
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
@@ -275,7 +253,6 @@ const ReviewApproveTable = () => {
                   </Button>
                 </ButtonGroup>
               </td>
-              {/* File upload */}
               <td>
                 {files[data.id - 1] === undefined && (
                   <Form.Control
@@ -295,12 +272,34 @@ const ReviewApproveTable = () => {
                   </Button>
                 )}
               </td>
-              {/* <td>
-                  <p>{data.reason}</p>
-                </td> */}
             </tr>
           ))}
         </tbody>
+   * 
+   * 
+   * 
+   * 
+   */
+
+  return (
+    <div>
+      {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
+      <Table striped bordered hover id="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Expense</th>
+            <th>Program</th>
+            <th>Description</th>
+            <th>Date Created</th>
+            <th>Date Needed</th>
+            <th>View</th>
+            <th>Decision</th>
+            <th>Confirmation</th>
+            <th>Reciept</th>
+            {/* <th>TEST</th> */}
+          </tr>
+        </thead>
       </Table>
       {/* Makes a call to the popup component but it will only call if showModal is true and with the
             call it sends a variable called show with the value of showModal and close using the set method of showModal

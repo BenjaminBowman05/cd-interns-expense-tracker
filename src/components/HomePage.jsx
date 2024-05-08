@@ -12,11 +12,13 @@ import * as userService from "../services/UserService.jsx";
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [request, setRequest] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   const [showSett, setShowSett] = useState(false);
-  function showSettings() { setShowSett(true); }
-  
+  function showSettings() {
+    setShowSett(true);
+  }
+
   const [admin, setAdmin] = useState(false);
 
   const [users, setUsers] = useState();
@@ -29,7 +31,9 @@ const HomePage = () => {
   function requestUserDataFromApi() {
     //All users ?????? big flaw should only get the current users info
     userService.getAllUsers().then((res) => {
+      console.log(res.data);
       setUsers(res.data);
+      setRequests(res.data[0].userExpenses);
     });
   }
 
@@ -61,7 +65,10 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}>
+                {" "}
+                Settings{" "}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -83,7 +90,7 @@ const HomePage = () => {
       {admin && requests ? (
         <ReviewApproveTable requestsObj={requests} />
       ) : (
-        <PurchaseTracker />
+        <PurchaseTracker requestsObj={requests} />
       )}
     </>
   );
