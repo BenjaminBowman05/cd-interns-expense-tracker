@@ -61,7 +61,7 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -81,7 +81,7 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker requestObj={users.userExpenses}/>
+        <PurchaseTracker />
       )}
     
     </>

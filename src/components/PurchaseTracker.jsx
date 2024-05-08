@@ -134,64 +134,10 @@ const PurchaseTracker = () => {
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-      <Table striped bordered hover size="lg">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Expense</th>
-            <th>Program</th>
-            <th>Item</th>
-            <th>Description</th>
-            <th>Signed</th>
-            <th>Date</th>
-            <th>Date Needed</th>
-            <th>Status</th>
-            <th>Receipt</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Outputs table rows for each obj display information */}
-          {requests.map((requestInfo) => (
-            <>
-              <tr key={requestInfo.id}>
-                <td>{requestInfo.id}</td>
-                <td>{requestInfo.expense}</td>
-                <td>{requestInfo.program}</td>
-                <td>{requestInfo.item}</td>
-                <td>{requestInfo.description}</td>
-                <td>{requestInfo.signedBy}</td>
-                <td>{requestInfo.date}</td>
-                <td>{requestInfo.dateNeeded}</td>
-                <td>{requestInfo.status}</td>
-                <td>
-                  {files[requestInfo.id - 1] === undefined && (
-                    <Form.Control
-                      onChange={(e) => handleFileSelect(e, requestInfo.id)}
-                      accept=".pdf, .png, .jpeg, .jpg"
-                      id={`file-${requestInfo.id}`}
-                      as="input"
-                      type="file"
-                    ></Form.Control>
-                  )}
-                  {files[requestInfo.id - 1] === true && (
-                    <Button
-                      onClick={() => handleShow(requestInfo.id)}
-                      variant="outline-info"
-                    >
-                      View Receipt
-                    </Button>
-                  )}
-                </td>
-                {/**<Button
-                  onClick={(e) => handleShow(requestInfo.id)}
-                  variant="outline-info"
-                >
-                  View Receipt
-                </Button> */}
-              </tr>
-            </>
-          ))}
-        </tbody>
+      <Table striped bordered hover size="lg"
+      caption="hello"
+      columns={requests}
+      >
       </Table>
     </>
   );
