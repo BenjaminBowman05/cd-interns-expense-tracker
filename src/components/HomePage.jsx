@@ -9,14 +9,16 @@ import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
 import * as userService from "../services/UserService.jsx";
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [request, setRequest] = useState([]);
+  const [requests, setRequests] = useState([]);
 
   const [showSett, setShowSett] = useState(false);
-  function showSettings() { setShowSett(true); }
-  
+  function showSettings() {
+    setShowSett(true);
+  }
+
   const [admin, setAdmin] = useState(false);
 
   const [users, setUsers] = useState();
@@ -29,7 +31,9 @@ const HomePage = () => {
   function requestUserDataFromApi() {
     //All users ?????? big flaw should only get the current users info
     userService.getAllUsers().then((res) => {
+      console.log(res.data);
       setUsers(res.data);
+      setRequests(res.data[0].userExpenses);
     });
   }
 
@@ -69,22 +73,23 @@ const HomePage = () => {
 
       {showSett ? (
         <SettingsModal
-          show = {showSett}
-          hide = {() => setShowSett(false)}
-          admin = {admin}
-          isAdmin = {() => {admin ? (setAdmin(false)) : (setAdmin(true))}}
+          show={showSett}
+          hide={() => setShowSett(false)}
+          admin={admin}
+          isAdmin={() => {
+            admin ? setAdmin(false) : setAdmin(true);
+          }}
         />
       ) : (
         ""
       )}
 
-      {admin ? (
-        <ReviewApproveTable />
+      {admin && requests ? (
+        <ReviewApproveTable requestsObj={requests} />
       ) : (
         // <PurchaseTracker requestObj={users.userExpenses}/>
         <PurchaseTracker />
       )}
-    
     </>
   );
 };

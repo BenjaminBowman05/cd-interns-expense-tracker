@@ -10,7 +10,7 @@ import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
 import * as userService from "../services/UserService.jsx";
 import Modal from "react-bootstrap/Modal";
-import Dropdown from 'react-bootstrap/Dropdown';
+import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
@@ -127,6 +127,9 @@ const ReviewApproveTable = () => {
   //This handles the approval decision
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  //used to keep track of modal info being passed into view and confirmation
+  const [modalId, setModalId] = useState(0);
+
   //This handles the decision
   const handleConfirmationShow = (reason) => {
     if (reason.length == 0) {
@@ -152,8 +155,6 @@ const ReviewApproveTable = () => {
     }
   };
 
-  //used to keep track of modal info being passed into view and confirmation
-  const [modalId, setModalId] = useState(0);
   //Finds the obj tied to the view button clicked then stores it for later
 
   const retrieveModalObj = (id) => {

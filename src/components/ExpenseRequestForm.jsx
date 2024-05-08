@@ -12,7 +12,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 
 const PurchaseRequestForm = () => {
-
   const navigate = useNavigate();
 
   //Obj that will hold all of the form information besides the programs
@@ -25,7 +24,7 @@ const PurchaseRequestForm = () => {
     dateNeeded: "",
     requester: true,
     userId: null,
-    recurring: false
+    recurring: false,
   });
 
   //Array var that will hold the expense programs objs
@@ -41,37 +40,52 @@ const PurchaseRequestForm = () => {
 
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
-
     //Makes sure all info is filled before submitting
-    if (formInfo.firstName != "" && formInfo.lastName != "" && formInfo.items != "" && formInfo.purpose != ""
-      && formInfo.total != 0 && formInfo.dateNeeded != "" && expensePrograms != []) {
-
-      console.log(formInfo)
+    if (
+      formInfo.firstName != "" &&
+      formInfo.lastName != "" &&
+      formInfo.items != "" &&
+      formInfo.purpose != "" &&
+      formInfo.total != 0 &&
+      formInfo.dateNeeded != "" &&
+      expensePrograms != []
+    ) {
+      console.log(formInfo);
       //Calls back-end to create expense for with the form info OBJ
-      expenseService.createExpense(formInfo)
-        .then(response => {
-          // console.log(response.data.id)
-          //Maps through all available programs then sets the exepense id to the expense form id so they link
-          const newRequest = expensePrograms.map((info) => {
-            return { ...info, expenseId: response.data.id };
+      expenseService.createExpense(formInfo).then((response) => {
+        // console.log(response.data.id)
+        //Maps through all available programs then sets the exepense id to the expense form id so they link
+        const newRequest = expensePrograms.map((info) => {
+          return { ...info, expenseId: response.data.id };
+        });
+
+        // console.log(newRequest)
+        // setExpensePrograms(newRequest);
+        //This loops through all programs and creates them
+        for (let i = 0; i < newRequest.length; i++) {
+          programService.createProgram(newRequest[i]).then((response) => {
+            // console.log(expenseService.getAllExpenses())
+            navigate(`/`);
           });
-
-          // console.log(newRequest)
-          // setExpensePrograms(newRequest);
-          //This loops through all programs and creates them
-          for (let i = 0; i < newRequest.length; i++) {
-            programService.createProgram(newRequest[i])
-              .then(response => {
-                // console.log(expenseService.getAllExpenses())
-                navigate(`/`);
-              })
-          }
-          // console.log(expenseService.getAllExpenses())
-
-        })
+        }
+        // console.log(expenseService.getAllExpenses())
+      });
     } else {
       window.alert("Please fillout the entire form");
     }
+  };
+
+  const updateTotal = () => {
+    let total = 0;
+    let totalBox = document.getElementById("totalBox");
+    let programs = document.getElementsByClassName("programs");
+
+    for (let i = 0; i < programs.length; i++) {
+      if (!isNaN(parseInt(programs[i].value))) {
+        total += parseInt(programs[i].value);
+      }
+    }
+    totalBox.value = total;
   };
 
   const handleProgram = (e, dex) => {
@@ -81,10 +95,15 @@ const PurchaseRequestForm = () => {
       //maps through the programs to compare indexes and once it finds the right one it updates the cost the returns
       const updateProgram = expensePrograms.map((pro, index) => {
         if (index === dex) {
-          pro.cost = parseInt(e.target.value);
+          if (isNaN(parseInt(e.target.value))) {
+            pro.cost = 0;
+          } else {
+            pro.cost = parseInt(e.target.value);
+          }
+          updateTotal();
           return pro;
         }
-        return pro
+        return pro;
       });
       //after the complete mapping it updates the obj
       setExpensePrograms(updateProgram);
@@ -100,9 +119,8 @@ const PurchaseRequestForm = () => {
         expenseId: 0,
         programName: program,
         cost: 0,
-      }
-    ],
-    );
+      },
+    ]);
     // console.log(formInfo);
     // console.log(expensePrograms)
   };
@@ -112,6 +130,7 @@ const PurchaseRequestForm = () => {
     let array1 = [...expensePrograms];
     array1.splice(event.target.id - 1, 1);
     // console.log(array1)
+
     setExpensePrograms(array1);
   };
 
@@ -128,7 +147,7 @@ const PurchaseRequestForm = () => {
               <Form.Control
                 type="firstName"
                 placeholder="John"
-                onChange={(e) => formInfo.firstName = e.target.value}
+                onChange={(e) => (formInfo.firstName = e.target.value)}
               />
             </FloatingLabel>
           </Col>
@@ -137,7 +156,7 @@ const PurchaseRequestForm = () => {
               <Form.Control
                 type="lastName"
                 placeholder="Doe"
-                onChange={(e) => formInfo.lastName = e.target.value}
+                onChange={(e) => (formInfo.lastName = e.target.value)}
               />
             </FloatingLabel>
           </Col>
@@ -148,7 +167,7 @@ const PurchaseRequestForm = () => {
               as="textarea"
               rows="4"
               placeholder="Items Requested..."
-              onChange={(e) => formInfo.items = e.target.value}
+              onChange={(e) => (formInfo.items = e.target.value)}
             />
           </Col>
         </Row>
@@ -158,7 +177,7 @@ const PurchaseRequestForm = () => {
               <Form.Control
                 type="purpose"
                 placeholder="Purpose goes here..."
-                onChange={(e) => formInfo.purpose = e.target.value}
+                onChange={(e) => (formInfo.purpose = e.target.value)}
               />
             </FloatingLabel>
           </Col>
@@ -168,14 +187,15 @@ const PurchaseRequestForm = () => {
             {expensePrograms.map((program, index) => (
               <li key={index + 1} id={index + 1}>
                 <InputGroup className="mt-3">
-                  <InputGroup.Text>{program.programName} cost: </InputGroup.Text>
+                  <InputGroup.Text>
+                    {program.programName} cost:{" "}
+                  </InputGroup.Text>
                   <Form.Control
+                    id={`program-${index + 1}`}
+                    className="programs"
                     as="input"
                     type="number"
-                    value={program.cost == 0 ? "" : program.cost}
-                    onChange={(e) =>
-                      handleProgram(e, index)
-                    }
+                    onChange={(e) => handleProgram(e, index)}
                   />
                   <Button
                     onClick={deleteProgram}
@@ -215,8 +235,9 @@ const PurchaseRequestForm = () => {
               <InputGroup.Text>$</InputGroup.Text>
               <FloatingLabel controlId="floatingInput" label="Total">
                 <Form.Control
+                  id="totalBox"
                   placeholder="Total Calculated Amount"
-                  onChange={(e) => formInfo.total = parseInt(e.target.value)}
+                  onChange={(e) => (formInfo.total = parseInt(e.target.value))}
                 />
               </FloatingLabel>
             </InputGroup>
@@ -228,7 +249,9 @@ const PurchaseRequestForm = () => {
               type={"checkbox"}
               id={`default-checkbox`}
               label={`Is Recurring`}
-              onClick={() => {formInfo.recurring = !(formInfo.recurring);}}
+              onClick={() => {
+                formInfo.recurring = !formInfo.recurring;
+              }}
             />
           </Col>
         </Row>
@@ -237,7 +260,7 @@ const PurchaseRequestForm = () => {
             <FloatingLabel controlId="floatingInput" label="Date Needed">
               <Form.Control
                 type="date"
-                onChange={(e) => formInfo.dateNeeded = e.target.value}
+                onChange={(e) => (formInfo.dateNeeded = e.target.value)}
               />
             </FloatingLabel>
           </Col>
