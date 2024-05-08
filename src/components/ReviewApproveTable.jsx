@@ -12,14 +12,16 @@ import * as userService from "../services/UserService.jsx";
 import Modal from "react-bootstrap/Modal";
 import Dropdown from "react-bootstrap/Dropdown";
 import DropdownButton from "react-bootstrap/DropdownButton";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
+import { Update } from "./Utilities/Update.jsx";
 
-const ReviewApproveTable = ({ requestsObj }) => {
+const ReviewApproveTable = () => {
   // make method to handle types of filters
   const [files, setFiles] = useState([]);
 
   //Obj array filled via backend
-  const [requests, setRequests] = useState(requestsObj);
+  const [requests, setRequests] = useState([]);
 
   //validates files passed into table and obj
   const validateFile = (id) => {
@@ -106,21 +108,32 @@ const ReviewApproveTable = ({ requestsObj }) => {
         return req;
       }
     });
-    btn.classList.toggle("disabled");
+    if (btn.value == "Disabled") {
+      btn.classList.toggle('disabled');
+      btn.value = "Not Disabled"
+    }
+
     //sets the array with updated value
     setRequests(updateRequest);
   };
 
   //showModal used in conjunction with the view button
-  const [showModal, setShowModal] = useState(false); // !!this should be for all modals not just the view modal!!
+  const [showModal, setShowModal] = useState(false);
 
   const [showReceipt, setShowReceipt] = useState(false);
 
   //This handles the approval decision
   const [showConfirmation, setShowConfirmation] = useState(false);
 
+  //used to keep track of modal info being passed into view and confirmation
+  const [modalId, setModalId] = useState(0);
+
   //This handles the decision
   const handleConfirmationShow = (reason) => {
+    if (reason.length == 0) {
+      reason = "";
+    }
+    // console.log(reason.length)
     setShowConfirmation(false);
     if (modalObj[modalId - 1].requesterSupervisor) {
       console.log("Approved");
@@ -128,12 +141,14 @@ const ReviewApproveTable = ({ requestsObj }) => {
       console.log("Denied");
       const updateRequest = requests.map((req) => {
         if (req.id === modalId) {
-          return { ...req, reason: reason };
+          // return { ...req, reason: reason };
+          return { ...req, reason: modalObj[modalId - 1].reason };
         } else {
           return req;
         }
       });
-
+      // console.log(modalObj[modalId-1])
+      Update(modalObj[modalId - 1])
       setRequests(updateRequest);
     }
   };
@@ -150,6 +165,9 @@ const ReviewApproveTable = ({ requestsObj }) => {
 
     setModalObj(updateRequest);
   };
+
+  //Id used for finding receipt for modal
+  const [reqId, setReqId] = useState(0);
 
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
@@ -168,38 +186,53 @@ const ReviewApproveTable = ({ requestsObj }) => {
     }
   };
 
-  /**
-   * <tbody>
+  return (
+    <div>
 
+      {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
+      <Table striped bordered hover className="table">
+        <thead>
+          <tr>
+            <th>ID</th>
+            {/* <th>Expense</th>
+              <th>Program</th>
+              <th>Description</th> */}
+            <th>Date Created</th>
+            {/* <th>Date Needed</th> */}
+            <th>View</th>
+            <th>Decision</th>
+            <th>Confirmation</th>
+            <th>Reciept</th>
+            {/* <th>TEST</th> */}
+          </tr>
+        </thead>
+        <tbody>
+          {/* Outputs table rows for each obj display information */}
           {requests.map((data) => (
             <tr key={data.id}>
               <td>{data.id}</td>
-              <td>${data.total}</td>
-              <td>
-                <DropdownButton
-                  size="sm"
-                  title="Programs"
-                  variant="outline-light"
-                >
-                  {data.expensePrograms.map((program) => (
-                    <Dropdown.Item
-                      disabled
-                      key={program.programName}
-                      as="button"
-                    >
-                      {program.programName}
-                    </Dropdown.Item>
-                  ))}
-                </DropdownButton>
-                {/* {data.expensePrograms.map((program) => (
+              {/* <td>${data.total}</td>
+                <td>
+                  <DropdownButton size="sm" title="Programs" variant="outline-light">
+                    {data.expensePrograms.map((program) => (
+                      <Dropdown.Item disabled
+                        key={program.programName}
+                        as="button"
+                      >
+                        {program.programName}
+                      </Dropdown.Item>
+                    ))}
+                  </DropdownButton> */}
+              {/* {data.expensePrograms.map((program) => (
                     <p key={program.programName} className="m-0">
                       {program.programName}
                     </p>
-                  ))} 
-              </td>
-              <td>{data.purpose}</td>
+                  ))} */}
+              {/* </td> */}
+              {/* <td>{data.purpose}</td> */}
               <td>{data.dateOfExpense}</td>
-              <td>{data.dateNeeded}</td>
+              {/* <td>{data.dateNeeded}</td> */}
+              {/* View Button will open a version of expense form that is populated with obj data */}
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
@@ -213,6 +246,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
                   </Button>
                 </ButtonGroup>
               </td>
+              {/* Approval Button */}
               <td>
                 <ToggleButtonGroup
                   type="radio"
@@ -229,6 +263,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
                   >
                     Approve
                   </ToggleButton>
+                  {/* Deny Button */}
                   <ToggleButton
                     className="mb-2"
                     id={"Deny-" + data.id}
@@ -240,6 +275,7 @@ const ReviewApproveTable = ({ requestsObj }) => {
                   </ToggleButton>
                 </ToggleButtonGroup>
               </td>
+              {/* Confirm Button */}
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
@@ -247,13 +283,17 @@ const ReviewApproveTable = ({ requestsObj }) => {
                     id={"Confirm-" + data.id}
                     type="button"
                     variant="outline-secondary"
-                    onClick={() => modalHandle("Confirm", data.id)}
+                    value={"Disabled"}
+                    onClick={() =>
+                      modalHandle("Confirm", data.id)
+                    }
                   >
                     Confirmation
                   </Button>
                 </ButtonGroup>
               </td>
-              <td>
+              {/* File upload */}
+              <td className="d-flex align-items-center">
                 {files[data.id - 1] === undefined && (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, data.id)}
@@ -264,42 +304,53 @@ const ReviewApproveTable = ({ requestsObj }) => {
                   ></Form.Control>
                 )}
                 {files[data.id - 1] === true && (
-                  <Button
-                    onClick={() => modalHandle("Reciept", data.id)}
-                    variant="outline-info"
-                  >
-                    View Receipt
-                  </Button>
+                  <>
+                    <Button
+                      onClick={() => modalHandle("Reciept", data.id)}
+                      className="d-inline-block me-2"
+                      variant="outline-info"
+                    >
+                      View Receipt
+                    </Button>
+                    <FloatingLabel controlId="floatingInput" label="Name | Date">
+                      <Form.Control
+                        className="d-inline-block"
+                        value={data.purchaser + " | " + data.dateDelivered}
+                      />
+                    </FloatingLabel>
+                  </>
+
                 )}
               </td>
+              {/* {data.receipt.length > 0 ? (
+                <td>
+                  <FloatingLabel controlId="floatingInput" label="Date">
+                    <Form.Control
+                      value={data.purchaser + " - " + data.dateDelivered}
+                    />
+                  </FloatingLabel>
+                </td>
+              ) : ("")} */}
+              {/* {data.receipt.length > 0 ? (
+                  <td>
+                    <Col>
+                      <FloatingLabel controlId="floatingInput" label="Name">
+                        <Form.Control
+                          type="Name"
+                          value={data.purchaser}
+                        />
+                      </FloatingLabel>
+                    </Col>
+                  </td>
+                ) : (
+                  ""
+                )} */}
+              {/* <td>
+                  <p>{data.reason}</p>
+                </td> */}
             </tr>
           ))}
         </tbody>
-   * 
-   * 
-   * 
-   * 
-   */
-
-  return (
-    <div>
-      {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-      <Table striped bordered hover id="table">
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Expense</th>
-            <th>Program</th>
-            <th>Description</th>
-            <th>Date Created</th>
-            <th>Date Needed</th>
-            <th>View</th>
-            <th>Decision</th>
-            <th>Confirmation</th>
-            <th>Reciept</th>
-            {/* <th>TEST</th> */}
-          </tr>
-        </thead>
       </Table>
       {/* Makes a call to the popup component but it will only call if showModal is true and with the
             call it sends a variable called show with the value of showModal and close using the set method of showModal
