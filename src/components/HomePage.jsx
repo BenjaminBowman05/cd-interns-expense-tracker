@@ -29,12 +29,12 @@ const HomePage = () => {
   }, []);
 
   function requestUserDataFromApi() {
-    //All users ?????? big flaw should only get the current users info
-    userService.getAllUsers().then((res) => {
-      console.log(res.data);
-      setUsers(res.data);
-      setRequests(res.data[0].userExpenses);
-    });
+    userService.getUserById(1)
+      .then((res) => {
+        // console.log(res.data);
+        setUsers(res.data);
+        setRequests(res.data.userExpenses);
+      });
   }
 
   return (
@@ -49,22 +49,6 @@ const HomePage = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <NavDropdown title="Filters" id="basic-nav-dropdown">
-                <NavDropdown title="TEST">
-                  <NavDropdown.Item>TEST</NavDropdown.Item>
-                </NavDropdown>
-                <NavDropdown.Item href="#action/3.1">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.2">
-                  Another action
-                </NavDropdown.Item>
-                <NavDropdown.Item href="#action/3.3">
-                  Something
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action/3.4">
-                  Separated link
-                </NavDropdown.Item>
-              </NavDropdown>
               <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
             </Nav>
           </Navbar.Collapse>
@@ -84,11 +68,11 @@ const HomePage = () => {
         ""
       )}
 
-      {admin && requests ? (
-        <ReviewApproveTable requestsObj={requests} />
+      {admin ? (
+        <ReviewApproveTable />
       ) : (
-        // <PurchaseTracker requestObj={users.userExpenses}/>
-        <PurchaseTracker />
+        <PurchaseTracker requestObj={requests}/>
+        // <PurchaseTracker />
       )}
     </>
   );

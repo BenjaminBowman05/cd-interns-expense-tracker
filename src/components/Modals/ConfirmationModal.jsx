@@ -9,17 +9,16 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 
-const ConfirmationModal = ({ show, confirm, close, data, reqId }) => {
-  const [reason, setReason] = useState("");
+const ConfirmationModal = ({ show, confirm, close, data }) => {
   return (
     <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          {data[reqId - 1].requesterSupervisor ? "Approval" : "Denial"}{" "}
+          {data.requesterSupervisor ? "Approval" : "Denial"}
           Confirmation
         </Modal.Title>
       </Modal.Header>
-      {data[reqId - 1].requesterSupervisor ? (
+      {data.requesterSupervisor ? (
         ""
       ) : (
         <Modal.Body>
@@ -34,11 +33,11 @@ const ConfirmationModal = ({ show, confirm, close, data, reqId }) => {
                     placeholder={""}
                     onChange={(e) => {
                       // setReason(e.target.value);
-                      data[reqId - 1].reason = e.target.value;
+                      data.reason = e.target.value;
                     }}
                     onPaste={(e) => {
                       // setReason(e.clipboardData.getData('text'));
-                      data[reqId - 1].reason = e.clipboardData.getData('text');
+                      data.reason = e.clipboardData.getData('text');
                     }}
                   />
                 </FloatingLabel>
@@ -48,7 +47,7 @@ const ConfirmationModal = ({ show, confirm, close, data, reqId }) => {
         </Modal.Body>
       )}
       <Modal.Footer>
-        <Button onClick={(e) => confirm(reason)}>Please Confirm</Button>
+        <Button onClick={(e) => confirm()}>Please Confirm</Button>
       </Modal.Footer>
     </Modal>
   );

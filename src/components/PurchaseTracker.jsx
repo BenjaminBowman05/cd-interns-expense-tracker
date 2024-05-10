@@ -2,9 +2,10 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-const PurchaseTracker = () => {
+const PurchaseTracker = ({ requestObj }) => {
+  
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
 
@@ -67,44 +68,7 @@ const PurchaseTracker = () => {
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
   //Obj array filled via backend
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      expense: "$1000",
-      program: "Kids",
-      item: "Baskets",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Approved",
-      receipt: "",
-    },
-    {
-      id: 2,
-      expense: "$1000",
-      program: "Kids",
-      item: "Rubber Balls",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Pending...",
-      receipt: "",
-    },
-    {
-      id: 3,
-      expense: "$1000",
-      program: "Kids",
-      item: "Pack of 15 Crayons",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Pending...",
-      receipt: "",
-    },
-  ]);
+  const [requests, setRequests] = useState(requestObj);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -114,24 +78,6 @@ const PurchaseTracker = () => {
 
   return (
     <>
-      <Modal size="lg" show={show} onHide={handleClose}>
-        <Modal.Header closeButton>
-          <Modal.Title>Receipt</Modal.Title>
-        </Modal.Header>
-        <Modal.Body id="modal-body">
-          <embed
-            src={requests[reqId].receipt}
-            width="500px"
-            height="500px"
-          ></embed>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-danger" onClick={handleClose}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal>
-
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
       <Table striped bordered hover size="lg">
@@ -139,30 +85,26 @@ const PurchaseTracker = () => {
           <tr>
             <th>ID</th>
             <th>Expense</th>
-            <th>Program</th>
+            {/* <th>Program</th> */}
             <th>Item</th>
-            <th>Description</th>
-            <th>Signed</th>
-            <th>Date</th>
+            <th>Date Created</th>
             <th>Date Needed</th>
-            <th>Status</th>
+            <th>View</th>
+            {/* <th>Status</th> */}
             <th>Receipt</th>
           </tr>
         </thead>
         <tbody>
           {/* Outputs table rows for each obj display information */}
           {requests.map((requestInfo) => (
-            <>
               <tr key={requestInfo.id}>
                 <td>{requestInfo.id}</td>
-                <td>{requestInfo.expense}</td>
-                <td>{requestInfo.program}</td>
-                <td>{requestInfo.item}</td>
-                <td>{requestInfo.description}</td>
-                <td>{requestInfo.signedBy}</td>
-                <td>{requestInfo.date}</td>
+                <td>{requestInfo.total}</td>
+                {/* <td>{requestInfo.program}</td> */}
+                <td>{requestInfo.items}</td>
+                <td>{requestInfo.dateOfExpense}</td>
                 <td>{requestInfo.dateNeeded}</td>
-                <td>{requestInfo.status}</td>
+                <td>Stuff</td>
                 <td>
                   {files[requestInfo.id - 1] === undefined && (
                     <Form.Control
@@ -189,7 +131,6 @@ const PurchaseTracker = () => {
                   View Receipt
                 </Button> */}
               </tr>
-            </>
           ))}
         </tbody>
       </Table>
