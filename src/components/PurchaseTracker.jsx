@@ -8,12 +8,12 @@ const PurchaseTracker = ({ requestObj }) => {
   
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
-
+ 
     var filePath = fileInput.value;
-
+ 
     // Allowing file type
     var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
-
+ 
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
       fileInput.value = "";
@@ -21,34 +21,34 @@ const PurchaseTracker = ({ requestObj }) => {
       newFileState[id - 1] = false;
       setFiles(newFileState);
       console.log(files);
-
+ 
       return false;
     }
     return true;
   };
-
+ 
   const handleFileSelect = (event, id) => {
     console.log(event);
     let valid = validateFile(id);
-
+ 
     if (valid) {
       console.log(event.target.files);
       const reader = new FileReader();
       reader.onload = (e) => handleFileLoadPdf(e, id);
       reader.readAsDataURL(event.target.files[0]);
-
+ 
       const newFileState = [...files];
       newFileState[id - 1] = true;
       setFiles(newFileState);
       console.log(files);
     }
   };
-
+ 
   const handleFileLoadText = (event) => {
     console.log(event);
     document.getElementById("modal-body").textContent = event.target.result;
   };
-
+ 
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
     const newRequest = requests.map((request) => {
@@ -57,11 +57,11 @@ const PurchaseTracker = ({ requestObj }) => {
       }
       return request;
     });
-
+ 
     setRequests(newRequest);
     console.log(requests);
   };
-
+ 
   const [show, setShow] = useState(false);
   // probably should connect all these to the backend as well not sure.
   // i literally cannot program good luck!
@@ -75,7 +75,7 @@ const PurchaseTracker = ({ requestObj }) => {
     setReqId(id - 1); // array indexing thats why we sub 1
     setShow(true);
   };
-
+ 
   return (
     <>
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
@@ -137,5 +137,6 @@ const PurchaseTracker = ({ requestObj }) => {
     </>
   );
 };
-
+ 
 export default PurchaseTracker;
+ 
