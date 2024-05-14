@@ -19,8 +19,6 @@ const HomePage = () => {
 
   const [admin, setAdmin] = useState(false);
 
-  
-
   return (
     <>
       <Navbar expand="lg" fixed="top">
@@ -58,7 +56,7 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker/>
+        <PurchaseTracker />
         // <PurchaseTracker />
       )}
     </>

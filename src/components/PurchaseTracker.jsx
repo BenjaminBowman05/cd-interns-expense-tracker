@@ -1,9 +1,12 @@
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
+import FormPopUp from "./Modals/FormPopUp.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect } from "react";
+import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal.jsx";
 
 const PurchaseTracker = () => {
   // get users to see if admin -> Probably a better way to do this
@@ -79,6 +82,8 @@ const PurchaseTracker = () => {
   // i literally cannot program good luck!
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalObj, setModalObj] = useState({});
   const [modalId, setModalId] = useState(0);
   //Obj array filled via backend
@@ -90,6 +95,32 @@ const PurchaseTracker = () => {
     setShow(true);
   };
 
+  //Finds the obj tied to the view button clicked then stores it for later
+  const retrieveModalObj = (id) => {
+    const updateRequest = requests.map((req) => {
+      if (req.id === id) {
+        // setModalId(req.id);
+        setModalObj(req);
+        return req;
+      }
+    });
+    // setModalObj(updateRequest[id - 1]);
+  };
+
+  //Handles the modal for the view form
+  const modalHandle = (status, id) => {
+    retrieveModalObj(id);
+    setModalId(id);
+    switch (status) {
+      case "View":
+        setShowModal(true);
+        break;
+      case "Delete":
+        setShowDeleteModal(true);
+        break;
+    }
+  };
+
   return (
     <>
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
@@ -98,11 +129,13 @@ const PurchaseTracker = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Expense Total</th>
-            <th>Item(s)</th>
+            <th>Expense</th>
+            {/* <th>Program</th> */}
+            <th>Item</th>
             <th>Date Created</th>
             <th>Date Needed</th>
-            <th>Details</th>
+            <th>View</th>
+            {/* <th>Status</th> */}
             <th>Receipt</th>
             <th>Cancel Request</th>
           </tr>
@@ -113,19 +146,21 @@ const PurchaseTracker = () => {
             <tr key={requestInfo.id}>
               <td>{requestInfo.id}</td>
               <td>{requestInfo.total}</td>
+              {/* <td>{requestInfo.program}</td> */}
               <td>{requestInfo.items}</td>
               <td>{requestInfo.dateOfExpense}</td>
               <td>{requestInfo.dateNeeded}</td>
               <td>
-                <Button
-                  className="mb-2"
-                  id={"View-" + requestInfo.id}
-                  type="button"
-                  variant="outline-light"
-                  onClick={() => handleView("View", requestInfo.id)}
-                >
-                  View
-                </Button>
+                <ButtonGroup className="mb-2 " size="sm">
+                  <Button
+                    id={"View-" + requestInfo.id}
+                    type="button"
+                    variant="outline-light"
+                    onClick={() => modalHandle("View", requestInfo.id)}
+                  >
+                    View
+                  </Button>
+                </ButtonGroup>
               </td>
               <td>
                 {files[requestInfo.id - 1] === undefined && (
@@ -139,7 +174,7 @@ const PurchaseTracker = () => {
                 )}
                 {files[requestInfo.id - 1] === true && (
                   <Button
-                    onClick={() => handleView("Reciept")}
+                    onClick={() => handleShow(requestInfo.id)}
                     variant="outline-info"
                   >
                     View Receipt
@@ -147,22 +182,32 @@ const PurchaseTracker = () => {
                 )}
               </td>
               <td>
-                <Button
-                  variant="outline-danger"
-                  onClick={() => handleView("Delete", requestInfo.id)}
-                >
-                  Delete
-                </Button>
+                <ButtonGroup className="mb-2 " size="sm">
+                  <Button
+                    id={"Cancel-" + requestInfo.id}
+                    type="button"
+                    variant="outline-danger"
+                    onClick={() => modalHandle("Delete", requestInfo.id)}
+                  >
+                    Cancel
+                  </Button>
+                </ButtonGroup>
               </td>
+              {/**<Button
+                  onClick={(e) => handleShow(requestInfo.id)}
+                  variant="outline-info"
+                >
+                  View Receipt
+                </Button> */}
             </tr>
           ))}
         </tbody>
       </Table>
 
-      {showView ? (
+      {showModal ? (
         <FormPopUp
-          show={showView}
-          close={() => setShowView(false)}
+          show={showModal}
+          close={() => setShowModal(false)}
           data={modalObj}
           reqId={modalId}
         />
@@ -170,22 +215,11 @@ const PurchaseTracker = () => {
         ""
       )}
 
-      {showReceipt ? (
-        <ShowReceipt
-          show={showReceipt}
-          close={() => setShowReceipt(false)}
-          data={requests}
-          reqId={reqId}
-        />
-      ) : (
-        ""
-      )}
-
-      {showConfirmation ? (
+      {showDeleteModal ? (
         <ConfirmDeleteModal
-          show={showConfirmation}
-          close={() => setShowConfirmation(false)}
-          reqId={reqId}
+          show={showDeleteModal}
+          close={() => setShowDeleteModal(false)}
+          reqId={modalId}
         />
       ) : (
         ""
