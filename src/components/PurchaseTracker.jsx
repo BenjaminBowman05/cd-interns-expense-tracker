@@ -2,9 +2,11 @@ import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import Form from "react-bootstrap/Form";
+import FormPopUp from "./Modals/FormPopUp";
+import ButtonGroup from "react-bootstrap/ButtonGroup";
 import { useState } from "react";
 
-const PurchaseTracker = () => {
+const PurchaseTracker = ({ requestsObj }) => {
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
 
@@ -43,11 +45,6 @@ const PurchaseTracker = () => {
     }
   };
 
-  const handleFileLoadText = (event) => {
-    console.log(event);
-    document.getElementById("modal-body").textContent = event.target.result;
-  };
-
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
     const newRequest = requests.map((request) => {
@@ -66,50 +63,37 @@ const PurchaseTracker = () => {
   // i literally cannot program good luck!
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [modalObj, setModalObj] = useState({});
+  const [modalId, setModalId] = useState(0);
   //Obj array filled via backend
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      expense: "$1000",
-      program: "Kids",
-      item: "Baskets",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Approved",
-      receipt: "",
-    },
-    {
-      id: 2,
-      expense: "$1000",
-      program: "Kids",
-      item: "Rubber Balls",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Pending...",
-      receipt: "",
-    },
-    {
-      id: 3,
-      expense: "$1000",
-      program: "Kids",
-      item: "Pack of 15 Crayons",
-      description: "For the kids!",
-      signedBy: "Nicolas",
-      date: "3/27/2024",
-      dateNeeded: "4/5/2024",
-      status: "Pending...",
-      receipt: "",
-    },
-  ]);
+  const [requests, setRequests] = useState(requestsObj);
+  console.log(requests);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
     setReqId(id - 1); // array indexing thats why we sub 1
     setShow(true);
+  };
+
+  const retrieveModalObj = (id) => {
+    const updateRequest = requests.map((req) => {
+      if (req.id === id) {
+        setModalId(req.id);
+        return req;
+      }
+    });
+
+    setModalObj(updateRequest);
+  };
+
+  const modalHandle = (status, id) => {
+    retrieveModalObj(id);
+    switch (status) {
+      case "View":
+        setShowModal(true);
+        break;
+    }
   };
 
   return (
@@ -119,11 +103,7 @@ const PurchaseTracker = () => {
           <Modal.Title>Receipt</Modal.Title>
         </Modal.Header>
         <Modal.Body id="modal-body">
-          <embed
-            src={requests[reqId].receipt}
-            width="500px"
-            height="500px"
-          ></embed>
+          <embed src={requests.receipt} width="500px" height="500px"></embed>
         </Modal.Body>
         <Modal.Footer>
           <Button variant="outline-danger" onClick={handleClose}>
@@ -138,14 +118,12 @@ const PurchaseTracker = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Expense</th>
-            <th>Program</th>
+            <th>Total</th>
+            {/*<th>Program</th>*/}
             <th>Item</th>
-            <th>Description</th>
-            <th>Signed</th>
+            <th>View</th>
             <th>Date</th>
             <th>Date Needed</th>
-            <th>Status</th>
             <th>Receipt</th>
           </tr>
         </thead>
@@ -156,13 +134,23 @@ const PurchaseTracker = () => {
               <tr key={requestInfo.id}>
                 <td>{requestInfo.id}</td>
                 <td>{requestInfo.expense}</td>
-                <td>{requestInfo.program}</td>
+                {/* <td>{requestInfo.program}</td> */}
                 <td>{requestInfo.item}</td>
-                <td>{requestInfo.description}</td>
-                <td>{requestInfo.signedBy}</td>
+                <td>
+                  <ButtonGroup className="mb-2 " size="sm">
+                    <Button
+                      className="mb-2"
+                      id={"View-" + requestInfo.id}
+                      type="button"
+                      variant="outline-light"
+                      onClick={() => modalHandle("View", requestInfo.id)}
+                    >
+                      View
+                    </Button>
+                  </ButtonGroup>
+                </td>
                 <td>{requestInfo.date}</td>
                 <td>{requestInfo.dateNeeded}</td>
-                <td>{requestInfo.status}</td>
                 <td>
                   {files[requestInfo.id - 1] === undefined && (
                     <Form.Control
@@ -193,6 +181,17 @@ const PurchaseTracker = () => {
           ))}
         </tbody>
       </Table>
+
+      {showModal ? (
+        <FormPopUp
+          show={showModal}
+          close={() => setShowModal(false)}
+          data={modalObj}
+          reqId={modalId}
+        />
+      ) : (
+        ""
+      )}
     </>
   );
 };

@@ -50,6 +50,7 @@ const ReviewApproveTable = () => {
 
   //Handles the implentation of a file while calling the other file functions to verify and attach the url
   const handleFileSelect = (event, id) => {
+    document.getElementById(`td-${id}`).className = "d-flex align-items-center";
     console.log(event);
     let valid = validateFile(id);
 
@@ -111,8 +112,8 @@ const ReviewApproveTable = () => {
       }
     });
     if (btn.value == "Disabled") {
-      btn.classList.toggle('disabled');
-      btn.value = "Not Disabled"
+      btn.classList.toggle("disabled");
+      btn.value = "Not Disabled";
     }
 
     //sets the array with updated value
@@ -150,7 +151,7 @@ const ReviewApproveTable = () => {
         }
       });
       // console.log(modalObj[modalId-1])
-      Update(modalObj[modalId - 1])
+      Update(modalObj[modalId - 1]);
       setRequests(updateRequest);
     }
   };
@@ -190,7 +191,6 @@ const ReviewApproveTable = () => {
 
   return (
     <div>
-
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <Table striped bordered hover className="table">
         <thead>
@@ -286,16 +286,14 @@ const ReviewApproveTable = () => {
                     type="button"
                     variant="outline-secondary"
                     value={"Disabled"}
-                    onClick={() =>
-                      modalHandle("Confirm", data.id)
-                    }
+                    onClick={() => modalHandle("Confirm", data.id)}
                   >
                     Confirmation
                   </Button>
                 </ButtonGroup>
               </td>
               {/* File upload */}
-              <td className="d-flex align-items-center">
+              <td id={`td-${data.id}`}>
                 {files[data.id - 1] === undefined && (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, data.id)}
@@ -314,14 +312,16 @@ const ReviewApproveTable = () => {
                     >
                       View Receipt
                     </Button>
-                    <FloatingLabel controlId="floatingInput" label="Name | Date">
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Name | Date"
+                    >
                       <Form.Control
                         className="d-inline-block"
                         value={data.purchaser + " | " + data.dateDelivered}
                       />
                     </FloatingLabel>
                   </>
-
                 )}
               </td>
               {/* {data.receipt.length > 0 ? (

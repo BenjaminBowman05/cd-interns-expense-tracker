@@ -30,10 +30,10 @@ const HomePage = () => {
 
   function requestUserDataFromApi() {
     //All users ?????? big flaw should only get the current users info
-    userService.getAllUsers().then((res) => {
+    userService.getUserById(1).then((res) => {
       console.log(res.data);
       setUsers(res.data);
-      setRequests(res.data[0].userExpenses);
+      setRequests(res.data.userExpenses);
     });
   }
 
@@ -49,7 +49,7 @@ const HomePage = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <NavDropdown title="Filters" id="basic-nav-dropdown">
+              <NavDropdown title="Dropdown" id="basic-nav-dropdown">
                 <NavDropdown title="TEST">
                   <NavDropdown.Item>TEST</NavDropdown.Item>
                 </NavDropdown>
@@ -65,7 +65,10 @@ const HomePage = () => {
                   Separated link
                 </NavDropdown.Item>
               </NavDropdown>
-              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}>
+                {" "}
+                Settings{" "}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -85,10 +88,9 @@ const HomePage = () => {
       )}
 
       {admin && requests ? (
-        <ReviewApproveTable requestsObj={requests} />
+        <ReviewApproveTable />
       ) : (
-        // <PurchaseTracker requestObj={users.userExpenses}/>
-        <PurchaseTracker />
+        <PurchaseTracker requestsObj={requests} />
       )}
     </>
   );
