@@ -31,11 +31,7 @@ const SettingsModal = ({ show, hide, admin, isAdmin }) => {
   const buttonVar = "outline-" + theme;
 
   function OI() {
-    if (admin === true) {
-      return "ON";
-    } else {
-      return "OFF";
-    }
+    return admin ? "ON" : "OFF";
   }
 
   function toTitleCase(str) {

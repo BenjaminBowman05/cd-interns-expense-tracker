@@ -79,7 +79,6 @@ const PurchaseTracker = () => {
   // i literally cannot program good luck!
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
-  const [showModal, setShowModal] = useState(false);
   const [modalObj, setModalObj] = useState({});
   const [modalId, setModalId] = useState(0);
   //Obj array filled via backend
@@ -99,14 +98,13 @@ const PurchaseTracker = () => {
         <thead>
           <tr>
             <th>ID</th>
-            <th>Expense</th>
-            {/* <th>Program</th> */}
-            <th>Item</th>
+            <th>Expense Total</th>
+            <th>Item(s)</th>
             <th>Date Created</th>
             <th>Date Needed</th>
-            <th>View</th>
-            {/* <th>Status</th> */}
+            <th>Details</th>
             <th>Receipt</th>
+            <th>Cancel Request</th>
           </tr>
         </thead>
         <tbody>
@@ -115,11 +113,20 @@ const PurchaseTracker = () => {
             <tr key={requestInfo.id}>
               <td>{requestInfo.id}</td>
               <td>{requestInfo.total}</td>
-              {/* <td>{requestInfo.program}</td> */}
               <td>{requestInfo.items}</td>
               <td>{requestInfo.dateOfExpense}</td>
               <td>{requestInfo.dateNeeded}</td>
-              <td>Stuff</td>
+              <td>
+                <Button
+                  className="mb-2"
+                  id={"View-" + requestInfo.id}
+                  type="button"
+                  variant="outline-light"
+                  onClick={() => handleView("View", requestInfo.id)}
+                >
+                  View
+                </Button>
+              </td>
               <td>
                 {files[requestInfo.id - 1] === undefined && (
                   <Form.Control
@@ -132,30 +139,53 @@ const PurchaseTracker = () => {
                 )}
                 {files[requestInfo.id - 1] === true && (
                   <Button
-                    onClick={() => handleShow(requestInfo.id)}
+                    onClick={() => handleView("Reciept")}
                     variant="outline-info"
                   >
                     View Receipt
                   </Button>
                 )}
               </td>
-              {/**<Button
-                  onClick={(e) => handleShow(requestInfo.id)}
-                  variant="outline-info"
+              <td>
+                <Button
+                  variant="outline-danger"
+                  onClick={() => handleView("Delete", requestInfo.id)}
                 >
-                  View Receipt
-                </Button> */}
+                  Delete
+                </Button>
+              </td>
             </tr>
           ))}
         </tbody>
       </Table>
 
-      {showModal ? (
+      {showView ? (
         <FormPopUp
-          show={showModal}
-          close={() => setShowModal(false)}
+          show={showView}
+          close={() => setShowView(false)}
           data={modalObj}
           reqId={modalId}
+        />
+      ) : (
+        ""
+      )}
+
+      {showReceipt ? (
+        <ShowReceipt
+          show={showReceipt}
+          close={() => setShowReceipt(false)}
+          data={requests}
+          reqId={reqId}
+        />
+      ) : (
+        ""
+      )}
+
+      {showConfirmation ? (
+        <ConfirmDeleteModal
+          show={showConfirmation}
+          close={() => setShowConfirmation(false)}
+          reqId={reqId}
         />
       ) : (
         ""
