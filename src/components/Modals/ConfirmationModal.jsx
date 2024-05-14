@@ -14,7 +14,7 @@ const ConfirmationModal = ({ show, confirm, close, data }) => {
     <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          {data.requesterSupervisor ? "Approval" : "Denial"}
+          {data.requesterSupervisor ? "Approval " : "Denial "}
           Confirmation
         </Modal.Title>
       </Modal.Header>
@@ -37,7 +37,7 @@ const ConfirmationModal = ({ show, confirm, close, data }) => {
                     }}
                     onPaste={(e) => {
                       // setReason(e.clipboardData.getData('text'));
-                      data.reason = e.clipboardData.getData('text');
+                      data.reason = e.clipboardData.getData("text");
                     }}
                   />
                 </FloatingLabel>
