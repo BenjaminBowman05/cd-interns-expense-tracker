@@ -81,6 +81,10 @@ const PurchaseRequestForm = () => {
     let programs = document.getElementsByClassName("programs");
 
     for (let i = 0; i < programs.length; i++) {
+      if (programs[i].value < 0) {
+        programs[i].value = 0;
+      }
+
       if (!isNaN(parseInt(programs[i].value))) {
         total += parseInt(programs[i].value);
       }
@@ -235,6 +239,7 @@ const PurchaseRequestForm = () => {
               <InputGroup.Text>$</InputGroup.Text>
               <FloatingLabel controlId="floatingInput" label="Total">
                 <Form.Control
+                  disabled
                   id="totalBox"
                   placeholder="Total Calculated Amount"
                   onChange={(e) => (formInfo.total = parseInt(e.target.value))}

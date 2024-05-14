@@ -8,12 +8,10 @@ import NavDropdown from "react-bootstrap/NavDropdown";
 import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
-import * as userService from "../services/UserService.jsx";
+
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [requests, setRequests] = useState([]);
-
   const [showSett, setShowSett] = useState(false);
   function showSettings() {
     setShowSett(true);
@@ -21,21 +19,7 @@ const HomePage = () => {
 
   const [admin, setAdmin] = useState(false);
 
-  const [users, setUsers] = useState();
-
-  // get users to see if admin -> Probably a better way to do this
-  useEffect(() => {
-    requestUserDataFromApi();
-  }, []);
-
-  function requestUserDataFromApi() {
-    userService.getUserById(1)
-      .then((res) => {
-        // console.log(res.data);
-        setUsers(res.data);
-        setRequests(res.data.userExpenses);
-      });
-  }
+  
 
   return (
     <>
@@ -49,7 +33,10 @@ const HomePage = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}>
+                {" "}
+                Settings{" "}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -71,7 +58,7 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker requestObj={requests}/>
+        <PurchaseTracker/>
         // <PurchaseTracker />
       )}
     </>
