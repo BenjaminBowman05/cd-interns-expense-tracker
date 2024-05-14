@@ -5,9 +5,9 @@ import Form from "react-bootstrap/Form";
 import ShowReceipt from "./Modals/ShowReceipt";
 import FormPopUp from "./Modals/FormPopUp";
 import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal"
-import { useState } from "react";
- 
-const PurchaseTracker = () => {
+import { useState, useEffect } from "react";
+
+const PurchaseTracker = ({ requestObj }) => {
   const validateFile = (id) => {
     var fileInput = document.getElementById(`file-${id}`);
  
@@ -74,83 +74,6 @@ const PurchaseTracker = () => {
   // i literally cannot program good luck!
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
-  //Obj array filled via backend
-  const [requests, setRequests] = useState([
-    {
-      id: 1,
-      dateOfExpense: "05-10-2024",
-      lastUpdatedDateOfExpense: "05-10-2024 13:22:39",
-      firstName: "T",
-      lastName: "T",
-      items: "money",
-      purpose: "money",
-      reason: "",
-      receipt: "",
-      expensePrograms: [
-          {
-              id: 1,
-              programName: "Program 1",
-              cost: 7000.0,
-              expenseId: 1
-          }
-      ],
-      total: 7000.0,
-      dateNeeded: "2024-05-11",
-      dateDelivered: null,
-      requester: true,
-      requesterSupervisor: false,
-      recurring: true,
-      userId: null,
-      ceo: false,
-      doo: false
-    },
-    {
-      id: 3,
-      dateOfExpense: "05-10-2024",
-      lastUpdatedDateOfExpense: "05-10-2024 13:34:21",
-      firstName: "John",
-      lastName: "John",
-      items: "Many items",
-      purpose: "Yes",
-      reason: "",
-      receipt: "",
-      expensePrograms: [
-        {
-          id: 3,
-          programName: "Program 1",
-          cost: 140.0,
-          expenseId: 3
-        },
-        {
-          id: 4,
-          programName: "Program 2",
-          cost: 500000.0,
-          expenseId: 3
-        },
-        {
-          id: 5,
-          programName: "Program 4",
-          cost: 1.0,
-          expenseId: 3
-        },
-        {
-          id: 6,
-          programName: "Program 3",
-          cost: 1.6E9,
-          expenseId: 3
-        }
-      ],
-      total: 1.600500141E9,
-      dateNeeded: "2024-05-10",
-      dateDelivered: null,
-      requester: true,
-      requesterSupervisor: false,
-      recurring: false,
-      userId: null,
-      ceo: false,
-      doo: false
-    },
-  ]);
 
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
@@ -179,27 +102,10 @@ const PurchaseTracker = () => {
         break;
     }
   };
+  const [requests, setRequests] = useState(requestObj);
  
   return (
     <>
-      {/* <Modal size="lg" show={showReceipt} onHide={() => setShowReceipt(false)}>
-        <Modal.Header closeButton>
-          <Modal.Title>Receipt</Modal.Title>
-        </Modal.Header>
-        <Modal.Body id="modal-body">
-          <embed
-            src={requests[reqId].receipt}
-            width="500px"
-            height="500px"
-          ></embed>
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="outline-danger" onClick={onHide()}>
-            Close
-          </Button>
-        </Modal.Footer>
-      </Modal> */}
- 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
       <Table striped bordered hover size="lg">
@@ -207,14 +113,10 @@ const PurchaseTracker = () => {
           <tr>
             <th>ID</th>
             <th>Expense Total</th>
-            {/* <th>Program</th> */}
             <th>Item(s)</th>
-            {/* <th>Description</th>
-            <th>Signed</th> */}
             <th>Date Created</th>
             <th>Date Needed</th>
             <th>Details</th>
-            {/* <th>Status</th> */}
             <th>Receipt</th>
             <th>Cancel Request</th>
           </tr>
@@ -222,19 +124,13 @@ const PurchaseTracker = () => {
         <tbody>
           {/* Outputs table rows for each obj display information */}
           {requests.map((requestInfo) => (
-            <>
               <tr key={requestInfo.id}>
                 <td>{requestInfo.id}</td>
                 <td>{requestInfo.total}</td>
-                {/* <td>{requestInfo.program}</td> */}
                 <td>{requestInfo.items}</td>
-                {/* <td>{requestInfo.description}</td> */}
-                {/* <td>{requestInfo.signedBy}</td> */}
                 <td>{requestInfo.dateOfExpense}</td>
                 <td>{requestInfo.dateNeeded}</td>
-                {/* <td>{requestInfo.status}</td> */}
                 <td>
-                  {/* <ButtonGroup className="mb-2 " size="sm"> */}
                     <Button
                       className="mb-2"
                       id={"View-" + requestInfo.id}
@@ -244,7 +140,6 @@ const PurchaseTracker = () => {
                     >
                       View
                     </Button>
-                  {/* </ButtonGroup> */}
                 </td>
                 <td>
                   {files[requestInfo.id - 1] === undefined && (
@@ -273,14 +168,7 @@ const PurchaseTracker = () => {
                     Delete
                   </Button>
                 </td>
-                {/**<Button
-                  onClick={(e) => handleShow(requestInfo.id)}
-                  variant="outline-info"
-                >
-                  View Receipt
-                </Button> */}
               </tr>
-            </>
           ))}
         </tbody>
       </Table>
@@ -322,4 +210,3 @@ const PurchaseTracker = () => {
 };
  
 export default PurchaseTracker;
- 

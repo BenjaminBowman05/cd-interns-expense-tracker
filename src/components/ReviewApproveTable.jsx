@@ -15,67 +15,29 @@ import DropdownButton from "react-bootstrap/DropdownButton";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 import { Update } from "./Utilities/Update.jsx";
+import PurchaserModal from "./Modals/PurchaserModal.jsx";
 
 const ReviewApproveTable = () => {
   // make method to handle types of filters
   const [files, setFiles] = useState([]);
-
+  const [show, setShow] = useState(false);
+  const [users, setUsers] = useState();
   //Obj array filled via backend
   const [requests, setRequests] = useState([]);
 
-  //validates files passed into table and obj
-  const validateFile = (id) => {
-    var fileInput = document.getElementById(`file-${id}`);
+  //Used as a temp storage to send a obj to the popup
+  const [modalObj, setModalObj] = useState();
 
-    var filePath = fileInput.value;
+  //showModal used in conjunction with the view button
+  const [showModal, setShowModal] = useState(false);
 
-    // Allowing file type
-    var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
+  const [showReceipt, setShowReceipt] = useState(false);
 
-    //If the give file is not part of the allowed extension it will remove it and throw error
-    if (!allowedExtensions.exec(filePath)) {
-      alert("Invalid file type");
-      fileInput.value = "";
-      const newFileState = [...files];
-      newFileState[id - 1] = false;
-      setFiles(newFileState);
-      console.log(files);
+  //This handles the approval decision
+  const [showConfirmation, setShowConfirmation] = useState(false);
 
-      return false;
-    }
-    return true;
-  };
+  const [showPurchaser, setShowPurchaser] = useState(false);
 
-  //Handles the implentation of a file while calling the other file functions to verify and attach the url
-  const handleFileSelect = (event, id) => {
-    console.log(event);
-    let valid = validateFile(id);
-
-    if (valid) {
-      console.log(event.target.files);
-      const reader = new FileReader();
-      reader.onload = (e) => handleFileLoadPdf(e, id);
-      reader.readAsDataURL(event.target.files[0]);
-      const newFileState = [...files];
-      newFileState[id - 1] = true;
-      setFiles(newFileState);
-      console.log(files);
-    }
-  };
-
-  //attaches the url of file to the request obj then updates array
-  const handleFileLoadPdf = (event, id) => {
-    let url = event.target.result;
-    const newRequest = requests.map((request) => {
-      if (request.id === id) {
-        return { ...request, receipt: url };
-      }
-      return request;
-    });
-
-    setRequests(newRequest);
-    console.log(requests);
-  };
 
   //The UseEffect calls a function
   useEffect(() => {
@@ -90,13 +52,122 @@ const ReviewApproveTable = () => {
     });
   }
 
-  //Used as a temp storage to send a obj to the popup
-  const [modalObj, setModalObj] = useState({});
+  //validates files passed into table and obj
+  const validateFile = (id) => {
+    var fileInput = document.getElementById(`file-${id}`);
+
+    var filePath = fileInput.value;
+
+    // Allowing file type
+    var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
+
+    //If the give file is not part of the allowed extension it will remove it and throw error
+    if (!allowedExtensions.exec(filePath)) {
+      alert("Invalid file type");
+      fileInput.value = "";
+      // const newFileState = [...files];
+      // newFileState[id - 1] = false;
+      // setFiles(newFileState);
+      // console.log(files);
+
+      return false;
+    }
+    return true;
+  };
+
+  //Handles the implentation of a file while calling the other file functions to verify and attach the url
+  const handleFileSelect = (event, id) => {
+    // console.log(event);
+    let valid = validateFile(id);
+
+    if (valid) {
+      // console.log(event.target.files);
+      const reader = new FileReader();
+      reader.onload = (e) => handleFileLoadPdf(e, id);
+      reader.readAsDataURL(event.target.files[0]);
+      // const newFileState = [...files];
+      // newFileState[id - 1] = true;
+      // setFiles(newFileState);
+      // console.log(files);
+      console.log(requests)
+      modalHandle("Purchaser", id);
+    }
+  };
+
+  //attaches the url of file to the request obj then updates array
+  const handleFileLoadPdf = (event, id) => {
+    let url = event.target.result;
+    console.log(url);
+    const newRequest = requests.map((request) => {
+      if (request.id === id) {
+        request.receipt = url;
+        return request;
+      }
+      return request;
+    });
+
+    setRequests(newRequest);
+    // Update(modalObj);
+  };
+
+  //Finds the obj tied to the view button clicked then stores it for later
+  const retrieveModalObj = (id) => {
+    const updateRequest = requests.map((req) => {
+      if (req.id === id) {
+        // setModalId(req.id);
+        setModalObj(req)
+        return req;
+      }
+    });
+    // setModalObj(updateRequest[id - 1]);
+  };
+
+  //Handles the modal for the view form
+  const modalHandle = (status, id) => {
+    retrieveModalObj(id);
+    switch (status) {
+      case "View":
+        setShowModal(true);
+        break;
+
+      case "Reciept":
+        setShowReceipt(true);
+        break;
+
+      case "Confirm":
+        setShowConfirmation(true);
+        break;
+
+      case "Purchaser":
+        setShowPurchaser(true);
+        break;
+    }
+  }
+
+  const handlePurchaserShow = () => {
+    setShowPurchaser(false);
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalObj.id) {
+        if (modalObj.purchaser.length == 0 && modalObj.dateDelivered == "") {
+          req.receipt = "";
+        } else {
+          req.purchaser = modalObj.purchaser;
+          req.dateDelivered = modalObj.dateDelivered;
+
+        }
+        return req;
+      } else {
+        return req;
+      }
+    });
+
+    Update(modalObj);
+    setRequests(updateRequest);
+  };
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
     let btn = document.getElementById(`Confirm-${id}`);
-
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -117,73 +188,26 @@ const ReviewApproveTable = () => {
     setRequests(updateRequest);
   };
 
-  //showModal used in conjunction with the view button
-  const [showModal, setShowModal] = useState(false);
-
-  const [showReceipt, setShowReceipt] = useState(false);
-
-  //This handles the approval decision
-  const [showConfirmation, setShowConfirmation] = useState(false);
-
   //used to keep track of modal info being passed into view and confirmation
-  const [modalId, setModalId] = useState(0);
+  // const [modalId, setModalId] = useState(0);
 
   //This handles the decision
-  const handleConfirmationShow = (reason) => {
-    if (reason.length == 0) {
-      reason = "";
-    }
-    // console.log(reason.length)
+  const handleConfirmationShow = () => {
     setShowConfirmation(false);
-    if (modalObj[modalId - 1].requesterSupervisor) {
+    if (modalObj.requesterSupervisor) {
       console.log("Approved");
     } else {
       console.log("Denied");
       const updateRequest = requests.map((req) => {
-        if (req.id === modalId) {
-          // return { ...req, reason: reason };
-          return { ...req, reason: modalObj[modalId - 1].reason };
+        if (req.id === modalObj.id) {
+          return { ...req, reason: modalObj.reason };
         } else {
           return req;
         }
       });
-      // console.log(modalObj[modalId-1])
-      Update(modalObj[modalId - 1])
+
+      Update(modalObj);
       setRequests(updateRequest);
-    }
-  };
-
-  //Finds the obj tied to the view button clicked then stores it for later
-
-  const retrieveModalObj = (id) => {
-    const updateRequest = requests.map((req) => {
-      if (req.id === id) {
-        setModalId(req.id);
-        console.log(req.id);
-        return req;
-      }
-    });
-
-    setModalObj(updateRequest);
-  };
-
-  //Id used for finding receipt for modal
-  const [reqId, setReqId] = useState(0);
-
-  //Handles the modal for the view form
-  const modalHandle = (status, id) => {
-    retrieveModalObj(id);
-    switch (status) {
-      case "View":
-        setShowModal(true);
-        break;
-      case "Reciept":
-        setShowReceipt(true);
-        setReqId(id);
-        break;
-
-      case "Confirm":
-        setShowConfirmation(true);
     }
   };
 
@@ -195,11 +219,11 @@ const ReviewApproveTable = () => {
         <thead>
           <tr>
             <th>ID</th>
-            {/* <th>Expense</th>
-              <th>Program</th>
+            <th>Expense</th>
+            {/* <th>Program</th>
               <th>Description</th> */}
             <th>Date Created</th>
-            {/* <th>Date Needed</th> */}
+            <th>Date Needed</th>
             <th>View</th>
             <th>Decision</th>
             <th>Confirmation</th>
@@ -212,8 +236,8 @@ const ReviewApproveTable = () => {
           {requests.map((data) => (
             <tr key={data.id}>
               <td>{data.id}</td>
-              {/* <td>${data.total}</td>
-                <td>
+              <td>${data.total}</td>
+              {/* <td>
                   <DropdownButton size="sm" title="Programs" variant="outline-light">
                     {data.expensePrograms.map((program) => (
                       <Dropdown.Item disabled
@@ -230,14 +254,12 @@ const ReviewApproveTable = () => {
                     </p>
                   ))} */}
               {/* </td> */}
-              {/* <td>{data.purpose}</td> */}
               <td>{data.dateOfExpense}</td>
-              {/* <td>{data.dateNeeded}</td> */}
+              <td>{data.dateNeeded}</td>
               {/* View Button will open a version of expense form that is populated with obj data */}
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
-                    className="mb-2"
                     id={"View-" + data.id}
                     type="button"
                     variant="outline-light"
@@ -256,7 +278,7 @@ const ReviewApproveTable = () => {
                   size="sm"
                 >
                   <ToggleButton
-                    className="mb-2 me-2"
+                    className="me-2"
                     id={"Approve-" + data.id}
                     variant="outline-success"
                     onClick={() => setChecked("Approved", data.id)}
@@ -266,7 +288,6 @@ const ReviewApproveTable = () => {
                   </ToggleButton>
                   {/* Deny Button */}
                   <ToggleButton
-                    className="mb-2"
                     id={"Deny-" + data.id}
                     variant="outline-danger"
                     value={"deny"}
@@ -280,7 +301,7 @@ const ReviewApproveTable = () => {
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
-                    className="mb-2 disabled"
+                    className="disabled"
                     id={"Confirm-" + data.id}
                     type="button"
                     variant="outline-secondary"
@@ -294,8 +315,8 @@ const ReviewApproveTable = () => {
                 </ButtonGroup>
               </td>
               {/* File upload */}
-              <td className="d-flex align-items-center">
-                {files[data.id - 1] === undefined && (
+              <td id={`file ${data.id}`} className={data.receipt == "" ? "" : "d-flex align-items-center"}>
+                {data.receipt == "" ? (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, data.id)}
                     accept=".pdf, .png, .jpeg, .jpg"
@@ -303,92 +324,64 @@ const ReviewApproveTable = () => {
                     as="input"
                     type="file"
                   ></Form.Control>
-                )}
-                {files[data.id - 1] === true && (
-                  <>
-                    <Button
-                      onClick={() => modalHandle("Reciept", data.id)}
-                      className="d-inline-block me-2"
-                      variant="outline-info"
-                    >
-                      View Receipt
-                    </Button>
-                    <FloatingLabel controlId="floatingInput" label="Name | Date">
-                      <Form.Control
-                        className="d-inline-block"
-                        value={data.purchaser + " | " + data.dateDelivered}
-                      />
-                    </FloatingLabel>
-                  </>
-
-                )}
-              </td>
-              {/* {data.receipt.length > 0 ? (
-                <td>
-                  <FloatingLabel controlId="floatingInput" label="Date">
-                    <Form.Control
-                      value={data.purchaser + " - " + data.dateDelivered}
-                    />
-                  </FloatingLabel>
-                </td>
-              ) : ("")} */}
-              {/* {data.receipt.length > 0 ? (
-                  <td>
-                    <Col>
-                      <FloatingLabel controlId="floatingInput" label="Name">
+                ) :
+                  (
+                    <>
+                      <Button
+                        onClick={() => modalHandle("Reciept", data.id)}
+                        className="d-inline-block me-2"
+                        variant="outline-info"
+                      >
+                        View Receipt
+                      </Button>
+                      <FloatingLabel controlId="floatingInput" label="Name | Date">
                         <Form.Control
-                          type="Name"
-                          value={data.purchaser}
+                          className="d-inline-block"
+                          value={data.purchaser + " | " + data.dateDelivered}
                         />
                       </FloatingLabel>
-                    </Col>
-                  </td>
-                ) : (
-                  ""
-                )} */}
-              {/* <td>
-                  <p>{data.reason}</p>
-                </td> */}
+                    </>
+                  )}
+              </td>
             </tr>
           ))}
         </tbody>
       </Table>
-      {/* Makes a call to the popup component but it will only call if showModal is true and with the
-            call it sends a variable called show with the value of showModal and close using the set method of showModal
-            Then sends the obj that was clicked on to be used*/}
+
+      {/* This Section contains all of the needed modals for the admin actions */}
       {showModal ? (
         <FormPopUp
           show={showModal}
           close={() => setShowModal(false)}
           data={modalObj}
-          reqId={modalId}
         />
-      ) : (
-        ""
-      )}
+      ) : ("")}
 
       {showConfirmation ? (
         <ConfirmationModal
           show={showConfirmation}
-          confirm={(reason) => handleConfirmationShow(reason)}
+          confirm={() => handleConfirmationShow()}
           close={() => setShowConfirmation(false)}
           data={modalObj}
-          reqId={modalId}
         />
-      ) : (
-        ""
-      )}
+      ) : ("")}
+
+      {showPurchaser ? (
+        <PurchaserModal
+          show={showPurchaser}
+          confirm={() => handlePurchaserShow()}
+          close={() => setShowPurchaser(false)}
+          data={modalObj}
+        />
+      ) : ("")}
 
       {showReceipt ? (
         <ShowReceipt
           show={showReceipt}
           close={() => setShowReceipt(false)}
-          data={requests}
-          reqId={reqId}
+          data={modalObj}
         />
-      ) : (
-        ""
-      )}
+      ) : ("")}
     </div>
   );
 };

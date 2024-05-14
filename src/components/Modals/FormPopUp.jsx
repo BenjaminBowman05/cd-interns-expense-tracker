@@ -20,16 +20,16 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             <Col>
               <FloatingLabel controlId="floatingInput" label="First Name">
               <Form.Control disabled
-                      value={data[reqId - 1].firstName}
-                      placeholder={data[reqId - 1].firstName}
+                      value={data.firstName}
+                      placeholder={data.firstName}
                     />
               </FloatingLabel>
             </Col>
             <Col>
               <FloatingLabel controlId="floatingInput" label="Last Name">
               <Form.Control disabled
-                      value={data[reqId - 1].lastName}
-                      placeholder={data[reqId - 1].lastName}
+                      value={data.lastName}
+                      placeholder={data.lastName}
                     />
               </FloatingLabel>
             </Col>
@@ -37,8 +37,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
           <Row className="itemsRequested mb-3">
             <Col>
               <Form.Control disabled
-                value={data[reqId - 1].items}
-                placeholder={data[reqId - 1].items}
+                value={data.items}
+                placeholder={data.items}
               />
             </Col>
           </Row>
@@ -46,15 +46,15 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             <Col>
               <FloatingLabel controlId="floatingInput" label="Purpose Of Request">
                 <Form.Control disabled
-                  value={data[reqId - 1].purpose}
-                  placeholder={data[reqId - 1].purpose}
+                  value={data.purpose}
+                  placeholder={data.purpose}
                 />
               </FloatingLabel>
             </Col>
           </Row>
           <Row className="selectedPrograms">
             <ul className="selectedPrograms-List">
-              {data[reqId - 1].expensePrograms.map((program) => (
+              {data.expensePrograms.map((program) => (
                 <li key={Math.random()}>
                   <InputGroup className="mt-3">
                     <InputGroup.Text>{program.programName} cost: </InputGroup.Text>
@@ -81,8 +81,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                 <InputGroup.Text>$</InputGroup.Text>
                 <FloatingLabel controlId="floatingInput" label="Total">
                   <Form.Control disabled
-                    value={data[reqId - 1].total}
-                    placeholder={data[reqId - 1].total}
+                    value={data.total}
+                    placeholder={data.total}
                   />
                 </FloatingLabel>
               </InputGroup>
@@ -93,8 +93,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             <Col>
               <FloatingLabel controlId="floatingInput" label="Date Needed">
                 <Form.Control disabled
-                  value={data[reqId - 1].dateNeeded}
-                  placeholder={data[reqId - 1].dateNeeded}
+                  value={data.dateNeeded}
+                  placeholder={data.dateNeeded}
                 />
               </FloatingLabel>
             </Col>
@@ -104,8 +104,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             <Col>
               <FloatingLabel controlId="floatingInput" label="Requestor">
                 <Form.Control disabled
-                  value={data[reqId - 1].requester == true ? "Aproved" : "Pending"}
-                  placeholder={data[reqId - 1].requester == true ? "Aproved" : "Pending"}
+                  value={data.requester == true ? "Aproved" : "Pending"}
+                  placeholder={data.requester == true ? "Aproved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
@@ -115,8 +115,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                 label="Requestor Supervisor"
               >
                 <Form.Control disabled
-                  value={data[reqId - 1].requestorSupervisor == true ? "Aproved" : "Pending"}
-                  placeholder={data[reqId - 1].requestorSupervisor == true ? "Aproved" : "Pending"}
+                  value={data.requestorSupervisor == true ? "Aproved" : data.reason == "" ? "Pending" : "Denied"}
+                  placeholder={data.requestorSupervisor == true ? "Aproved" : data.reason == "" ? "Pending" : "Denied"}
                 />
               </FloatingLabel>
             </Col>
@@ -126,16 +126,16 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                 label="Director Of Operations"
               >
                 <Form.Control disabled
-                  value={data[reqId - 1].DOO == true ? "Aproved" : "Pending"}
-                  placeholder={data[reqId - 1].DOO == true ? "Aproved" : "Pending"}
+                  value={data.DOO == true ? "Aproved" : "Pending"}
+                  placeholder={data.DOO == true ? "Aproved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
             <Col>
               <FloatingLabel controlId="floatingInput" label="CEO">
                 <Form.Control disabled
-                  value={data[reqId - 1].CEO == true ? "Aproved" : "Pending"}
-                  placeholder={data[reqId - 1].CEO == true ? "Aproved" : "Pending"}
+                  value={data.CEO == true ? "Aproved" : "Pending"}
+                  placeholder={data.CEO == true ? "Aproved" : "Pending"}
                 />
 
               </FloatingLabel>

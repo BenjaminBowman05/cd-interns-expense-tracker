@@ -3,7 +3,7 @@ import * as programService from "../../services/ProgramService.jsx";
 
 export function Update(obj) {
     // const programs = [obj.expensePrograms];
-    // console.log(obj)
+    console.log(obj)
     
     expenseService.updateExpense(obj.id, obj).then(response => {
         // for (let i = 0; i < programs.length; i++) {
