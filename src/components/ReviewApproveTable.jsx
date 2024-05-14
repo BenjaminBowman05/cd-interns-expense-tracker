@@ -159,6 +159,7 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         setModalId(req.id);
+        console.log(req.id);
         return req;
       }
     });
