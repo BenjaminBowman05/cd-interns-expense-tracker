@@ -21,18 +21,15 @@ const HomePage = () => {
 
   const [admin, setAdmin] = useState(false);
 
-  const [users, setUsers] = useState();
-
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
     requestUserDataFromApi();
   }, []);
 
   function requestUserDataFromApi() {
-    userService.getUserById(1)
+    userService.getUserById(0)
       .then((res) => {
         // console.log(res.data);
-        setUsers(res.data);
         setRequests(res.data.userExpenses);
       });
   }
