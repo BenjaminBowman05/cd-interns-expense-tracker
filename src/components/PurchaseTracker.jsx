@@ -74,6 +74,10 @@ const PurchaseTracker = ({ requestObj }) => {
   // i literally cannot program good luck!
   const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
+  const [modalObj, setModalObj] = useState({});
+  const [modalId, setModalId] = useState(0);
+  //Obj array filled via backend
+  const [requests, setRequests] = useState(requestObj);
 
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
@@ -102,7 +106,6 @@ const PurchaseTracker = ({ requestObj }) => {
         break;
     }
   };
-  const [requests, setRequests] = useState(requestObj);
  
   return (
     <>
@@ -177,8 +180,8 @@ const PurchaseTracker = ({ requestObj }) => {
         <FormPopUp
           show={showView}
           close={() => setShowView(false)}
-          data={requests}
-          reqId={reqId}
+          data={modalObj}
+          reqId={modalId}
         />
       ) : (
         ""

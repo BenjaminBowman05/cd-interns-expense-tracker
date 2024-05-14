@@ -77,7 +77,8 @@ const ReviewApproveTable = () => {
 
   //Handles the implentation of a file while calling the other file functions to verify and attach the url
   const handleFileSelect = (event, id) => {
-    // console.log(event);
+    document.getElementById(`td-${id}`).className = "d-flex align-items-center";
+    console.log(event);
     let valid = validateFile(id);
 
     if (valid) {
@@ -180,8 +181,8 @@ const ReviewApproveTable = () => {
       }
     });
     if (btn.value == "Disabled") {
-      btn.classList.toggle('disabled');
-      btn.value = "Not Disabled"
+      btn.classList.toggle("disabled");
+      btn.value = "Not Disabled";
     }
 
     //sets the array with updated value
@@ -205,15 +206,14 @@ const ReviewApproveTable = () => {
           return req;
         }
       });
-
-      Update(modalObj);
+      // console.log(modalObj[modalId-1])
+      Update(modalObj[modalId - 1]);
       setRequests(updateRequest);
     }
   };
 
   return (
     <div>
-
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <Table striped bordered hover className="table">
         <thead>
@@ -306,17 +306,15 @@ const ReviewApproveTable = () => {
                     type="button"
                     variant="outline-secondary"
                     value={"Disabled"}
-                    onClick={() =>
-                      modalHandle("Confirm", data.id)
-                    }
+                    onClick={() => modalHandle("Confirm", data.id)}
                   >
                     Confirmation
                   </Button>
                 </ButtonGroup>
               </td>
               {/* File upload */}
-              <td id={`file ${data.id}`} className={data.receipt == "" ? "" : "d-flex align-items-center"}>
-                {data.receipt == "" ? (
+              <td id={`td-${data.id}`}>
+                {files[data.id - 1] === undefined && (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, data.id)}
                     accept=".pdf, .png, .jpeg, .jpg"
@@ -324,24 +322,27 @@ const ReviewApproveTable = () => {
                     as="input"
                     type="file"
                   ></Form.Control>
-                ) :
-                  (
-                    <>
-                      <Button
-                        onClick={() => modalHandle("Reciept", data.id)}
-                        className="d-inline-block me-2"
-                        variant="outline-info"
-                      >
-                        View Receipt
-                      </Button>
-                      <FloatingLabel controlId="floatingInput" label="Name | Date">
-                        <Form.Control
-                          className="d-inline-block"
-                          value={data.purchaser + " | " + data.dateDelivered}
-                        />
-                      </FloatingLabel>
-                    </>
-                  )}
+                )}
+                {files[data.id - 1] === true && (
+                  <>
+                    <Button
+                      onClick={() => modalHandle("Reciept", data.id)}
+                      className="d-inline-block me-2"
+                      variant="outline-info"
+                    >
+                      View Receipt
+                    </Button>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Name | Date"
+                    >
+                      <Form.Control
+                        className="d-inline-block"
+                        value={data.purchaser + " | " + data.dateDelivered}
+                      />
+                    </FloatingLabel>
+                  </>
+                )}
               </td>
             </tr>
           ))}
