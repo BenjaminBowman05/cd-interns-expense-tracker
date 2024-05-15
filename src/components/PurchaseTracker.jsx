@@ -5,12 +5,14 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
 import FormPopUp from "./Modals/FormPopUp.jsx";
 import * as userService from "../services/UserService.jsx";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal.jsx";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Update } from "./Utilities/Update.jsx";
 import PurchaserModal from "./Modals/PurchaserModal.jsx";
+import { useNavigate } from "react-router-dom";
+import MyContext from "../utils/MyContext";
 
 const PurchaseTracker = () => {
   const [show, setShow] = useState(false);
@@ -26,16 +28,26 @@ const PurchaseTracker = () => {
   const [requests, setRequests] = useState([]);
   const [showReceipt, setShowReceipt] = useState(false);
   const [showPurchaser, setShowPurchaser] = useState(false);
+  const { cookies, setCookies } = useContext(MyContext);
+  const navigate = useNavigate();
 
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate('/');
+    }
     requestUserDataFromApi();
-  }, []);
+  }, [cookies.name])
+
+
+  const [users, setUsers] = useState();
 
   function requestUserDataFromApi() {
-    // MAKE ID DYNAMIC
-    userService.getUserById(1).then((res) => {
-      // console.log(res.data);
+    console.log(cookies.name)
+    userService.getUserByUsername(cookies.name).then((res) => {
+      console.log(res.data.userExpenses);
+      setUsers(res.data);
       setRequests(res.data.userExpenses);
     });
   }

@@ -9,20 +9,10 @@ import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
-import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import { useState } from "react";
+import Cookies from 'js-cookie'
 
 const HomePage = () => {
-  let data = []
-  const { cookies, setCookies } = useContext(MyContext);
-  const navigate = useNavigate();
-  useEffect(() => {
-      console.log(cookies);
-      if (!cookies.name) {
-          navigate('/');
-      }
-  }, [cookies.name])
 
   const [requests, setRequests] = useState([]);
 
@@ -32,21 +22,6 @@ const HomePage = () => {
   }
 
   const [admin, setAdmin] = useState(false);
-
-  const [users, setUsers] = useState();
-
-  // get users to see if admin -> Probably a better way to do this
-  useEffect(() => {
-    requestUserDataFromApi();
-  }, []);
-
-  function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
-      setUsers(res.data);
-      setRequests(res.data.userExpenses);
-    });
-  }
 
   return (
     <>
@@ -64,6 +39,9 @@ const HomePage = () => {
                 {" "}
                 Settings{" "}
               </Button>
+              {/* <Button onClick={Cookies.remove('name')}>
+                Log out
+              </Button> */}
             </Nav>
           </Navbar.Collapse>
         </Container>
