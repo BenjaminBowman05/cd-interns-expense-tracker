@@ -25,7 +25,6 @@ const SettingsModal = ({ show, hide, admin, isAdmin }) => {
       setTheme("light");
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
     }
-    admin = true;
   }
 
   const buttonVar = "outline-" + theme;

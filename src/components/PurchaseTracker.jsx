@@ -187,7 +187,7 @@ const PurchaseTracker = () => {
           {requests.map((requestInfo) => (
             <tr key={requestInfo.id}>
               <td>{requestInfo.id}</td>
-              <td>{requestInfo.total}</td>
+              <td>${requestInfo.total}</td>
               {/* <td>{requestInfo.program}</td> */}
               <td>{requestInfo.items}</td>
               <td>{requestInfo.dateOfExpense}</td>
