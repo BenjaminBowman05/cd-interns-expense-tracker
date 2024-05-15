@@ -19,14 +19,12 @@ const HomePage = () => {
 
   const [admin, setAdmin] = useState(false);
 
-  
-
   return (
     <>
       <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img width={30} src="/src/assets/cdLogo.webp" /> Code Differently
+            <img style={{height: 25, margin: 0}} src="/src/assets/CDBrand.png" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">

@@ -159,7 +159,7 @@ const PurchaseTracker = () => {
         </tbody>
       </Table>
 
-      {showView ? (
+      {/* {showView ? (
         <FormPopUp
           show={showView}
           close={() => setShowView(false)}
@@ -168,9 +168,9 @@ const PurchaseTracker = () => {
         />
       ) : (
         ""
-      )}
+      )} */}
 
-      {showReceipt ? (
+      {/* {showReceipt ? (
         <ShowReceipt
           show={showReceipt}
           close={() => setShowReceipt(false)}
@@ -179,9 +179,9 @@ const PurchaseTracker = () => {
         />
       ) : (
         ""
-      )}
+      )} */}
 
-      {showConfirmation ? (
+      {/* {showConfirmation ? (
         <ConfirmDeleteModal
           show={showConfirmation}
           close={() => setShowConfirmation(false)}
@@ -189,7 +189,7 @@ const PurchaseTracker = () => {
         />
       ) : (
         ""
-      )}
+      )} */}
     </>
   );
 };
