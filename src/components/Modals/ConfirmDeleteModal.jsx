@@ -1,15 +1,20 @@
 import { useState } from "react";
 import { Button, ButtonGroup, Modal } from "react-bootstrap";
 import * as expenseService from "../../services/ExpenseService.jsx";
+import * as programsService from "../../services/ProgramService.jsx";
 
-const ConfirmDeleteModal = ({ show, close, reqId }) => {
+const ConfirmDeleteModal = ({ show, close, updateUI, data }) => {
   const deleteExpense = () => {
-    expenseService.deleteExpense(reqId);
+    for (let i = 0; i < data.expensePrograms.length; i++) {
+      programsService.deleteProgram(data.expensePrograms[i].id);
+    }
+
+    expenseService.deleteExpense(data.id);
   };
 
   return (
-    <Modal show={show} onHide={close} size="lg" centered>
-      <Modal.Header closeButton>Confirm</Modal.Header>
+    <Modal show={show} size="lg" centered backdrop="static">
+      <Modal.Header>Confirm</Modal.Header>
       <Modal.Body>Are you sure you want to delete this request?</Modal.Body>
       <Modal.Footer>
         <Button
@@ -17,6 +22,7 @@ const ConfirmDeleteModal = ({ show, close, reqId }) => {
           size="md"
           onClick={(e) => {
             deleteExpense();
+            updateUI();
             close();
           }}
         >

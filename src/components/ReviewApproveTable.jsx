@@ -383,6 +383,7 @@ const ReviewApproveTable = () => {
           show={showReceipt}
           close={() => setShowReceipt(false)}
           data={modalObj}
+          
         />
       ) : (
         ""

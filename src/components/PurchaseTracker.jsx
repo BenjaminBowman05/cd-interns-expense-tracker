@@ -7,14 +7,33 @@ import FormPopUp from "./Modals/FormPopUp.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect } from "react";
 import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal.jsx";
+import ShowReceipt from "./Modals/ShowReceipt.jsx";
+import FloatingLabel from "react-bootstrap/FloatingLabel";
+import { Update } from "./Utilities/Update.jsx";
+import PurchaserModal from "./Modals/PurchaserModal.jsx";
 
 const PurchaseTracker = () => {
+  const [show, setShow] = useState(false);
+  // probably should connect all these to the backend as well not sure.
+  // i literally cannot program good luck!
+  const [reqId, setReqId] = useState(0);
+  const [files, setFiles] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [modalObj, setModalObj] = useState({});
+  const [modalId, setModalId] = useState(0);
+  //Obj array filled via backend
+  const [requests, setRequests] = useState([]);
+  const [showReceipt, setShowReceipt] = useState(false);
+  const [showPurchaser, setShowPurchaser] = useState(false);
+
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
     requestUserDataFromApi();
   }, []);
 
   function requestUserDataFromApi() {
+    // MAKE ID DYNAMIC
     userService.getUserById(1).then((res) => {
       // console.log(res.data);
       setRequests(res.data.userExpenses);
@@ -32,10 +51,10 @@ const PurchaseTracker = () => {
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
       fileInput.value = "";
-      const newFileState = [...files];
-      newFileState[id - 1] = false;
-      setFiles(newFileState);
-      console.log(files);
+      // const newFileState = [...files];
+      // newFileState[id - 1] = false;
+      // setFiles(newFileState);
+      //console.log(files);
 
       return false;
     }
@@ -52,42 +71,48 @@ const PurchaseTracker = () => {
       reader.onload = (e) => handleFileLoadPdf(e, id);
       reader.readAsDataURL(event.target.files[0]);
 
-      const newFileState = [...files];
-      newFileState[id - 1] = true;
-      setFiles(newFileState);
+      // const newFileState = [...files];
+      // newFileState[id - 1] = true;
+      // setFiles(newFileState);
       console.log(files);
+      modalHandle("Purchaser", id);
     }
   };
 
-  const handleFileLoadText = (event) => {
-    console.log(event);
-    document.getElementById("modal-body").textContent = event.target.result;
+  const handlePurchaserShow = () => {
+    setShowPurchaser(false);
+    console.log(modalObj.purchaser, modalObj.dateDelivered);
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalObj.id) {
+        if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
+          req.receipt = "";
+          window.alert("Please fill out all fields and reattach file");
+        } else {
+          req.purchaser = modalObj.purchaser;
+          req.dateDelivered = modalObj.dateDelivered;
+        }
+      }
+      return req;
+    });
+
+    Update(modalObj);
+    setRequests(updateRequest);
   };
 
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
+    // console.log(url);
     const newRequest = requests.map((request) => {
       if (request.id === id) {
-        return { ...request, receipt: url };
+        request.receipt = url;
+        return request;
       }
       return request;
     });
 
     setRequests(newRequest);
-    console.log(requests);
+    // Update(modalObj);
   };
-
-  const [show, setShow] = useState(false);
-  // probably should connect all these to the backend as well not sure.
-  // i literally cannot program good luck!
-  const [reqId, setReqId] = useState(0);
-  const [files, setFiles] = useState([]);
-  const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [modalObj, setModalObj] = useState({});
-  const [modalId, setModalId] = useState(0);
-  //Obj array filled via backend
-  const [requests, setRequests] = useState([]);
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
@@ -118,8 +143,25 @@ const PurchaseTracker = () => {
       case "Delete":
         setShowDeleteModal(true);
         break;
+      case "Reciept":
+        setShowReceipt(true);
+        break;
+      case "Purchaser":
+        setShowPurchaser(true);
+        break;
     }
   };
+
+  function updateReq() {
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalId) {
+        const newTodos = requests.filter((t) => t !== req);
+        setRequests(newTodos);
+      } else {
+        return req;
+      }
+    });
+  }
 
   return (
     <>
@@ -162,8 +204,13 @@ const PurchaseTracker = () => {
                   </Button>
                 </ButtonGroup>
               </td>
-              <td>
-                {files[requestInfo.id - 1] === undefined && (
+              <td
+                id={`file ${requestInfo.id}`}
+                className={
+                  requestInfo.receipt == "" ? "" : "d-flex align-items-center"
+                }
+              >
+                {requestInfo.receipt == "" ? (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, requestInfo.id)}
                     accept=".pdf, .png, .jpeg, .jpg"
@@ -171,14 +218,29 @@ const PurchaseTracker = () => {
                     as="input"
                     type="file"
                   ></Form.Control>
-                )}
-                {files[requestInfo.id - 1] === true && (
-                  <Button
-                    onClick={() => handleShow(requestInfo.id)}
-                    variant="outline-info"
-                  >
-                    View Receipt
-                  </Button>
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => modalHandle("Reciept", requestInfo.id)}
+                      className="d-inline-block me-2"
+                      variant="outline-info"
+                    >
+                      View Receipt
+                    </Button>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Name | Date"
+                    >
+                      <Form.Control
+                        className="d-inline-block"
+                        value={
+                          requestInfo.purchaser +
+                          " | " +
+                          requestInfo.dateDelivered
+                        }
+                      />
+                    </FloatingLabel>
+                  </>
                 )}
               </td>
               <td>
@@ -215,11 +277,35 @@ const PurchaseTracker = () => {
         ""
       )}
 
+      {showPurchaser ? (
+        <PurchaserModal
+          show={showPurchaser}
+          confirm={() => handlePurchaserShow()}
+          close={() => setShowPurchaser(false)}
+          data={modalObj}
+        />
+      ) : (
+        ""
+      )}
+
       {showDeleteModal ? (
         <ConfirmDeleteModal
           show={showDeleteModal}
-          close={() => setShowDeleteModal(false)}
-          reqId={modalId}
+          close={() => {
+            setShowDeleteModal(false);
+          }}
+          data={modalObj}
+          updateUI={updateReq}
+        />
+      ) : (
+        ""
+      )}
+
+      {showReceipt ? (
+        <ShowReceipt
+          show={showReceipt}
+          close={() => setShowReceipt(false)}
+          data={modalObj}
         />
       ) : (
         ""
