@@ -11,8 +11,8 @@ import { useState } from "react";
 
 const PurchaserModal = ({ show, confirm, close, data }) => {
     return (
-        <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
-            <Modal.Header closeButton>
+        <Modal id="modalPopUp" show={show} backdrop="static" size="md" centered>
+            <Modal.Header>
                 <Modal.Title>
                     Purchase Information
                 </Modal.Title>
@@ -53,7 +53,7 @@ const PurchaserModal = ({ show, confirm, close, data }) => {
                 </Container>
             </Modal.Body>
             <Modal.Footer>
-                <Button onClick={(e) => confirm()}>Please Confirm</Button>
+                <Button onClick={() => confirm()}>Please Confirm</Button>
             </Modal.Footer>
         </Modal>
     );

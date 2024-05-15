@@ -97,7 +97,7 @@ const ReviewApproveTable = () => {
   //attaches the url of file to the request obj then updates array
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
-    console.log(url);
+    // console.log(url);
     const newRequest = requests.map((request) => {
       if (request.id === id) {
         request.receipt = url;
@@ -146,19 +146,18 @@ const ReviewApproveTable = () => {
 
   const handlePurchaserShow = () => {
     setShowPurchaser(false);
+    console.log(modalObj.purchaser, modalObj.dateDelivered)
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
-        if (modalObj.purchaser.length == 0 && modalObj.dateDelivered == "") {
+        if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
           req.receipt = "";
+          window.alert("Please fill out all fields and reattach file");
         } else {
           req.purchaser = modalObj.purchaser;
           req.dateDelivered = modalObj.dateDelivered;
-
         }
-        return req;
-      } else {
-        return req;
       }
+      return req;
     });
 
     Update(modalObj);
@@ -191,7 +190,7 @@ const ReviewApproveTable = () => {
   //used to keep track of modal info being passed into view and confirmation
   // const [modalId, setModalId] = useState(0);
 
-  //This handles the decision
+  //This handles the confirmation decision of approve and deny
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
     if (modalObj.requesterSupervisor) {
@@ -213,7 +212,6 @@ const ReviewApproveTable = () => {
 
   return (
     <div>
-
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <Table striped bordered hover className="table">
         <thead>
@@ -228,7 +226,6 @@ const ReviewApproveTable = () => {
             <th>Decision</th>
             <th>Confirmation</th>
             <th>Reciept</th>
-            {/* <th>TEST</th> */}
           </tr>
         </thead>
         <tbody>
