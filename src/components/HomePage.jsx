@@ -25,10 +25,11 @@ const HomePage = () => {
 
   return (
     <>
-      <Navbar expand="lg" fixed="top">
+      <NavbarC admin={admin} setAdmin={setAdmin} />
+      {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img width={30} src="/src/assets/cdLogo.webp" /> Code Differently
+            <img style={{height: 25, margin: 0}} src="/src/assets/CDBrand.png" />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -45,20 +46,7 @@ const HomePage = () => {
             </Nav>
           </Navbar.Collapse>
         </Container>
-      </Navbar>
-
-      {showSett ? (
-        <SettingsModal
-          show={showSett}
-          hide={() => setShowSett(false)}
-          admin={admin}
-          isAdmin={() => {
-            admin ? setAdmin(false) : setAdmin(true);
-          }}
-        />
-      ) : (
-        ""
-      )}
+      </Navbar> */}
 
       {admin ? (
         <ReviewApproveTable />
