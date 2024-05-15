@@ -8,10 +8,6 @@ import { useState, useEffect } from "react";
 import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
-import * as userService from "../services/UserService.jsx";
-import Modal from "react-bootstrap/Modal";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 import { Update } from "./Utilities/Update.jsx";
@@ -97,6 +93,7 @@ const ReviewApproveTable = () => {
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
     // console.log(url);
+    // console.log(url);
     const newRequest = requests.map((request) => {
       if (request.id === id) {
         request.receipt = url;
@@ -145,18 +142,21 @@ const ReviewApproveTable = () => {
 
   const handlePurchaserShow = () => {
     setShowPurchaser(false);
-    console.log(modalObj.purchaser, modalObj.dateDelivered);
+    console.log(modalObj.purchaser, modalObj.dateDelivered)
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-          req.receipt = "";
-          window.alert("Please fill out all fields and reattach file");
-        } else {
-          req.purchaser = modalObj.purchaser;
-          req.dateDelivered = modalObj.dateDelivered;
+          if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
+            req.receipt = "";
+            window.alert("Please fill out all fields and reattach file");
+            window.alert("Please fill out all fields and reattach file");
+          } else {
+            req.purchaser = modalObj.purchaser;
+            req.dateDelivered = modalObj.dateDelivered;
+          }
         }
+        return req;
       }
-      return req;
     });
 
     Update(modalObj);
@@ -189,6 +189,7 @@ const ReviewApproveTable = () => {
   //used to keep track of modal info being passed into view and confirmation
   // const [modalId, setModalId] = useState(0);
 
+  //This handles the confirmation decision of approve and deny
   //This handles the confirmation decision of approve and deny
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
