@@ -1,27 +1,17 @@
-import Table from "react-bootstrap/Table";
 import ReviewApproveTable from "./ReviewApproveTable"; // !!!FOR ADMIN USE
 import PurchaseTracker from "./PurchaseTracker"; // !!!FOR USER USE
-import ExpenseRequestForm from "./ExpenseRequestForm.jsx";
-import Navbar from "react-bootstrap/Navbar";
-import Nav from "react-bootstrap/Nav";
-import NavDropdown from "react-bootstrap/NavDropdown";
-import Container from "react-bootstrap/Container";
-import { Button } from "react-bootstrap";
 import SettingsModal from "./Modals/SettingsModal";
+import NavbarC from "./Utilities/NavbarC";
 
 import { useEffect, useState } from "react";
 
 const HomePage = () => {
-  const [showSett, setShowSett] = useState(false);
-  function showSettings() {
-    setShowSett(true);
-  }
-
   const [admin, setAdmin] = useState(false);
 
   return (
     <>
-      <Navbar expand="lg" fixed="top">
+      <NavbarC admin={admin} setAdmin={setAdmin} />
+      {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
             <img width={30} src="/src/assets/cdLogo.webp" /> Code Differently
@@ -38,20 +28,7 @@ const HomePage = () => {
             </Nav>
           </Navbar.Collapse>
         </Container>
-      </Navbar>
-
-      {showSett ? (
-        <SettingsModal
-          show={showSett}
-          hide={() => setShowSett(false)}
-          admin={admin}
-          isAdmin={() => {
-            admin ? setAdmin(false) : setAdmin(true);
-          }}
-        />
-      ) : (
-        ""
-      )}
+      </Navbar> */}
 
       {admin ? (
         <ReviewApproveTable />
