@@ -40,9 +40,9 @@ const HomePage = () => {
                 {" "}
                 Settings{" "}
               </Button>
-              {/* <Button onClick={Cookies.remove('name')}>
+              <Button onClick={Cookies.remove('name')}>
                 Log out
-              </Button> */}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
