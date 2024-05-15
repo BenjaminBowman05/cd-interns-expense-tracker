@@ -146,17 +146,17 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-        if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-          req.receipt = "";
-          window.alert("Please fill out all fields and reattach file");
-          window.alert("Please fill out all fields and reattach file");
-        } else {
-          req.purchaser = modalObj.purchaser;
-          req.dateDelivered = modalObj.dateDelivered;
+          if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
+            req.receipt = "";
+            window.alert("Please fill out all fields and reattach file");
+            window.alert("Please fill out all fields and reattach file");
+          } else {
+            req.purchaser = modalObj.purchaser;
+            req.dateDelivered = modalObj.dateDelivered;
+          }
         }
+        return req;
       }
-      return req;
-      return req;
     });
 
     Update(modalObj);
