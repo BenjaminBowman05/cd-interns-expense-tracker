@@ -8,10 +8,6 @@ import { useState, useEffect } from "react";
 import FormPopUp from "./Modals/FormPopUp";
 import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
 import * as expenseService from "../services/ExpenseService.jsx";
-import * as userService from "../services/UserService.jsx";
-import Modal from "react-bootstrap/Modal";
-import Dropdown from "react-bootstrap/Dropdown";
-import DropdownButton from "react-bootstrap/DropdownButton";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "./Modals/ShowReceipt.jsx";
 import { Update } from "./Utilities/Update.jsx";
@@ -37,7 +33,6 @@ const ReviewApproveTable = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [showPurchaser, setShowPurchaser] = useState(false);
-
 
   //The UseEffect calls a function
   useEffect(() => {
@@ -89,7 +84,7 @@ const ReviewApproveTable = () => {
       // newFileState[id - 1] = true;
       // setFiles(newFileState);
       // console.log(files);
-      console.log(requests)
+      console.log(requests);
       modalHandle("Purchaser", id);
     }
   };
@@ -97,6 +92,7 @@ const ReviewApproveTable = () => {
   //attaches the url of file to the request obj then updates array
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
+    // console.log(url);
     // console.log(url);
     const newRequest = requests.map((request) => {
       if (request.id === id) {
@@ -115,7 +111,7 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         // setModalId(req.id);
-        setModalObj(req)
+        setModalObj(req);
         return req;
       }
     });
@@ -142,7 +138,7 @@ const ReviewApproveTable = () => {
         setShowPurchaser(true);
         break;
     }
-  }
+  };
 
   const handlePurchaserShow = () => {
     setShowPurchaser(false);
@@ -150,13 +146,16 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
+        if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
           req.receipt = "";
+          window.alert("Please fill out all fields and reattach file");
           window.alert("Please fill out all fields and reattach file");
         } else {
           req.purchaser = modalObj.purchaser;
           req.dateDelivered = modalObj.dateDelivered;
         }
       }
+      return req;
       return req;
     });
 
@@ -179,8 +178,8 @@ const ReviewApproveTable = () => {
       }
     });
     if (btn.value == "Disabled") {
-      btn.classList.toggle('disabled');
-      btn.value = "Not Disabled"
+      btn.classList.toggle("disabled");
+      btn.value = "Not Disabled";
     }
 
     //sets the array with updated value
@@ -190,6 +189,7 @@ const ReviewApproveTable = () => {
   //used to keep track of modal info being passed into view and confirmation
   // const [modalId, setModalId] = useState(0);
 
+  //This handles the confirmation decision of approve and deny
   //This handles the confirmation decision of approve and deny
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
@@ -303,16 +303,19 @@ const ReviewApproveTable = () => {
                     type="button"
                     variant="outline-secondary"
                     value={"Disabled"}
-                    onClick={() =>
-                      modalHandle("Confirm", data.id)
-                    }
+                    onClick={() => modalHandle("Confirm", data.id)}
                   >
                     Confirmation
                   </Button>
                 </ButtonGroup>
               </td>
               {/* File upload */}
-              <td id={`file ${data.id}`} className={data.receipt == "" ? "" : "d-flex align-items-center"}>
+              <td
+                id={`file ${data.id}`}
+                className={
+                  data.receipt == "" ? "" : "d-flex align-items-center"
+                }
+              >
                 {data.receipt == "" ? (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, data.id)}
@@ -321,24 +324,26 @@ const ReviewApproveTable = () => {
                     as="input"
                     type="file"
                   ></Form.Control>
-                ) :
-                  (
-                    <>
-                      <Button
-                        onClick={() => modalHandle("Reciept", data.id)}
-                        className="d-inline-block me-2"
-                        variant="outline-info"
-                      >
-                        View Receipt
-                      </Button>
-                      <FloatingLabel controlId="floatingInput" label="Name | Date">
-                        <Form.Control
-                          className="d-inline-block"
-                          value={data.purchaser + " | " + data.dateDelivered}
-                        />
-                      </FloatingLabel>
-                    </>
-                  )}
+                ) : (
+                  <>
+                    <Button
+                      onClick={() => modalHandle("Reciept", data.id)}
+                      className="d-inline-block me-2"
+                      variant="outline-info"
+                    >
+                      View Receipt
+                    </Button>
+                    <FloatingLabel
+                      controlId="floatingInput"
+                      label="Name | Date"
+                    >
+                      <Form.Control
+                        className="d-inline-block"
+                        value={data.purchaser + " | " + data.dateDelivered}
+                      />
+                    </FloatingLabel>
+                  </>
+                )}
               </td>
             </tr>
           ))}
@@ -352,7 +357,9 @@ const ReviewApproveTable = () => {
           close={() => setShowModal(false)}
           data={modalObj}
         />
-      ) : ("")}
+      ) : (
+        ""
+      )}
 
       {showConfirmation ? (
         <ConfirmationModal
@@ -361,7 +368,9 @@ const ReviewApproveTable = () => {
           close={() => setShowConfirmation(false)}
           data={modalObj}
         />
-      ) : ("")}
+      ) : (
+        ""
+      )}
 
       {showPurchaser ? (
         <PurchaserModal
@@ -370,7 +379,9 @@ const ReviewApproveTable = () => {
           close={() => setShowPurchaser(false)}
           data={modalObj}
         />
-      ) : ("")}
+      ) : (
+        ""
+      )}
 
       {showReceipt ? (
         <ShowReceipt
@@ -378,7 +389,9 @@ const ReviewApproveTable = () => {
           close={() => setShowReceipt(false)}
           data={modalObj}
         />
-      ) : ("")}
+      ) : (
+        ""
+      )}
     </div>
   );
 };

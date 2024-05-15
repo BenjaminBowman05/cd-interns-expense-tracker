@@ -25,17 +25,12 @@ const SettingsModal = ({ show, hide, admin, isAdmin }) => {
       setTheme("light");
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
     }
-    admin = true;
   }
 
   const buttonVar = "outline-" + theme;
 
   function OI() {
-    if (admin === true) {
-      return "ON";
-    } else {
-      return "OFF";
-    }
+    return admin ? "ON" : "OFF";
   }
 
   function toTitleCase(str) {

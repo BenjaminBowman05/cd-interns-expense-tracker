@@ -60,7 +60,10 @@ const HomePage = () => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}> Settings </Button>
+              <Button variant="transparent" size="md" onClick={showSettings}>
+                {" "}
+                Settings{" "}
+              </Button>
             </Nav>
           </Navbar.Collapse>
         </Container>
@@ -82,7 +85,7 @@ const HomePage = () => {
       {admin ? (
         <ReviewApproveTable />
       ) : (
-        <PurchaseTracker requestObj={requests}/>
+        <PurchaseTracker />
         // <PurchaseTracker />
       )}
     </>
