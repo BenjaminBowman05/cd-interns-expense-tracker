@@ -12,17 +12,17 @@ import * as userService from "../services/UserService.jsx";
 import { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../utils/MyContext";
+import NavbarC from "./Utilities/NavbarC.jsx";
 
 const HomePage = () => {
-  let data = []
   const { cookies, setCookies } = useContext(MyContext);
   const navigate = useNavigate();
   useEffect(() => {
-      console.log(cookies);
-      if (!cookies.name) {
-          navigate('/');
-      }
-  }, [cookies.name])
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate("/");
+    }
+  }, [cookies.name]);
 
   const [requests, setRequests] = useState([]);
 
@@ -31,7 +31,7 @@ const HomePage = () => {
     setShowSett(true);
   }
 
-  const [admin, setAdmin] = useState(false);
+  const [admin, setAdmin] = useState();
 
   const [users, setUsers] = useState();
 
@@ -43,6 +43,8 @@ const HomePage = () => {
   function requestUserDataFromApi() {
     userService.getUserByUsername(cookies.name).then((res) => {
       console.log(res.data.userExpenses);
+      setAdmin(res.data.admin);
+      console.log(res.data);
       setUsers(res.data);
       setRequests(res.data.userExpenses);
     });
@@ -50,7 +52,7 @@ const HomePage = () => {
 
   return (
     <>
-      <NavbarC admin={admin} setAdmin={setAdmin} />
+      <NavbarC admin={admin} user={users} setAdmin={setAdmin} />
       {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>

@@ -34,7 +34,7 @@ const PurchaseTracker = () => {
 
   function requestUserDataFromApi() {
     // MAKE ID DYNAMIC
-    userService.getUserById(1).then((res) => {
+    userService.getUserById(2).then((res) => {
       // console.log(res.data);
       setRequests(res.data.userExpenses);
     });

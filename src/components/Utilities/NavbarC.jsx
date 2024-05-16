@@ -5,7 +5,7 @@ import Button from "react-bootstrap/Button";
 import SettingsModal from "../Modals/SettingsModal";
 import { useState } from "react";
 
-const NavbarC = ({ admin, setAdmin }) => {
+const NavbarC = ({ admin, user, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
 
   function showSettings() {
@@ -17,7 +17,8 @@ const NavbarC = ({ admin, setAdmin }) => {
       <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img width={30} src="/src/assets/cdLogo.webp" /> Code Differently
+            <img width={30} src="../../src/assets/CDLogo.png" /> Code
+            Differently
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -38,6 +39,7 @@ const NavbarC = ({ admin, setAdmin }) => {
           show={showSett}
           hide={() => setShowSett(false)}
           admin={admin}
+          user={user}
           isAdmin={() => {
             admin ? setAdmin(false) : setAdmin(true);
           }}
