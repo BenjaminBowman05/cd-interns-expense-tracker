@@ -9,17 +9,36 @@ import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
-import { useState } from "react";
-import Cookies from 'js-cookie';
+import { useState, useEffect, useContext } from "react";
 import NavbarC from "./Utilities/NavbarC.jsx";
+import MyContext from "../utils/MyContext";
+import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
-
   const [admin, setAdmin] = useState(false);
+  const [user, setUser] = useState();
+  const { cookies, setCookies } = useContext(MyContext);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate("/");
+    }
+    requestUserDataFromApi();
+  }, [cookies.name]);
+
+  function requestUserDataFromApi() {
+    console.log(cookies.name);
+    userService.getUserByUsername(cookies.name).then((res) => {
+      console.log(res.data.userExpenses);
+      setUser(res.data);
+    });
+  }
 
   return (
     <>
-      <NavbarC admin={admin} user={users} setAdmin={setAdmin} />
+      <NavbarC admin={admin} user={user} setAdmin={setAdmin} />
       {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>

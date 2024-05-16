@@ -8,11 +8,22 @@ import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
 import * as expenseService from "../services/ExpenseService.jsx";
 import * as programService from "../services/ProgramService.jsx";
-import { useState } from "react";
+import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
+import NavbarAlt from "./Utilities/NavbarAlt.jsx";
+import MyContext from "../utils/MyContext";
 
 const PurchaseRequestForm = () => {
   const navigate = useNavigate();
+  const { cookies, setCookies } = useContext(MyContext);
+
+  // we could get user object from the cookie and restore the settings button. But how about no.
+  useEffect(() => {
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate("/");
+    }
+  }, [cookies.name]);
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
@@ -141,6 +152,8 @@ const PurchaseRequestForm = () => {
   //most of the fields are using a controlled input to update on change
   return (
     <>
+      <NavbarAlt />
+
       <Container fluid className="mb-3">
         <h1>Expense Request Form</h1>
       </Container>

@@ -2,19 +2,9 @@ import Navbar from "react-bootstrap/Navbar";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
-import SettingsModal from "../Modals/SettingsModal";
-import { useState, useContext } from "react";
-import MyContext from "../../utils/MyContext";
 import Cookies from "js-cookie";
 
-const NavbarC = ({ admin, user, setAdmin }) => {
-  const [showSett, setShowSett] = useState(false);
-  const [logOut, setLogOut] = useState(false);
-
-  function showSettings() {
-    setShowSett(true);
-  }
-
+const NavbarAlt = () => {
   return (
     <>
       <Navbar expand="lg" fixed="top">
@@ -27,10 +17,6 @@ const NavbarC = ({ admin, user, setAdmin }) => {
             <Nav className="me-auto">
               <Nav.Link href="/">Home</Nav.Link>
               <Nav.Link href="/request">Request Form</Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}>
-                {" "}
-                Settings{" "}
-              </Button>
               <Button
                 variant="transparent"
                 size="md"
@@ -42,22 +28,8 @@ const NavbarC = ({ admin, user, setAdmin }) => {
           </Navbar.Collapse>
         </Container>
       </Navbar>
-
-      {showSett ? (
-        <SettingsModal
-          show={showSett}
-          hide={() => setShowSett(false)}
-          admin={admin}
-          user={user}
-          isAdmin={() => {
-            setAdmin(!admin);
-          }}
-        />
-      ) : (
-        ""
-      )}
     </>
   );
 };
 
-export default NavbarC;
+export default NavbarAlt;
