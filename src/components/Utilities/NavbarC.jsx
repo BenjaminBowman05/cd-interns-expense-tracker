@@ -3,10 +3,14 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import SettingsModal from "../Modals/SettingsModal";
-import { useState } from "react";
+import { useState, useContext } from "react";
+import MyContext from "../../utils/MyContext";
+import Cookies from "js-cookie";
 
-const NavbarC = ({ admin, user, setAdmin }) => {
+const NavbarC = ({ admin, setAdmin }) => {
+  const { cookies, setCookies } = useContext(MyContext);
   const [showSett, setShowSett] = useState(false);
+  const [logOut, setLogOut] = useState(false);
 
   function showSettings() {
     setShowSett(true);
@@ -17,8 +21,7 @@ const NavbarC = ({ admin, user, setAdmin }) => {
       <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img width={30} src="../../src/assets/CDLogo.png" /> Code
-            Differently
+            <img width={30} src="../src/assets/CDBrand.png" /> Code Differently
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -28,6 +31,9 @@ const NavbarC = ({ admin, user, setAdmin }) => {
               <Button variant="transparent" size="md" onClick={showSettings}>
                 {" "}
                 Settings{" "}
+              </Button>
+              <Button variant="transparent" size="md" onClick={() => Cookies.remove('name')}>
+                Sign Out
               </Button>
             </Nav>
           </Navbar.Collapse>
@@ -41,7 +47,7 @@ const NavbarC = ({ admin, user, setAdmin }) => {
           admin={admin}
           user={user}
           isAdmin={() => {
-            admin ? setAdmin(false) : setAdmin(true);
+            setAdmin(!admin);
           }}
         />
       ) : (

@@ -9,19 +9,11 @@ import Container from "react-bootstrap/Container";
 import { Button } from "react-bootstrap";
 import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
-import { useEffect, useState, useContext } from "react";
-import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import { useState } from "react";
+import Cookies from 'js-cookie';
 import NavbarC from "./Utilities/NavbarC.jsx";
 
 const HomePage = () => {
-
-  const [requests, setRequests] = useState([]);
-
-  const [showSett, setShowSett] = useState(false);
-  function showSettings() {
-    setShowSett(true);
-  }
 
   const [admin, setAdmin] = useState(false);
 
