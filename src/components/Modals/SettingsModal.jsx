@@ -29,10 +29,6 @@ const SettingsModal = ({ show, hide, admin, isAdmin }) => {
 
   const buttonVar = "outline-" + theme;
 
-  function OI() {
-    return admin ? "ON" : "OFF";
-  }
-
   function toTitleCase(str) {
     return str.replace(/\w\S*/g, function (txt) {
       return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
@@ -54,7 +50,7 @@ const SettingsModal = ({ show, hide, admin, isAdmin }) => {
         <p>
           Admin View:{" "}
           <Button variant={buttonVar} onClick={isAdmin}>
-            {OI()}
+            {admin ? "ON" : "OFF"}
           </Button>
         </p>
       </Modal.Body>

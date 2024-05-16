@@ -10,16 +10,10 @@ import { Button } from "react-bootstrap";
 import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState } from "react";
-import Cookies from 'js-cookie'
+import Cookies from 'js-cookie';
+import NavbarC from "./Utilities/NavbarC.jsx";
 
 const HomePage = () => {
-
-  const [requests, setRequests] = useState([]);
-
-  const [showSett, setShowSett] = useState(false);
-  function showSettings() {
-    setShowSett(true);
-  }
 
   const [admin, setAdmin] = useState(false);
 
