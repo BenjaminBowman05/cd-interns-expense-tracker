@@ -4,8 +4,8 @@ import LoginForm from "./LoginForm";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../utils/MyContext";
-import { Button, Card, FloatingLabel, Row } from "react-bootstrap";
-const Home = () => {
+import { Button } from "react-bootstrap";
+const EntryPoint = () => {
     const { cookies, setCookies } = useContext(MyContext);
     const [pageBool, setPageBool] = useState(false);
 
@@ -32,4 +32,4 @@ const Home = () => {
     )
 }
 
-export default Home;
+export default EntryPoint;

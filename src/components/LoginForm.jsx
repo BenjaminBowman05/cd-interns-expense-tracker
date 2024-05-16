@@ -24,6 +24,7 @@ function LoginForm({ setCurrentUser }) {
         //with setCookies
         setCookies('name', username, { maxAge: 3600 });
         console.log(cookies);
+        
         // Reset the form fields after submission
         setUsername('');
         setPassword('');

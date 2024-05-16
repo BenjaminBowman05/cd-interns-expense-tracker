@@ -15,14 +15,6 @@ import MyContext from "../utils/MyContext";
 import NavbarC from "./Utilities/NavbarC.jsx";
 
 const HomePage = () => {
-  const { cookies, setCookies } = useContext(MyContext);
-  const navigate = useNavigate();
-  useEffect(() => {
-    console.log(cookies);
-    if (!cookies.name) {
-      navigate("/");
-    }
-  }, [cookies.name]);
 
   const [requests, setRequests] = useState([]);
 
@@ -31,24 +23,7 @@ const HomePage = () => {
     setShowSett(true);
   }
 
-  const [admin, setAdmin] = useState();
-
-  const [users, setUsers] = useState();
-
-  // get users to see if admin -> Probably a better way to do this
-  useEffect(() => {
-    requestUserDataFromApi();
-  }, []);
-
-  function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
-      setAdmin(res.data.admin);
-      console.log(res.data);
-      setUsers(res.data);
-      setRequests(res.data.userExpenses);
-    });
-  }
+  const [admin, setAdmin] = useState(false);
 
   return (
     <>
@@ -66,6 +41,9 @@ const HomePage = () => {
               <Button variant="transparent" size="md" onClick={showSettings}>
                 {" "}
                 Settings{" "}
+              </Button>
+              <Button onClick={Cookies.remove('name')}>
+                Log out
               </Button>
             </Nav>
           </Navbar.Collapse>
