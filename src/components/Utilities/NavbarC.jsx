@@ -9,8 +9,7 @@ import Cookies from "js-cookie";
 // Add more variety to icons to make change more noticable
 import { DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, FileText, FileRichtextFill, FileTextFill } from "react-bootstrap-icons";
 
-const NavbarC = ({ admin, setAdmin }) => {
-  const { cookies, setCookies } = useContext(MyContext);
+const NavbarC = ({ admin, user, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
   const [home, setHome] = useState(false);
   const [form, setForm] = useState(false);
@@ -47,11 +46,12 @@ const NavbarC = ({ admin, setAdmin }) => {
                 onMouseLeave={() => setSett(false)}>
                 Settings {sett ? <GearFill size={20} /> : <Gear size={20} />}
               </Button>
-              <Button variant="transparent" size="md" onClick={() => Cookies.remove('name')}
-                onMouseEnter={() => setLogOut(true)}
-                onMouseLeave={() => setLogOut(false)}>
-                {/* Can set size to increase by 2 */}
-                Sign Out {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
+              <Button
+                variant="transparent"
+                size="md"
+                onClick={() => Cookies.remove("name")}
+              >
+                Sign Out
               </Button>
 
             </Nav>
@@ -64,6 +64,7 @@ const NavbarC = ({ admin, setAdmin }) => {
           show={showSett}
           hide={() => setShowSett(false)}
           admin={admin}
+          user={user}
           isAdmin={() => {
             setAdmin(!admin);
           }}
