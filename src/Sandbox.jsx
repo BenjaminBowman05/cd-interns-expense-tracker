@@ -1,10 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import FileUploadTest from "./components/FileUploadTest";
-import PurchaseTracker from "./components/PurchaseTracker";
-import ExpenseRequestForm from "./components/ExpenseRequestForm";
+import ExpenseRequestForm from "./components/Forms/ExpenseRequestForm";
 import HomePage from "./components/HomePage";
-import EntryPoint from "./components/EntryPoint";
-import MyContext from "./utils/MyContext";
+import EntryPoint from "./components/Entry/EntryPoint";
+import MyContext from "./FireBase/MyContext";
 import { useCookies } from "react-cookie";
 
 const Sandbox = () => {
@@ -15,7 +13,7 @@ const Sandbox = () => {
         <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<EntryPoint />} />
-            <Route path="/logged-in" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/request" element={<ExpenseRequestForm />} />
           </Routes>
         </BrowserRouter>

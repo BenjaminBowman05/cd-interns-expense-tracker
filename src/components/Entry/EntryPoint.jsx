@@ -1,10 +1,11 @@
-import { getAllUsers, createUser } from "../services/UserService";
+import { getAllUsers, createUser } from "../../services/UserService";
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import MyContext from "../../FireBase/MyContext";
 import { Button } from "react-bootstrap";
+
 const EntryPoint = () => {
     const { cookies, setCookies } = useContext(MyContext);
     const [pageBool, setPageBool] = useState(false);
@@ -13,7 +14,7 @@ const EntryPoint = () => {
 
     useEffect(() => {
         if (cookies.name) {
-            navigate('/logged-in')
+            navigate('/home')
         }
     }, [cookies.name]
     )

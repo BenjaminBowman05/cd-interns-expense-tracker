@@ -6,8 +6,8 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import * as expenseService from "../services/ExpenseService.jsx";
-import * as programService from "../services/ProgramService.jsx";
+import * as expenseService from "../../services/ExpenseService.jsx";
+import * as programService from "../../services/ProgramService.jsx";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 

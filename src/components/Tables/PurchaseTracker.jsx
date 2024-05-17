@@ -3,27 +3,27 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
-import FormPopUp from "./Modals/FormPopUp.jsx";
-import * as userService from "../services/UserService.jsx";
+import FormPopUp from "../Modals/FormPopUp.jsx";
+import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
-import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal.jsx";
-import ShowReceipt from "./Modals/ShowReceipt.jsx";
+import ConfirmDeleteModal from "../Modals/ConfirmDeleteModal.jsx";
+import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Update } from "./Utilities/Update.jsx";
-import PurchaserModal from "./Modals/PurchaserModal.jsx";
+import { Update } from "../Utilities/Update.jsx";
+import PurchaserModal from "../Modals/PurchaserModal.jsx";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import MyContext from "../../FireBase/MyContext.jsx";
 
 const PurchaseTracker = () => {
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   // probably should connect all these to the backend as well not sure.
   // i literally cannot program good luck!
-  const [reqId, setReqId] = useState(0);
+  // const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [modalObj, setModalObj] = useState({});
-  const [modalId, setModalId] = useState(0);
+
   //Obj array filled via backend
   const [requests, setRequests] = useState([]);
   const [showReceipt, setShowReceipt] = useState(false);
@@ -38,7 +38,7 @@ const PurchaseTracker = () => {
       navigate('/');
     }
     requestUserDataFromApi();
-  }, [cookies.name])
+  }, [cookies.name]);
 
 
   const [users, setUsers] = useState();
@@ -128,7 +128,7 @@ const PurchaseTracker = () => {
 
   const handleClose = () => setShow(false);
   const handleShow = (id) => {
-    setReqId(id - 1); // array indexing thats why we sub 1
+    // setReqId(id - 1); // array indexing thats why we sub 1
     setShow(true);
   };
 
@@ -147,7 +147,6 @@ const PurchaseTracker = () => {
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
     retrieveModalObj(id);
-    setModalId(id);
     switch (status) {
       case "View":
         setShowModal(true);
@@ -166,7 +165,7 @@ const PurchaseTracker = () => {
 
   function updateReq() {
     const updateRequest = requests.map((req) => {
-      if (req.id === modalId) {
+      if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
         setRequests(newTodos);
       } else {
@@ -283,7 +282,6 @@ const PurchaseTracker = () => {
           show={showModal}
           close={() => setShowModal(false)}
           data={modalObj}
-          reqId={modalId}
         />
       ) : (
         ""

@@ -1,32 +1,38 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
-import { createUser } from '../services/UserService';
-import signUpFireBase from '../utils/signUpFireBase';
+import { createUser } from '../../services/UserService';
+import signUpFireBase from '../../FireBase/signUpFireBase';
+import MyContext from '../../FireBase/MyContext';
+
 function SignUpForm() {
-    const [email, setEmail] = useState('');
+    const [userEmail, setUserEmail] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
+    const { cookies, setCookies } = useContext(MyContext);
 
     const handleSignUp = async (e) => {
         e.preventDefault();
         console.log('Signing up...');
-        console.log('Email:', email);
+        console.log('Email:', userEmail);
         console.log('Username:', username);
         console.log('Password:', password);
-        const fireBaseUser = await signUpFireBase(email, password);
+        const fireBaseUser = await signUpFireBase(userEmail, password, username);
+        // console.log(fireBaseUser)
         //TODO:need to add check if username
         if (fireBaseUser) {
-            createUser({ name: username, admin: false, uid: fireBaseUser.uid })
+            createUser({ name: username, pass: password, email: userEmail, admin: false, uid: fireBaseUser.uid })
+            setCookies('name', username, { maxAge: 3600 });
         }
+        
         // Reset the form fields after submission
-        setEmail('');
-        setUsername('');
-        setPassword('');
+        // setUserEmail('');
+        // setUsername('');
+        // setPassword('');
 
     };
 
@@ -42,7 +48,8 @@ function SignUpForm() {
                             <Form.Control
                                 type="email"
                                 placeholder="PlaceHolder@gmail.com"
-                                onChange={(e) => setEmail(e.target.value)}
+                                onChange={(e) => setUserEmail(e.target.value)}
+                                onPaste={(e) => setUserEmail(e.clipboardData.getData("text"))}
                             />
                         </FloatingLabel>
                     </Col>
@@ -54,6 +61,7 @@ function SignUpForm() {
                                 type="name"
                                 placeholder="User"
                                 onChange={(e) => setUsername(e.target.value)}
+                                onPaste={(e) => setUsername(e.clipboardData.getData("text"))}
                             />
                         </FloatingLabel>
                     </Col>
@@ -65,6 +73,7 @@ function SignUpForm() {
                                 type="password"
                                 placeholder="Ex. 123bb11aa2"
                                 onChange={(e) => setPassword(e.target.value)}
+                                onPaste={(e) => setPassword(e.clipboardData.getData("text"))}
                             />
                         </FloatingLabel>
                     </Col>

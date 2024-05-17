@@ -5,13 +5,13 @@ import Button from "react-bootstrap/Button";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
 import { useState, useEffect } from "react";
-import FormPopUp from "./Modals/FormPopUp";
-import ConfirmationModal from "./Modals/ConfirmationModal.jsx";
-import * as expenseService from "../services/ExpenseService.jsx";
+import FormPopUp from "../Modals/FormPopUp.jsx";
+import ConfirmationModal from "../Modals/ConfirmationModal.jsx";
+import * as expenseService from "../../services/ExpenseService.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import ShowReceipt from "./Modals/ShowReceipt.jsx";
-import { Update } from "./Utilities/Update.jsx";
-import PurchaserModal from "./Modals/PurchaserModal.jsx";
+import ShowReceipt from "../Modals/ShowReceipt.jsx";
+import { Update } from "../Utilities/Update.jsx";
+import PurchaserModal from "../Modals/PurchaserModal.jsx";
 
 const ReviewApproveTable = () => {
   // make method to handle types of filters
