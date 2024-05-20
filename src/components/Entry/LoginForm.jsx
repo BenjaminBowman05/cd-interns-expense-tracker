@@ -1,49 +1,56 @@
-import React, { useState,useContext } from 'react';
+import React, { useState, useContext } from 'react';
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { Button } from "react-bootstrap";
-import { getAllUsers } from '../services/UserService';
-import MyContext from '../utils/MyContext';
+import { getAllUsers } from '../../services/UserService';
+import MyContext from '../../FireBase/MyContext';
+import signInFireBase from '../../FireBase/signInFireBase';
 
-function LoginForm({ setCurrentUser }) {
-    const { cookies,setCookies } = useContext(MyContext);
-    const [username, setUsername] = useState('');
+function LoginForm() {
+    const { cookies, setCookies } = useContext(MyContext);
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     
 
-    const handleLogin = (e) => {
+    const handleLogin = async (e) => {
         e.preventDefault();
         // Here you can implement the logic to handle the login process, such as calling an API endpoint
         console.log('Logging in...');
-        console.log('Username:', username);
+        console.log('Email:', email);
         console.log('Password:', password);
         //TODO: Add logic to check if email attached to username + password entered matches a user on firebase
         //Currently logged in time is only 10 seconds, can set to an hour and refresh cookies anytime user does anything
         //with setCookies
-        setCookies('name', username, { maxAge: 3600 });
-        console.log(cookies);
-        
+        const fireBaseUser = await signInFireBase(email, password);
+        if (fireBaseUser) {
+            setCookies('name', fireBaseUser.displayName, { maxAge: 3600 });
+            // console.log(cookies);
+        }
+
+
         // Reset the form fields after submission
-        setUsername('');
-        setPassword('');
+        // setEmail('');
+        // setPassword('');
     };
 
     return (
         <>
+            {/* <img style={{ height: 25, margin: 0 }} src="../src/assets/TextLogo.png" /> */}
             <Container fluid className="mb-3">
                 <h1>Account Login</h1>
             </Container>
             <Container fluid>
-                <Row className="user mb-3">
+                <Row className="mail mb-3">
                     <Col>
-                        <FloatingLabel controlId="floatingInputUser" label="User Name">
+                        <FloatingLabel controlId="floatingInputUser" label="Email">
                             <Form.Control
-                                type="name"
-                                placeholder="User"
-                                onChange={(e) => setUsername(e.target.value)}
+                                type="email"
+                                placeholder="Email"
+                                onChange={(e) => setEmail(e.target.value)}
+                                onPaste={(e) => setEmail(e.clipboardData.getData("text"))}
                             />
                         </FloatingLabel>
                     </Col>
@@ -55,6 +62,13 @@ function LoginForm({ setCurrentUser }) {
                                 type="password"
                                 placeholder="Ex. 123bb11aa2"
                                 onChange={(e) => setPassword(e.target.value)}
+                                onPaste={(e) => setPassword(e.clipboardData.getData("text"))}
+                                onKeyDown={event => {
+                                    // console.log(event.key)
+                                    if (event.key === "Enter") {
+                                      handleLogin(event);
+                                    }
+                                  }}
                             />
                         </FloatingLabel>
                     </Col>

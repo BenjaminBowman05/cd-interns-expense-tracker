@@ -1,7 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import FileUploadTest from "./components/FileUploadTest";
-import PurchaseTracker from "./components/PurchaseTracker";
-import ExpenseRequestForm from "./components/ExpenseRequestForm";
+import ExpenseRequestForm from "./components/Forms/ExpenseRequestForm";
 import HomePage from "./components/HomePage";
 import EntryPoint from "./components/EntryPoint";
 import MyContext from "./utils/MyContext";
@@ -16,7 +14,7 @@ const Sandbox = () => {
         <BrowserRouter>
           <Routes>
             <Route exact path="/" element={<EntryPoint />} />
-            <Route path="/logged-in" element={<HomePage />} />
+            <Route path="/home" element={<HomePage />} />
             <Route path="/request" element={<ExpenseRequestForm />} />
             <Route path="/profile" element={<Profile />} />
           </Routes>
