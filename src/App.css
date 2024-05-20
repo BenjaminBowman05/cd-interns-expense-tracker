@@ -52,3 +52,7 @@
 a {
   display: inline;
 }
+
+#user-info {
+  list-style: none;
+}
