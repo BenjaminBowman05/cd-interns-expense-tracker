@@ -3,13 +3,14 @@ import Container from "react-bootstrap/Container";
 import NavbarAlt from "./Utilities/NavbarAlt";
 import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import MyContext from "../FireBase/MyContext.jsx";
 import * as userService from "../services/UserService.jsx";
 
 const Profile = () => {
   const { cookies, setCookies } = useContext(MyContext);
   const navigate = useNavigate();
   const [user, setUser] = useState({});
+  
   useEffect(() => {
     if (!cookies.name) {
       navigate("/");

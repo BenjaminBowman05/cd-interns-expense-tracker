@@ -1,8 +1,8 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ExpenseRequestForm from "./components/Forms/ExpenseRequestForm";
 import HomePage from "./components/HomePage";
-import EntryPoint from "./components/EntryPoint";
-import MyContext from "./utils/MyContext";
+import EntryPoint from "./components/Entry/EntryPoint";
+import MyContext from "./FireBase/MyContext";
 import Profile from "./components/Profile";
 import { useCookies } from "react-cookie";
 import Archived from "./components/Tables/Archived";
