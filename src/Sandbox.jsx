@@ -1,8 +1,9 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import ExpenseRequestForm from "./components/Forms/ExpenseRequestForm";
 import HomePage from "./components/HomePage";
-import EntryPoint from "./components/Entry/EntryPoint";
-import MyContext from "./FireBase/MyContext";
+import EntryPoint from "./components/EntryPoint";
+import MyContext from "./utils/MyContext";
+import Profile from "./components/Profile";
 import { useCookies } from "react-cookie";
 import Archived from "./components/Tables/Archived";
 
@@ -16,6 +17,7 @@ const Sandbox = () => {
             <Route exact path="/" element={<EntryPoint />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/request" element={<ExpenseRequestForm />} />
+            <Route path="/profile" element={<Profile />} />
             <Route path="/archive" element={<Archived />} />
           </Routes>
         </BrowserRouter>

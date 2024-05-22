@@ -104,8 +104,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             <Col>
               <FloatingLabel controlId="floatingInput" label="Requestor">
                 <Form.Control disabled
-                  value={data.requester == true ? "Aproved" : "Pending"}
-                  placeholder={data.requester == true ? "Aproved" : "Pending"}
+                  value={data.requester == true ? "Approved" : "Pending"}
+                  placeholder={data.requester == true ? "Approved" : "Pending"}
                 />
               </FloatingLabel>
             </Col>
@@ -115,8 +115,8 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                 label="Requestor Supervisor"
               >
                 <Form.Control disabled
-                  value={data.requestorSupervisor == true ? "Aproved" : data.reason == "" ? "Pending" : "Denied"}
-                  placeholder={data.requestorSupervisor == true ? "Aproved" : data.reason == "" ? "Pending" : "Denied"}
+                  value={data.requestorSupervisor == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
+                  placeholder={data.requestorSupervisor == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
                 />
               </FloatingLabel>
             </Col>
@@ -126,16 +126,16 @@ const FormPopUp = ({ show, close, data, reqId }) => {
                 label="Director Of Operations"
               >
                 <Form.Control disabled
-                  value={data.DOO == true ? "Aproved" : "Pending"}
-                  placeholder={data.DOO == true ? "Aproved" : "Pending"}
+                  value={data.doo == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
+                  placeholder={data.doo == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
                 />
               </FloatingLabel>
             </Col>
             <Col>
               <FloatingLabel controlId="floatingInput" label="CEO">
                 <Form.Control disabled
-                  value={data.CEO == true ? "Aproved" : "Pending"}
-                  placeholder={data.CEO == true ? "Aproved" : "Pending"}
+                  value={data.ceo == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
+                  placeholder={data.ceo == true ? "Approved" : data.reason == "" ? "Pending" : "Denied"}
                 />
 
               </FloatingLabel>
@@ -146,6 +146,7 @@ const FormPopUp = ({ show, close, data, reqId }) => {
       {/* <Modal.Footer>
         <Button onClick={close}>Cancel</Button>
       </Modal.Footer> */}
+      
     </Modal>
   );
 }

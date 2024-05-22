@@ -58,6 +58,13 @@ const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
         ) : (
           ""
         )}
+
+        <p>
+          Profile:{" "}
+          <Button variant={buttonVar} href="/profile">
+            View Profile
+          </Button>
+        </p>
       </Modal.Body>
       <Modal.Footer></Modal.Footer>
     </Modal>
