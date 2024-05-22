@@ -4,6 +4,7 @@ import HomePage from "./components/HomePage";
 import EntryPoint from "./components/Entry/EntryPoint";
 import MyContext from "./FireBase/MyContext";
 import { useCookies } from "react-cookie";
+import Archived from "./components/Tables/Archived";
 
 const Sandbox = () => {
   const [cookies, setCookies] = useCookies();
@@ -15,6 +16,7 @@ const Sandbox = () => {
             <Route exact path="/" element={<EntryPoint />} />
             <Route path="/home" element={<HomePage />} />
             <Route path="/request" element={<ExpenseRequestForm />} />
+            <Route path="/archive" element={<Archived />} />
           </Routes>
         </BrowserRouter>
       </MyContext.Provider>

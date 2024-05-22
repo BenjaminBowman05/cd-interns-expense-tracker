@@ -1,3 +1,4 @@
+
 import Table from "react-bootstrap/Table";
 import ReviewApproveTable from "./Tables/ReviewApproveTable.jsx"; // !!!FOR ADMIN USE
 import PurchaseTracker from "./Tables/PurchaseTracker.jsx"; // !!!FOR USER USE
@@ -11,7 +12,7 @@ import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import NavbarC from "./Utilities/NavbarC.jsx";
-import MyContext from "../utils/MyContext";
+import MyContext from "../FireBase/MyContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {
@@ -21,7 +22,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies.name) {
       navigate("/");
     }
@@ -29,9 +30,9 @@ const HomePage = () => {
   }, [cookies.name]);
 
   function requestUserDataFromApi() {
-    console.log(cookies.name);
+    // console.log(cookies.name);
     userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
+      // console.log(res.data.userExpenses);
       setUser(res.data);
     });
   }

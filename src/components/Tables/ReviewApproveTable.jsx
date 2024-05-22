@@ -165,7 +165,7 @@ const ReviewApproveTable = () => {
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
-    let btn = document.getElementById(`Confirm-${id}`);
+    
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -177,6 +177,8 @@ const ReviewApproveTable = () => {
         return req;
       }
     });
+    
+    let btn = document.getElementById(`Confirm-${id}`);
     if (btn.value == "Disabled") {
       btn.classList.toggle("disabled");
       btn.value = "Not Disabled";
