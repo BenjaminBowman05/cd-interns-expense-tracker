@@ -9,16 +9,16 @@ import InputGroup from "react-bootstrap/InputGroup";
 import Dropdown from "react-bootstrap/Dropdown";
 import { useState } from "react";
 
-const ConfirmationModal = ({ show, confirm, close, data }) => {
+const ConfirmationModal = ({ show, confirm, close, data, role }) => {
   return (
     <Modal id="modalPopUp" show={show} onHide={close} size="md" centered>
       <Modal.Header closeButton>
         <Modal.Title>
-          {data.requesterSupervisor ? "Approval " : "Denial "}
+          {data[role] ? "Approval " : "Denial "}
           Confirmation
         </Modal.Title>
       </Modal.Header>
-      {data.requesterSupervisor ? (
+      {data[role] ? (
         ""
       ) : (
         <Modal.Body>

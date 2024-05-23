@@ -46,17 +46,23 @@ const NavbarC = ({ admin, setAdmin }) => {
       <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img style={{ height: 25, margin: 0 }} src="../src/assets/CDBrand.png" />
+            <img
+              style={{ height: 25, margin: 0 }}
+              src="../src/assets/CDBrand.png"
+            />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto">
-              <Nav.Link href="/"
+              <Nav.Link
+                href="/"
                 onMouseEnter={() => setHome(true)}
-                onMouseLeave={() => setHome(false)}>
+                onMouseLeave={() => setHome(false)}
+              >
                 Home {home ? <HouseFill size={20} /> : <House size={20} />}
               </Nav.Link>
-              <Nav.Link href="/request"
+              <Nav.Link
+                href="/request"
                 onMouseEnter={() => setForm(true)}
                 onMouseLeave={() => setForm(false)}>
                 {/* FileRichtextFill instead of FileTextFill */}
@@ -70,7 +76,8 @@ const NavbarC = ({ admin, setAdmin }) => {
               </Nav.Link>
               <Button variant="transparent" size="md" onClick={showSettings}
                 onMouseEnter={() => setSett(true)}
-                onMouseLeave={() => setSett(false)}>
+                onMouseLeave={() => setSett(false)}
+              >
                 Settings {sett ? <GearFill size={20} /> : <Gear size={20} />}
               </Button>
               <Button
@@ -81,7 +88,6 @@ const NavbarC = ({ admin, setAdmin }) => {
                 onMouseLeave={() => setLogOut(false)}>
                 Sign Out {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
               </Button>
-
             </Nav>
           </Navbar.Collapse>
         </Container>

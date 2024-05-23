@@ -35,11 +35,10 @@ const PurchaseTracker = () => {
   useEffect(() => {
     // console.log(cookies);
     if (!cookies.name) {
-      navigate('/');
+      navigate("/");
     }
     requestUserDataFromApi();
   }, [cookies.name]);
-
 
   const [users, setUsers] = useState();
 
@@ -174,6 +173,8 @@ const PurchaseTracker = () => {
 
   return (
     <>
+      <h1>Your Requests</h1>
+
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
       <Table striped bordered hover size="lg">

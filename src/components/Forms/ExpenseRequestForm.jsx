@@ -67,7 +67,6 @@ const PurchaseRequestForm = () => {
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
     //Makes sure all info is filled before submitting
-    console.log(formInfo)
     formInfo.total = parseInt(document.getElementById("totalBox").value);
     formInfo.userId = user.id;
     if (
@@ -75,7 +74,6 @@ const PurchaseRequestForm = () => {
       formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
-      formInfo.total != 0 &&
       formInfo.dateNeeded != "" &&
       expensePrograms != []
     ) {
