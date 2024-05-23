@@ -3,27 +3,27 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
-import FormPopUp from "./Modals/FormPopUp.jsx";
-import * as userService from "../services/UserService.jsx";
+import FormPopUp from "../Modals/FormPopUp.jsx";
+import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
-import ConfirmDeleteModal from "./Modals/ConfirmDeleteModal.jsx";
-import ShowReceipt from "./Modals/ShowReceipt.jsx";
+import ConfirmArchiveModal from "../Modals/ConfirmArchiveModal.jsx";
+import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Update } from "./Utilities/Update.jsx";
-import PurchaserModal from "./Modals/PurchaserModal.jsx";
+import { Update } from "../Utilities/Update.jsx";
+import PurchaserModal from "../Modals/PurchaserModal.jsx";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import MyContext from "../../FireBase/MyContext.jsx";
 
 const PurchaseTracker = () => {
-  const [show, setShow] = useState(false);
+  // const [show, setShow] = useState(false);
   // probably should connect all these to the backend as well not sure.
   // i literally cannot program good luck!
-  const [reqId, setReqId] = useState(0);
+  // const [reqId, setReqId] = useState(0);
   const [files, setFiles] = useState([]);
   const [showModal, setShowModal] = useState(false);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showArchiveModal, setShowArchiveModal] = useState(false);
   const [modalObj, setModalObj] = useState({});
-  const [modalId, setModalId] = useState(0);
+
   //Obj array filled via backend
   const [requests, setRequests] = useState([]);
   const [showReceipt, setShowReceipt] = useState(false);
@@ -33,20 +33,19 @@ const PurchaseTracker = () => {
 
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies.name) {
-      navigate('/');
+      navigate("/");
     }
     requestUserDataFromApi();
-  }, [cookies.name])
-
+  }, [cookies.name]);
 
   const [users, setUsers] = useState();
 
   function requestUserDataFromApi() {
-    console.log(cookies.name)
+    // console.log(cookies.name)
     userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
+      // console.log(res.data.userExpenses);
       setUsers(res.data);
       setRequests(res.data.userExpenses);
     });
@@ -126,12 +125,6 @@ const PurchaseTracker = () => {
     // Update(modalObj);
   };
 
-  const handleClose = () => setShow(false);
-  const handleShow = (id) => {
-    setReqId(id - 1); // array indexing thats why we sub 1
-    setShow(true);
-  };
-
   //Finds the obj tied to the view button clicked then stores it for later
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
@@ -147,13 +140,12 @@ const PurchaseTracker = () => {
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
     retrieveModalObj(id);
-    setModalId(id);
     switch (status) {
       case "View":
         setShowModal(true);
         break;
-      case "Delete":
-        setShowDeleteModal(true);
+      case "Archive":
+        setShowArchiveModal(true);
         break;
       case "Reciept":
         setShowReceipt(true);
@@ -165,8 +157,12 @@ const PurchaseTracker = () => {
   };
 
   function updateReq() {
+    modalObj.archive = true;
+      Update(modalObj);
     const updateRequest = requests.map((req) => {
-      if (req.id === modalId) {
+      
+      // requestUserDataFromApi();
+      if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
         setRequests(newTodos);
       } else {
@@ -177,6 +173,8 @@ const PurchaseTracker = () => {
 
   return (
     <>
+      <h1>Your Requests</h1>
+
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
       <Table striped bordered hover size="lg" style={{fontFamily: 'Open Sans', width: '1000px'}}>
@@ -191,13 +189,13 @@ const PurchaseTracker = () => {
             <th>View</th>
             {/* <th>Status</th> */}
             <th>Receipt</th>
-            <th>Cancel Request</th>
+            <th>Archive Request</th>
           </tr>
         </thead>
         <tbody>
           {/* Outputs table rows for each obj display information */}
           {requests.map((requestInfo) => (
-            <tr key={requestInfo.id}>
+            requestInfo.archive ? "" : <tr key={requestInfo.id}>
               <td>{requestInfo.id}</td>
               <td>${requestInfo.total}</td>
               {/* <td>{requestInfo.program}</td> */}
@@ -222,7 +220,7 @@ const PurchaseTracker = () => {
                   requestInfo.receipt == "" ? "" : "d-flex align-items-center"
                 }
               >
-                {requestInfo.receipt == "" ? (
+                {requestInfo.CEO && requestInfo.DOO && requestInfo.requesterSupervisor ? (requestInfo.receipt == "" ? (
                   <Form.Control
                     onChange={(e) => handleFileSelect(e, requestInfo.id)}
                     accept=".pdf, .png, .jpeg, .jpg"
@@ -253,26 +251,20 @@ const PurchaseTracker = () => {
                       />
                     </FloatingLabel>
                   </>
-                )}
+                )) : (requestInfo.reason != "" ? "Denied" : "Pending")}
               </td>
               <td>
                 <ButtonGroup className="mb-2 " size="sm">
                   <Button
-                    id={"Cancel-" + requestInfo.id}
+                    id={"Archive-" + requestInfo.id}
                     type="button"
                     variant="outline-danger"
-                    onClick={() => modalHandle("Delete", requestInfo.id)}
+                    onClick={() => modalHandle("Archive", requestInfo.id)}
                   >
-                    Cancel
+                    Archive
                   </Button>
                 </ButtonGroup>
               </td>
-              {/**<Button
-                  onClick={(e) => handleShow(requestInfo.id)}
-                  variant="outline-info"
-                >
-                  View Receipt
-                </Button> */}
             </tr>
           ))}
         </tbody>
@@ -283,7 +275,6 @@ const PurchaseTracker = () => {
           show={showModal}
           close={() => setShowModal(false)}
           data={modalObj}
-          reqId={modalId}
         />
       ) : (
         ""
@@ -300,11 +291,11 @@ const PurchaseTracker = () => {
         ""
       )}
 
-      {showDeleteModal ? (
-        <ConfirmDeleteModal
-          show={showDeleteModal}
+      {showArchiveModal ? (
+        <ConfirmArchiveModal
+          show={showArchiveModal}
           close={() => {
-            setShowDeleteModal(false);
+            setShowArchiveModal(false);
           }}
           data={modalObj}
           updateUI={updateReq}

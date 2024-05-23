@@ -1,7 +1,8 @@
+
 import Table from "react-bootstrap/Table";
-import ReviewApproveTable from "../components/ReviewApproveTable.jsx"; // !!!FOR ADMIN USE
-import PurchaseTracker from "../components/PurchaseTracker.jsx"; // !!!FOR USER USE
-import ExpenseRequestForm from "../components/ExpenseRequestForm.jsx";
+import ReviewApproveTable from "./Tables/ReviewApproveTable.jsx"; // !!!FOR ADMIN USE
+import PurchaseTracker from "./Tables/PurchaseTracker.jsx"; // !!!FOR USER USE
+import ExpenseRequestForm from "./Forms/ExpenseRequestForm.jsx";
 import Navbar from "react-bootstrap/Navbar";
 import Nav from "react-bootstrap/Nav";
 import NavDropdown from "react-bootstrap/NavDropdown";
@@ -11,17 +12,17 @@ import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import NavbarC from "./Utilities/NavbarC.jsx";
-import MyContext from "../utils/MyContext";
+import MyContext from "../FireBase/MyContext.jsx";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
-  const [admin, setAdmin] = useState(false);
+const HomePage = (adminView) => {
+  // const [admin, setAdmin] = useState(false);
   const [user, setUser] = useState();
   const { cookies, setCookies } = useContext(MyContext);
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies.name) {
       navigate("/");
     }
@@ -29,16 +30,16 @@ const HomePage = () => {
   }, [cookies.name]);
 
   function requestUserDataFromApi() {
-    console.log(cookies.name);
+    // console.log(cookies.name);
     userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
+      // console.log(res.data.userExpenses);
       setUser(res.data);
     });
   }
 
   return (
     <>
-      <NavbarC admin={admin} user={user} setAdmin={setAdmin} />
+      {/* <NavbarC admin={admin} user={user} setAdmin={setAdmin} /> */}
       {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
@@ -61,7 +62,7 @@ const HomePage = () => {
         </Container>
       </Navbar> */}
 
-      {admin ? (
+      {adminView ? (
         <ReviewApproveTable />
       ) : (
         <PurchaseTracker />

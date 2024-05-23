@@ -6,12 +6,14 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import * as expenseService from "../services/ExpenseService.jsx";
-import * as programService from "../services/ProgramService.jsx";
+import * as expenseService from "../../services/ExpenseService.jsx";
+import * as programService from "../../services/ProgramService.jsx";
+import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import NavbarAlt from "./Utilities/NavbarAlt.jsx";
-import MyContext from "../utils/MyContext";
+import NavbarAlt from "../Utilities/NavbarAlt.jsx";
+import MyContext from "../../FireBase/MyContext.jsx";
+import NavbarC from "../Utilities/NavbarC.jsx";
 
 const PurchaseRequestForm = () => {
   const navigate = useNavigate();
@@ -19,11 +21,24 @@ const PurchaseRequestForm = () => {
 
   // we could get user object from the cookie and restore the settings button. But how about no.
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies.name) {
-      navigate("/");
+      navigate('/');
     }
+    requestUserDataFromApi();
   }, [cookies.name]);
+
+
+  const [user, setUser] = useState();
+
+  function requestUserDataFromApi() {
+    // console.log(cookies.name)
+    userService.getUserByUsername(cookies.name).then((res) => {
+      // console.log(res.data);
+      setUser(res.data);
+      // setRequests(res.data.userExpenses);
+    });
+  }
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
@@ -52,12 +67,13 @@ const PurchaseRequestForm = () => {
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
     //Makes sure all info is filled before submitting
+    formInfo.total = parseInt(document.getElementById("totalBox").value);
+    formInfo.userId = user.id;
     if (
       formInfo.firstName != "" &&
       formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
-      formInfo.total != 0 &&
       formInfo.dateNeeded != "" &&
       expensePrograms != []
     ) {
@@ -152,15 +168,16 @@ const PurchaseRequestForm = () => {
   //most of the fields are using a controlled input to update on change
   return (
     <>
-      <NavbarAlt />
+      {/* <NavbarAlt/> */}
+      {/* <NavbarC /> */}
 
-      <Container fluid className="mb-3">
+      <Container fluid className="mb-3 mt-3">
         <h1>Expense Request Form</h1>
       </Container>
       <Container fluid>
         <Row className="user mb-3">
           <Col>
-            <FloatingLabel controlId="floatingInput" label="First Name">
+            <FloatingLabel controlId="firstName" label="First Name">
               <Form.Control
                 type="firstName"
                 placeholder="John"
@@ -169,7 +186,7 @@ const PurchaseRequestForm = () => {
             </FloatingLabel>
           </Col>
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Last Name">
+            <FloatingLabel controlId="lastName" label="Last Name">
               <Form.Control
                 type="lastName"
                 placeholder="Doe"
@@ -181,7 +198,7 @@ const PurchaseRequestForm = () => {
         <Row className="itemsRequested mb-3">
           <Col>
             <Form.Control
-              as="textarea"
+              as="textarea" //is it needed?
               rows="4"
               placeholder="Items Requested..."
               onChange={(e) => (formInfo.items = e.target.value)}
@@ -190,7 +207,7 @@ const PurchaseRequestForm = () => {
         </Row>
         <Row className="purpose">
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Purpose Of Request">
+            <FloatingLabel controlId="purpose" label="Purpose Of Request">
               <Form.Control
                 type="purpose"
                 placeholder="Purpose goes here..."
@@ -250,7 +267,7 @@ const PurchaseRequestForm = () => {
           <Col>
             <InputGroup>
               <InputGroup.Text>$</InputGroup.Text>
-              <FloatingLabel controlId="floatingInput" label="Total">
+              <FloatingLabel label="Total">
                 <Form.Control
                   disabled
                   id="totalBox"
@@ -275,7 +292,7 @@ const PurchaseRequestForm = () => {
         </Row>
         <Row className="dateNeeded mb-3">
           <Col>
-            <FloatingLabel controlId="floatingInput" label="Date Needed">
+            <FloatingLabel controlId="date" label="Date Needed">
               <Form.Control
                 type="date"
                 onChange={(e) => (formInfo.dateNeeded = e.target.value)}
