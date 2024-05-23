@@ -1,3 +1,4 @@
+
 import Table from "react-bootstrap/Table";
 import ReviewApproveTable from "./Tables/ReviewApproveTable.jsx"; // !!!FOR ADMIN USE
 import PurchaseTracker from "./Tables/PurchaseTracker.jsx"; // !!!FOR USER USE
@@ -21,7 +22,7 @@ const HomePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(cookies);
+    // console.log(cookies);
     if (!cookies.name) {
       navigate("/");
     }
@@ -29,9 +30,9 @@ const HomePage = () => {
   }, [cookies.name]);
 
   function requestUserDataFromApi() {
-    console.log(cookies.name);
+    // console.log(cookies.name);
     userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data.userExpenses);
+      // console.log(res.data.userExpenses);
       setUser(res.data);
     });
   }
