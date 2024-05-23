@@ -30,7 +30,7 @@ const NavbarC = ({ admin, setAdmin }) => {
   const [fold, setFold] = useState(false);
   const [sett, setSett] = useState(false);
   const [logOut, setLogOut] = useState(false);
-  const { cookies, setCookies } = useContext(MyContext);
+  const { cookies, setCookies, updateCookies } = useContext(MyContext);
 
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
@@ -39,25 +39,38 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   useEffect(() => {
     // console.log(theme)
-    const currTheme = document
-      .querySelector("html")
-      .getAttribute("data-bs-theme");
+    // const currTheme = document
+    //   .querySelector("html")
+    //   .getAttribute("data-bs-theme");
 
-    if (currTheme === "dark") {
+    if (cookies.theme === "light") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
       setTheme("dark");
       setNavStyle({backgroundColor: '#d1d3d4'});
-      
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
       setTheme("light")
       setNavStyle({});
     }
-  }, [themeChange]);
+  }, []);
 
   function toggleTheme() {
-    // console.log(themeChange);
-    setThemeChange(!themeChange);
+    const currTheme = document
+      .querySelector("html")
+      .getAttribute("data-bs-theme");
+    // console.log(cookies.theme)
+    if (currTheme === "dark") {
+      document.querySelector("html").setAttribute("data-bs-theme", "light");
+      setTheme("dark");
+      setCookies("theme", "light");
+      setNavStyle({backgroundColor: '#d1d3d4'});
+      
+    } else {
+      document.querySelector("html").setAttribute("data-bs-theme", "dark");
+      setCookies("theme", "dark");
+      setTheme("light")
+      setNavStyle({});
+    }
   }
 
   const [user, setUsers] = useState();
