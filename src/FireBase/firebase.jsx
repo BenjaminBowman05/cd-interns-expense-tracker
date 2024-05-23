@@ -5,12 +5,17 @@ import { getAuth } from "firebase/auth";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyCiQudxgZyRz9mqFJqlW___8IavgTY5vgk",
-  authDomain: "testauth-29d72.firebaseapp.com",
-  projectId: "testauth-29d72",
-  storageBucket: "testauth-29d72.appspot.com",
-  messagingSenderId: "490406618916",
-  appId: "1:490406618916:web:7b96e9bd5a462eb770f5b1"
+  apiKey: "AIzaSyCxnG95WFkdxGg4RXHXhT2UZJlj1Q56Y2k",
+
+  authDomain: "expense-tracker-721b0.firebaseapp.com",
+
+  projectId: "expense-tracker-721b0",
+
+  storageBucket: "expense-tracker-721b0.appspot.com",
+
+  messagingSenderId: "332676063090",
+
+  appId: "1:332676063090:web:7f0048463488e35f6947eb",
 };
 
 // Initialize Firebase
