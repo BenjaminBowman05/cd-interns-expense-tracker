@@ -26,7 +26,7 @@ const Profile = () => {
 
   return (
     <>
-      <NavbarAlt />
+      {/* <NavbarAlt /> */}
 
       <Container fluid>
         <Card style={{ width: "18rem" }}>
