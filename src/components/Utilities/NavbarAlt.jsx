@@ -9,9 +9,9 @@ const NavbarAlt = () => {
     <>
       <Navbar expand="lg" fixed="top">
         <Container>
-          <Navbar.Brand>
-            <img width={30} src="../src/assets/CDBrand.png" /> Code Differently
-          </Navbar.Brand>
+          <Nav.Link href="/">
+              <img height={25} src="/src/assets/CDBrand.png" />
+          </Nav.Link>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto">

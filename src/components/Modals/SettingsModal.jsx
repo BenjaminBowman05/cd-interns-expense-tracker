@@ -2,38 +2,14 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
 
-const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
-  const [theme, setTheme] = useState("");
-
-  useEffect(() => {
-    const currTheme = document
-      .querySelector("html")
-      .getAttribute("data-bs-theme");
-
-    if (currTheme === "dark") {
-      setTheme("light");
-    } else {
-      setTheme("dark");
-    }
-  }, []);
-
-  function changeTheme() {
-    if (theme == "light") {
-      setTheme("dark");
-      document.querySelector("html").setAttribute("data-bs-theme", "light");
-    } else {
-      setTheme("light");
-      document.querySelector("html").setAttribute("data-bs-theme", "dark");
-    }
-  }
-
+const SettingsModal = ({ show, hide, user, admin, isAdmin, theme, changeTheme }) => {
   const buttonVar = "outline-" + theme;
 
-  function toTitleCase(str) {
-    return str.replace(/\w\S*/g, function (txt) {
-      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
-    });
-  }
+  // function toTitleCase(str) {
+  //   return str.replace(/\w\S*/g, function (txt) {
+  //     return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+  //   });
+  // }
 
   return (
     <Modal size="lg" show={show} onHide={hide}>
@@ -44,7 +20,7 @@ const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
         <p>
           Toggle Theme:{" "}
           <Button variant={buttonVar} onClick={changeTheme}>
-            {toTitleCase(theme)}
+            {theme}
           </Button>{" "}
         </p>
 

@@ -31,11 +31,26 @@ function SignUpForm() {
     };
 
     return (
-        <>
-            <Container fluid className="mb-3">
+        <Container>
+            <Container 
+                fluid
+                className="mb-3"
+                style={{
+                    border: "solid white 1px",
+                    width: "360.5px",
+                    marginTop: "15px",
+                    fontSize: "83%"
+                }}
+            >
                 <h1>Account Creation</h1>
             </Container>
-            <Container fluid>
+            <Container 
+                fluid
+                style={{
+                    marginTop: "30px",
+                    width: "350px"
+                }}
+            >
                 <Row className="email mb-3">
                     <Col>
                         <FloatingLabel controlId="floatingInputEmail" label="Email">
@@ -75,7 +90,7 @@ function SignUpForm() {
                     Sign Up
                 </Button>
             </Container>
-        </>
+        </Container>
     );
 }
 

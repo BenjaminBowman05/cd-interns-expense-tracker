@@ -32,10 +32,15 @@ function LoginForm({ setCurrentUser }) {
 
     return (
         <>
-            <Container fluid className="mb-3">
+            <Container fluid className="mb-3"
+                style={{
+                    border: "solid white 1px",
+                    width: "360.5px"
+                }}
+            >
                 <h1>Account Login</h1>
             </Container>
-            <Container fluid>
+            <Container fluid style={{width: "350px"}}>
                 <Row className="user mb-3">
                     <Col>
                         <FloatingLabel controlId="floatingInputUser" label="User Name">
