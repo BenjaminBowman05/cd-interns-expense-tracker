@@ -11,7 +11,7 @@ import SettingsModal from "../components/Modals/SettingsModal.jsx";
 import * as userService from "../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import NavbarC from "./Utilities/NavbarC.jsx";
-import MyContext from "../utils/MyContext";
+import MyContext from "../FireBase/MyContext.jsx";
 import { useNavigate } from "react-router-dom";
 
 const HomePage = () => {

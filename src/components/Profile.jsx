@@ -3,7 +3,7 @@ import Container from "react-bootstrap/Container";
 import NavbarAlt from "./Utilities/NavbarAlt";
 import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import MyContext from "../utils/MyContext";
+import MyContext from "../FireBase/MyContext";
 import * as userService from "../services/UserService.jsx";
 
 const Profile = () => {

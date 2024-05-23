@@ -7,7 +7,17 @@ import { useState, useContext } from "react";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
 // Add more variety to icons to make change more noticable
-import { DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, FileText, FileRichtextFill, FileTextFill } from "react-bootstrap-icons";
+import {
+  DoorClosed,
+  DoorOpenFill,
+  House,
+  HouseFill,
+  Gear,
+  GearFill,
+  FileText,
+  FileRichtextFill,
+  FileTextFill,
+} from "react-bootstrap-icons";
 
 const NavbarC = ({ admin, user, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
@@ -25,35 +35,49 @@ const NavbarC = ({ admin, user, setAdmin }) => {
       <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img style={{ height: 25, margin: 0 }} src="../src/assets/CDBrand.png" />
+            <img
+              style={{ height: 25, margin: 0 }}
+              src="../src/assets/CDBrand.png"
+            />
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
             <Nav className="me-auto">
-              <Nav.Link href="/"
+              <Nav.Link
+                href="/"
                 onMouseEnter={() => setHome(true)}
-                onMouseLeave={() => setHome(false)}>
+                onMouseLeave={() => setHome(false)}
+              >
                 Home {home ? <HouseFill size={20} /> : <House size={20} />}
               </Nav.Link>
-              <Nav.Link href="/request"
+              <Nav.Link
+                href="/request"
                 onMouseEnter={() => setForm(true)}
-                onMouseLeave={() => setForm(false)}>
-                  {/* FileRichtextFill instead of FileTextFill */}
-                Request Form {form ? <FileTextFill size={20} /> : <FileText size={20} />}
+                onMouseLeave={() => setForm(false)}
+              >
+                {/* FileRichtextFill instead of FileTextFill */}
+                Request Form{" "}
+                {form ? <FileTextFill size={20} /> : <FileText size={20} />}
               </Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}
+              <Button
+                variant="transparent"
+                size="md"
+                onClick={showSettings}
                 onMouseEnter={() => setSett(true)}
-                onMouseLeave={() => setSett(false)}>
+                onMouseLeave={() => setSett(false)}
+              >
                 Settings {sett ? <GearFill size={20} /> : <Gear size={20} />}
               </Button>
               <Button
                 variant="transparent"
                 size="md"
                 onClick={() => Cookies.remove("name")}
+                onMouseEnter={() => setLogOut(true)}
+                onMouseLeave={() => setLogOut(false)}
               >
-                Sign Out
+                Sign Out{" "}
+                {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
               </Button>
-
             </Nav>
           </Navbar.Collapse>
         </Container>

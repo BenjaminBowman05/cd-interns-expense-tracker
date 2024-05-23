@@ -6,24 +6,17 @@ import Col from "react-bootstrap/Col";
 import InputGroup from "react-bootstrap/InputGroup";
 import Button from "react-bootstrap/Button";
 import Dropdown from "react-bootstrap/Dropdown";
-import * as expenseService from "../services/ExpenseService.jsx";
-import * as programService from "../services/ProgramService.jsx";
+import * as expenseService from "../../services/ExpenseService.jsx";
+import * as programService from "../../services/ProgramService.jsx";
+import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
-import NavbarAlt from "./Utilities/NavbarAlt.jsx";
-import MyContext from "../utils/MyContext";
+import NavbarAlt from "../Utilities/NavbarAlt.jsx";
+import MyContext from "../../FireBase/MyContext";
 
 const PurchaseRequestForm = () => {
   const navigate = useNavigate();
   const { cookies, setCookies } = useContext(MyContext);
-
-  // we could get user object from the cookie and restore the settings button. But how about no.
-  useEffect(() => {
-    console.log(cookies);
-    if (!cookies.name) {
-      navigate("/");
-    }
-  }, [cookies.name]);
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
@@ -37,6 +30,23 @@ const PurchaseRequestForm = () => {
     userId: null,
     recurring: false,
   });
+
+  // we could get user object from the cookie and restore the settings button. But how about no.
+  useEffect(() => {
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate("/");
+    }
+    requestUserDataFromApi();
+  }, [cookies.name]);
+
+  const [user, setUser] = useState();
+
+  function requestUserDataFromApi() {
+    userService.getUserByUsername(cookies.name).then((res) => {
+      setUser(res.data);
+    });
+  }
 
   //Array var that will hold the expense programs objs
   const [expensePrograms, setExpensePrograms] = useState([]);
@@ -52,12 +62,13 @@ const PurchaseRequestForm = () => {
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
     //Makes sure all info is filled before submitting
+    formInfo.total = parseInt(document.getElementById("totalBox").value);
+    formInfo.userId = user.id;
     if (
       formInfo.firstName != "" &&
       formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
-      formInfo.total != 0 &&
       formInfo.dateNeeded != "" &&
       expensePrograms != []
     ) {

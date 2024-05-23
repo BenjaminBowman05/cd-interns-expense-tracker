@@ -4,14 +4,17 @@ import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Button from "react-bootstrap/Button";
 import ToggleButton from "react-bootstrap/ToggleButton";
 import ToggleButtonGroup from "react-bootstrap/ToggleButtonGroup";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import FormPopUp from "../Modals/FormPopUp.jsx";
 import ConfirmationModal from "../Modals/ConfirmationModal.jsx";
 import * as expenseService from "../../services/ExpenseService.jsx";
+import * as userService from "../../services/UserService.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import { Update } from "../Utilities/Update.jsx";
 import PurchaserModal from "../Modals/PurchaserModal.jsx";
+import MyContext from "../../FireBase/MyContext.jsx";
+import { useNavigate } from "react-router-dom";
 
 const ReviewApproveTable = () => {
   // make method to handle types of filters
@@ -33,17 +36,21 @@ const ReviewApproveTable = () => {
   const [showConfirmation, setShowConfirmation] = useState(false);
 
   const [showPurchaser, setShowPurchaser] = useState(false);
+  const { cookies, setCookies } = useContext(MyContext);
+  const navigate = useNavigate();
 
-  //The UseEffect calls a function
   useEffect(() => {
-    requestDataFromApi();
-  }, []);
+    console.log(cookies);
+    if (!cookies.name) {
+      navigate("/");
+    }
+    requestUserDataFromApi();
+  }, [cookies.name]);
 
-  //The Function makes use of the expenseService function list to call all of the expenses from the back-end
-  //Then sets the empty objArray with all of the values from the back-end
-  function requestDataFromApi() {
-    expenseService.getAllExpenses().then((res) => {
-      setRequests(res.data);
+  function requestUserDataFromApi() {
+    userService.getUserByUsername(cookies.name).then((res) => {
+      setUsers(res.data);
+      setRequests(res.data.userExpenses);
     });
   }
 
@@ -142,13 +149,12 @@ const ReviewApproveTable = () => {
 
   const handlePurchaserShow = () => {
     setShowPurchaser(false);
-    console.log(modalObj.purchaser, modalObj.dateDelivered)
+    console.log(modalObj.purchaser, modalObj.dateDelivered);
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
           if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
             req.receipt = "";
-            window.alert("Please fill out all fields and reattach file");
             window.alert("Please fill out all fields and reattach file");
           } else {
             req.purchaser = modalObj.purchaser;
@@ -169,14 +175,18 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
-          return { ...req, requesterSupervisor: true };
+          console.log("APPROVED BTN VALUE");
+          return { ...req, [users.role]: true };
         } else if (btnVal == "Denied") {
-          return { ...req, requesterSupervisor: false };
+          console.log("DENIED BTN VALUE");
+          return { ...req, [users.role]: false };
         }
       } else {
         return req;
       }
     });
+    expenseService.updateExpense(id, updateRequest[id - 1]);
+
     if (btn.value == "Disabled") {
       btn.classList.toggle("disabled");
       btn.value = "Not Disabled";
@@ -184,6 +194,7 @@ const ReviewApproveTable = () => {
 
     //sets the array with updated value
     setRequests(updateRequest);
+    console.log(requests);
   };
 
   //used to keep track of modal info being passed into view and confirmation
@@ -193,7 +204,7 @@ const ReviewApproveTable = () => {
   //This handles the confirmation decision of approve and deny
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
-    if (modalObj.requesterSupervisor) {
+    if (modalObj[users.role]) {
       console.log("Approved");
     } else {
       console.log("Denied");
@@ -367,6 +378,7 @@ const ReviewApproveTable = () => {
           confirm={() => handleConfirmationShow()}
           close={() => setShowConfirmation(false)}
           data={modalObj}
+          role={users.role}
         />
       ) : (
         ""
