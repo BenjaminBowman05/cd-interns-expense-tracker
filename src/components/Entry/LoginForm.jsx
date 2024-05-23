@@ -38,12 +38,16 @@ function LoginForm() {
 
     return (
         <>
-            {/* <img style={{ height: 25, margin: 0 }} src="../src/assets/TextLogo.png" /> */}
-            <Container fluid className="mb-3">
+            <Container fluid className="mb-3"
+                style={{
+                    border: "solid white 1px",
+                    width: "360.5px"
+                }}
+            >
                 <h1>Account Login</h1>
             </Container>
-            <Container fluid>
-                <Row className="mail mb-3">
+            <Container fluid style={{width: "350px"}}>
+                <Row className="user mb-3">
                     <Col>
                         <FloatingLabel controlId="floatingInputUser" label="Email">
                             <Form.Control

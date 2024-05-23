@@ -15,8 +15,8 @@ import NavbarC from "./Utilities/NavbarC.jsx";
 import MyContext from "../FireBase/MyContext.jsx";
 import { useNavigate } from "react-router-dom";
 
-const HomePage = () => {
-  const [admin, setAdmin] = useState(false);
+const HomePage = (adminView) => {
+  // const [admin, setAdmin] = useState(false);
   const [user, setUser] = useState();
   const { cookies, setCookies } = useContext(MyContext);
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const HomePage = () => {
 
   return (
     <>
-      <NavbarC admin={admin} user={user} setAdmin={setAdmin} />
+      {/* <NavbarC admin={admin} user={user} setAdmin={setAdmin} /> */}
       {/* <Navbar expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
@@ -62,7 +62,7 @@ const HomePage = () => {
         </Container>
       </Navbar> */}
 
-      {admin ? (
+      {adminView ? (
         <ReviewApproveTable />
       ) : (
         <PurchaseTracker />

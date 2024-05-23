@@ -3,34 +3,79 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import SettingsModal from "../Modals/SettingsModal";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
 // Add more variety to icons to make change more noticable
-import { DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, 
-  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open } from "react-bootstrap-icons";
+import {
+  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
+  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open
+} from "react-bootstrap-icons";
 
-const NavbarC = ({ admin, user, setAdmin }) => {
+const NavbarC = ({ admin, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
   const [home, setHome] = useState(false);
   const [form, setForm] = useState(false);
   const [fold, setFold] = useState(false);
   const [sett, setSett] = useState(false);
   const [logOut, setLogOut] = useState(false);
+  const { cookies, setCookies } = useContext(MyContext);
 
-  function showSettings() {
-    setShowSett(true);
+  const [theme, setTheme] = useState("");
+  const [navStyle, setNavStyle] = useState({});
+  const [themeChange, setThemeChange] = useState(false);
+
+  useEffect(() => {
+    // console.log(theme)
+    const currTheme = document
+      .querySelector("html")
+      .getAttribute("data-bs-theme");
+
+    if (currTheme === "dark") {
+      document.querySelector("html").setAttribute("data-bs-theme", "light");
+      setTheme("Dark");
+      setNavStyle({backgroundColor: '#d1d3d4'});
+    } else {
+      document.querySelector("html").setAttribute("data-bs-theme", "dark");
+      setTheme("Light")
+      setNavStyle({});
+    }
+  }, [themeChange]);
+
+  function toggleTheme() {
+    console.log(themeChange);
+    setThemeChange((curr) => (curr == false ? true : false));
+  }
+
+  const [user, setUsers] = useState();
+
+  useEffect(() => {
+    requestDataFromApi();
+  }, []);
+
+  function requestDataFromApi() {
+    // console.log(cookies.name)
+    userService.getUserByUsername(cookies.name).then((res) => {
+      // console.log(res.data.userExpenses);
+      setUsers(res.data);
+    });
+
   }
 
   return (
     <>
-      <Navbar expand="lg" fixed="top">
+      <style>
+        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300&display=swap');
+      </style>
+      <Navbar 
+      style={navStyle}
+      expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
-            <img
-              style={{ height: 25, margin: 0 }}
-              src="../src/assets/CDBrand.png"
-            />
+            <Nav.Link href="/">
+              <img style={{ height: 25, margin: 0 }} src="/src/assets/CDBrand.png" />
+            </Nav.Link>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
           <Navbar.Collapse id="navbarScroll">
@@ -83,6 +128,8 @@ const NavbarC = ({ admin, user, setAdmin }) => {
           isAdmin={() => {
             setAdmin(!admin);
           }}
+          theme={theme}
+          changeTheme={() => {toggleTheme()}}
         />
       ) : (
         ""

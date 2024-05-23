@@ -17,7 +17,6 @@ import MyContext from "../../FireBase/MyContext.jsx";
 import NavbarC from "../Utilities/NavbarC.jsx";
 
 const Archived = () => {
-    const [files, setFiles] = useState([]);
     const [showModal, setShowModal] = useState(false);
     const [showArchiveModal, setShowArchiveModal] = useState(false);
     const [modalObj, setModalObj] = useState({});
@@ -25,10 +24,7 @@ const Archived = () => {
     //Obj array filled via backend
     const [requests, setRequests] = useState([]);
     const [showReceipt, setShowReceipt] = useState(false);
-    const [showPurchaser, setShowPurchaser] = useState(false);
     const { cookies, setCookies } = useContext(MyContext);
-    const [admin, setAdmin] = useState(false);
-    const navigate = useNavigate();
 
     // get users to see if admin -> Probably a better way to do this
     useEffect(() => {
@@ -40,18 +36,11 @@ const Archived = () => {
 
     function requestDataFromApi() {
         // console.log(cookies.name)
-        // if (!admin) {
             userService.getUserByUsername(cookies.name).then((res) => {
                 // console.log(res.data.userExpenses);
                 setUsers(res.data);
                 setRequests(res.data.userExpenses);
             });
-        // } else {
-        //     expenseService.getAllExpenses().then((res) => {
-        //         setRequests(res.data);
-        //     });
-        // }
-
     }
 
     //Finds the obj tied to the view button clicked then stores it for later
@@ -79,9 +68,6 @@ const Archived = () => {
             case "Reciept":
                 setShowReceipt(true);
                 break;
-            case "Purchaser":
-                setShowPurchaser(true);
-                break;
         }
     };
 
@@ -102,7 +88,7 @@ const Archived = () => {
 
     return (
         <>
-            <NavbarC admin={admin} user={users} setAdmin={setAdmin} />
+            {/* <NavbarC admin={admin} user={users} setAdmin={setAdmin} /> */}
             {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
             <Table striped bordered hover size="lg">
