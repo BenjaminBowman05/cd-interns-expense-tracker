@@ -3,23 +3,42 @@ import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Button from "react-bootstrap/Button";
 import SettingsModal from "../Modals/SettingsModal";
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
+import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
 // Add more variety to icons to make change more noticable
-import { DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, 
-  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open } from "react-bootstrap-icons";
+import {
+  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
+  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open
+} from "react-bootstrap-icons";
 
-const NavbarC = ({ admin, user, setAdmin }) => {
+const NavbarC = ({ admin, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
   const [home, setHome] = useState(false);
   const [form, setForm] = useState(false);
   const [fold, setFold] = useState(false);
   const [sett, setSett] = useState(false);
   const [logOut, setLogOut] = useState(false);
+  const { cookies, setCookies } = useContext(MyContext);
 
   function showSettings() {
     setShowSett(true);
+  }
+
+  const [user, setUsers] = useState();
+
+  useEffect(() => {
+    requestDataFromApi();
+  }, []);
+
+  function requestDataFromApi() {
+    // console.log(cookies.name)
+    userService.getUserByUsername(cookies.name).then((res) => {
+      // console.log(res.data.userExpenses);
+      setUsers(res.data);
+    });
+
   }
 
   return (

@@ -1,9 +1,12 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useEffect, useState } from "react";
+import { Person, PersonLinesFill, Palette, PaletteFill, Lock, UnlockFill } from "react-bootstrap-icons";
 
 const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
   const [theme, setTheme] = useState("");
+  const [profile, setProfile] = useState(false);
+  const [color, setColor] = useState(false);
 
   useEffect(() => {
     const currTheme = document
@@ -43,8 +46,10 @@ const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
       <Modal.Body id="modal-body">
         <p>
           Toggle Theme:{" "}
-          <Button variant={buttonVar} onClick={changeTheme}>
-            {toTitleCase(theme)}
+          <Button variant={buttonVar} onClick={changeTheme}
+          onMouseEnter={() => setColor(true)}
+          onMouseLeave={() => setColor(false)}>
+            {toTitleCase(theme)} {color ? <PaletteFill /> : <Palette />}
           </Button>{" "}
         </p>
 
@@ -52,7 +57,7 @@ const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
           <p>
             Admin View:{" "}
             <Button variant={buttonVar} onClick={isAdmin}>
-              {admin ? "ON" : "OFF"}
+              {admin ? "ON" : "OFF"} {admin ? <UnlockFill /> : <Lock />}
             </Button>
           </p>
         ) : (
@@ -61,8 +66,10 @@ const SettingsModal = ({ show, hide, user, admin, isAdmin }) => {
 
         <p>
           Profile:{" "}
-          <Button variant={buttonVar} href="/profile">
-            View Profile
+          <Button variant={buttonVar} href="/profile"
+          onMouseEnter={() => setProfile(true)}
+          onMouseLeave={() => setProfile(false)}>
+            View {profile ? <PersonLinesFill /> : <Person />}
           </Button>
         </p>
       </Modal.Body>
