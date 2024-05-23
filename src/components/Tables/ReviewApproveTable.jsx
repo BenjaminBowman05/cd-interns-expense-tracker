@@ -171,7 +171,8 @@ const ReviewApproveTable = () => {
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
-    
+    let btn = document.getElementById(`Confirm-${id}`);
+
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
@@ -223,6 +224,7 @@ const ReviewApproveTable = () => {
 
   return (
     <div>
+      <h1>Your Users Requests</h1>
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <Table striped bordered hover className="table">
         <thead>

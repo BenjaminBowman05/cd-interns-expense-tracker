@@ -9,9 +9,6 @@ import Dropdown from "react-bootstrap/Dropdown";
 import * as expenseService from "../../services/ExpenseService.jsx";
 import * as programService from "../../services/ProgramService.jsx";
 import * as userService from "../../services/UserService.jsx";
-import * as expenseService from "../../services/ExpenseService.jsx";
-import * as programService from "../../services/ProgramService.jsx";
-import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import NavbarAlt from "../Utilities/NavbarAlt.jsx";
@@ -55,23 +52,6 @@ const PurchaseRequestForm = () => {
     userId: null,
     recurring: false,
   });
-
-  // we could get user object from the cookie and restore the settings button. But how about no.
-  useEffect(() => {
-    console.log(cookies);
-    if (!cookies.name) {
-      navigate("/");
-    }
-    requestUserDataFromApi();
-  }, [cookies.name]);
-
-  const [user, setUser] = useState();
-
-  function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
-      setUser(res.data);
-    });
-  }
 
   //Array var that will hold the expense programs objs
   const [expensePrograms, setExpensePrograms] = useState([]);
