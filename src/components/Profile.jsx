@@ -10,7 +10,7 @@ const Profile = () => {
   const { cookies, setCookies } = useContext(MyContext);
   const navigate = useNavigate();
   const [user, setUser] = useState({});
-  
+
   useEffect(() => {
     if (!cookies.name) {
       navigate("/");
@@ -26,8 +26,6 @@ const Profile = () => {
 
   return (
     <>
-      <NavbarAlt />
-
       <Container fluid>
         <Card style={{ width: "18rem" }}>
           <Card.Img variant="top" src="../src/assets/CDLogo.png" />

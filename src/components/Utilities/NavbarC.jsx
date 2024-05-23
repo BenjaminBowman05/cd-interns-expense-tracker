@@ -9,8 +9,17 @@ import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
 // Add more variety to icons to make change more noticable
 import {
-  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
-  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open
+  DoorClosed,
+  DoorOpenFill,
+  House,
+  HouseFill,
+  Gear,
+  GearFill,
+  FileText,
+  FileRichtextFill,
+  FileTextFill,
+  Folder2,
+  Folder2Open,
 } from "react-bootstrap-icons";
 
 const NavbarC = ({ admin, setAdmin }) => {
@@ -34,11 +43,11 @@ const NavbarC = ({ admin, setAdmin }) => {
 
     if (currTheme === "dark") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
-      setTheme("Dark");
-      setNavStyle({backgroundColor: '#d1d3d4'});
+      setTheme("dark");
+      setNavStyle({ backgroundColor: "#d1d3d4" });
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
-      setTheme("Light")
+      setTheme("light");
       setNavStyle({});
     }
   }, [themeChange]);
@@ -60,21 +69,22 @@ const NavbarC = ({ admin, setAdmin }) => {
       // console.log(res.data.userExpenses);
       setUsers(res.data);
     });
-
   }
 
   return (
     <>
       <style>
-        @import url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300&display=swap');
+        @import
+        url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300&display=swap');
       </style>
-      <Navbar 
-      style={navStyle}
-      expand="lg" fixed="top">
+      <Navbar style={navStyle} expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
             <Nav.Link href="/">
-              <img style={{ height: 25, margin: 0 }} src="/src/assets/CDBrand.png" />
+              <img
+                style={{ height: 25, margin: 0 }}
+                src="/src/assets/CDBrand.png"
+              />
             </Nav.Link>
           </Navbar.Brand>
           <Navbar.Toggle aria-controls="navbarScroll" />
@@ -90,17 +100,25 @@ const NavbarC = ({ admin, setAdmin }) => {
               <Nav.Link
                 href="/request"
                 onMouseEnter={() => setForm(true)}
-                onMouseLeave={() => setForm(false)}>
+                onMouseLeave={() => setForm(false)}
+              >
                 {/* FileRichtextFill instead of FileTextFill */}
-                Request Form {form ? <FileTextFill size={20} /> : <FileText size={20} />}
+                Request Form{" "}
+                {form ? <FileTextFill size={20} /> : <FileText size={20} />}
               </Nav.Link>
-              <Nav.Link href="/archive"
+              <Nav.Link
+                href="/archive"
                 onMouseEnter={() => setFold(true)}
-                onMouseLeave={() => setFold(false)}>
+                onMouseLeave={() => setFold(false)}
+              >
                 {/* FileRichtextFill instead of FileTextFill */}
-                Archive {fold ? <Folder2Open size={20} /> : <Folder2 size={20} />}
+                Archive{" "}
+                {fold ? <Folder2Open size={20} /> : <Folder2 size={20} />}
               </Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}
+              <Button
+                variant="transparent"
+                size="md"
+                onClick={() => setShowSett(true)}
                 onMouseEnter={() => setSett(true)}
                 onMouseLeave={() => setSett(false)}
               >
@@ -111,8 +129,10 @@ const NavbarC = ({ admin, setAdmin }) => {
                 size="md"
                 onClick={() => Cookies.remove("name")}
                 onMouseEnter={() => setLogOut(true)}
-                onMouseLeave={() => setLogOut(false)}>
-                Sign Out {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
+                onMouseLeave={() => setLogOut(false)}
+              >
+                Sign Out{" "}
+                {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
               </Button>
             </Nav>
           </Navbar.Collapse>
@@ -129,7 +149,9 @@ const NavbarC = ({ admin, setAdmin }) => {
             setAdmin(!admin);
           }}
           theme={theme}
-          changeTheme={() => {toggleTheme()}}
+          changeTheme={() => {
+            toggleTheme();
+          }}
         />
       ) : (
         ""
