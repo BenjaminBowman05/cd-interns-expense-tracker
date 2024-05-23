@@ -7,6 +7,7 @@ import { useState, useContext, useEffect } from "react";
 import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
+import { useLocation } from "react-router-dom";
 // Add more variety to icons to make change more noticable
 import {
   DoorClosed,
@@ -34,6 +35,7 @@ const NavbarC = ({ admin, setAdmin }) => {
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
   const [themeChange, setThemeChange] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
     // console.log(theme)
@@ -44,17 +46,18 @@ const NavbarC = ({ admin, setAdmin }) => {
     if (currTheme === "dark") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
       setTheme("dark");
-      setNavStyle({ backgroundColor: "#d1d3d4" });
+      setNavStyle({backgroundColor: '#d1d3d4'});
+      
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
-      setTheme("light");
+      setTheme("light")
       setNavStyle({});
     }
   }, [themeChange]);
 
   function toggleTheme() {
-    console.log(themeChange);
-    setThemeChange((curr) => (curr == false ? true : false));
+    // console.log(themeChange);
+    setThemeChange(!themeChange);
   }
 
   const [user, setUsers] = useState();
@@ -73,11 +76,14 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   return (
     <>
+    
       <style>
         @import
         url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300&display=swap');
       </style>
-      <Navbar style={navStyle} expand="lg" fixed="top">
+      {location.pathname == "/" ? "" : (<Navbar 
+      style={navStyle}
+      expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
             <Nav.Link href="/">
@@ -115,10 +121,7 @@ const NavbarC = ({ admin, setAdmin }) => {
                 Archive{" "}
                 {fold ? <Folder2Open size={20} /> : <Folder2 size={20} />}
               </Nav.Link>
-              <Button
-                variant="transparent"
-                size="md"
-                onClick={() => setShowSett(true)}
+              <Button variant="transparent" size="md" onClick={() => setShowSett(true)}
                 onMouseEnter={() => setSett(true)}
                 onMouseLeave={() => setSett(false)}
               >
@@ -137,7 +140,7 @@ const NavbarC = ({ admin, setAdmin }) => {
             </Nav>
           </Navbar.Collapse>
         </Container>
-      </Navbar>
+      </Navbar>)}
 
       {showSett ? (
         <SettingsModal
