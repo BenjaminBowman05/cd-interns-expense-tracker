@@ -42,6 +42,9 @@ const NavbarC = ({ admin, setAdmin }) => {
     // const currTheme = document
     //   .querySelector("html")
     //   .getAttribute("data-bs-theme");
+    if(cookies.admin){
+      setAdmin(true);
+    }
 
     if (cookies.theme === "light") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
@@ -163,6 +166,7 @@ const NavbarC = ({ admin, setAdmin }) => {
           user={user}
           isAdmin={() => {
             setAdmin(!admin);
+            setCookies('admin', !admin, { maxAge: 3600 });
           }}
           theme={theme}
           changeTheme={() => {
