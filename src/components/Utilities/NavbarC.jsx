@@ -100,7 +100,7 @@ const NavbarC = ({ admin, setAdmin }) => {
                 {/* FileRichtextFill instead of FileTextFill */}
                 Archive {fold ? <Folder2Open size={20} /> : <Folder2 size={20} />}
               </Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}
+              <Button variant="transparent" size="md" onClick={() => {setShowSett(true)}}
                 onMouseEnter={() => setSett(true)}
                 onMouseLeave={() => setSett(false)}
               >
