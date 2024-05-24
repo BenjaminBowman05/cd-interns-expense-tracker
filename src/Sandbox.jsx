@@ -12,14 +12,15 @@ import ReviewApproveTable from "./components/Tables/ReviewApproveTable";
 import PurchaseTracker from "./components/Tables/PurchaseTracker";
 
 const Sandbox = () => {
-  const [cookies, setCookies] = useCookies();
+  const [cookies, setCookies, updateCookies] = useCookies();
   const [admin, setAdmin] = useState(false);
 
   return (
     <>
-      <MyContext.Provider value={{ cookies, setCookies }}>
-      <NavbarC admin={admin} setAdmin={setAdmin} />
+      <MyContext.Provider value={{ cookies, setCookies, updateCookies }}>
+      
         <BrowserRouter>
+        <NavbarC admin={admin} setAdmin={setAdmin} />
           <Routes>
             <Route exact path="/" element={<EntryPoint />} />
             <Route path="/home" element={admin ? <ReviewApproveTable /> : <PurchaseTracker />} />

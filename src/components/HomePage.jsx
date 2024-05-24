@@ -39,34 +39,10 @@ const HomePage = (adminView) => {
 
   return (
     <>
-      {/* <NavbarC admin={admin} user={user} setAdmin={setAdmin} /> */}
-      {/* <Navbar expand="lg" fixed="top">
-        <Container>
-          <Navbar.Brand>
-            <img style={{height: 25, margin: 0}} src="/src/assets/CDBrand.png" />
-          </Navbar.Brand>
-          <Navbar.Toggle aria-controls="navbarScroll" />
-          <Navbar.Collapse id="navbarScroll">
-            <Nav className="me-auto">
-              <Nav.Link href="/">Home</Nav.Link>
-              <Nav.Link href="/request">Request Form</Nav.Link>
-              <Button variant="transparent" size="md" onClick={showSettings}>
-                {" "}
-                Settings{" "}
-              </Button>
-              <Button onClick={Cookies.remove('name')}>
-                Log out
-              </Button>
-            </Nav>
-          </Navbar.Collapse>
-        </Container>
-      </Navbar> */}
-
       {adminView ? (
         <ReviewApproveTable />
       ) : (
         <PurchaseTracker />
-        // <PurchaseTracker />
       )}
     </>
   );

@@ -10,7 +10,7 @@ const firebaseConfig = {
   projectId: "expense-tracker-721b0",
   storageBucket: "expense-tracker-721b0.appspot.com",
   messagingSenderId: "332676063090",
-  appId: "1:332676063090:web:7f0048463488e35f6947eb"
+  appId: "1:332676063090:web:7f0048463488e35f6947eb",
 };
 
 // Initialize Firebase
