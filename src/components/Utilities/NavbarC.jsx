@@ -10,17 +10,8 @@ import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
 // Add more variety to icons to make change more noticable
 import {
-  DoorClosed,
-  DoorOpenFill,
-  House,
-  HouseFill,
-  Gear,
-  GearFill,
-  FileText,
-  FileRichtextFill,
-  FileTextFill,
-  Folder2,
-  Folder2Open,
+  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, 
+  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open,
 } from "react-bootstrap-icons";
 
 const NavbarC = ({ admin, setAdmin }) => {
@@ -72,7 +63,7 @@ const NavbarC = ({ admin, setAdmin }) => {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
       setCookies("theme", "dark");
       setTheme("light")
-      setNavStyle({});
+      setNavStyle({backgroundColor: "#212529"});
     }
   }
 

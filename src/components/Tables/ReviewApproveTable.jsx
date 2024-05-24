@@ -224,7 +224,7 @@ const ReviewApproveTable = () => {
 
   return (
     <div>
-      <h1>Your Users Requests</h1>
+      <h2>All User Requests</h2>
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <Table striped bordered hover size="lg" style={{fontFamily: 'Open Sans', width: '1000px'}}>
         <thead>
@@ -244,6 +244,7 @@ const ReviewApproveTable = () => {
         <tbody>
           {/* Outputs table rows for each obj display information */}
           {requests.map((data) => (
+            data.archive ? "" :
             <tr key={data.id}>
               <td>{data.id}</td>
               <td>${data.total}</td>
@@ -272,7 +273,7 @@ const ReviewApproveTable = () => {
                   <Button
                     id={"View-" + data.id}
                     type="button"
-                    variant="outline-light"
+                    variant={cookies.theme == "light" ? "outline-primary" : "outline-info"}
                     onClick={() => modalHandle("View", data.id)}
                   >
                     View
@@ -286,13 +287,15 @@ const ReviewApproveTable = () => {
                   name={"actions " + data.id}
                   className="mb-2 "
                   size="sm"
+                  defaultValue={data.doo ? "Approved-" + data.id : data.reason != "" ? "Deny-"+ data.id : ""}
                 >
                   <ToggleButton
                     className="me-2"
                     id={"Approve-" + data.id}
                     variant="outline-success"
                     onClick={() => setChecked("Approved", data.id)}
-                    value={"approved"}
+                    value={"Approved-" + data.id}
+                    disabled = {data.receipt != "" ? true : false}
                   >
                     Approve
                   </ToggleButton>
@@ -300,8 +303,9 @@ const ReviewApproveTable = () => {
                   <ToggleButton
                     id={"Deny-" + data.id}
                     variant="outline-danger"
-                    value={"deny"}
+                    value={"Deny-"+ data.id}
                     onClick={() => setChecked("Denied", data.id)}
+                    disabled = {data.receipt != "" ? true : false}
                   >
                     Deny
                   </ToggleButton>
@@ -336,6 +340,7 @@ const ReviewApproveTable = () => {
                     id={`file-${data.id}`}
                     as="input"
                     type="file"
+                    disabled = {data.reason != "" ? true : false}
                   ></Form.Control>
                 ) : (
                   <>

@@ -173,7 +173,7 @@ const PurchaseTracker = () => {
 
   return (
     <>
-      <h1>Your Requests</h1>
+      <h2>Your Requests</h2>
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
@@ -207,7 +207,7 @@ const PurchaseTracker = () => {
                   <Button
                     id={"View-" + requestInfo.id}
                     type="button"
-                    variant="outline-light"
+                    variant={cookies.theme == "light" ? "outline-primary" : "outline-info"}
                     onClick={() => modalHandle("View", requestInfo.id)}
                   >
                     View

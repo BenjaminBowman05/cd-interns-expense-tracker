@@ -4,10 +4,10 @@ import { useEffect, useState } from "react";
 import {
   Person,
   PersonLinesFill,
-  Palette,
-  PaletteFill,
   Lock,
   UnlockFill,
+  Sun, SunFill, MoonFill,
+  Moon
 } from "react-bootstrap-icons";
 
 const SettingsModal = ({
@@ -38,7 +38,7 @@ const SettingsModal = ({
             onMouseEnter={() => setColor(true)}
             onMouseLeave={() => setColor(false)}
           >
-            {theme} {color ? <PaletteFill /> : <Palette />}
+            {theme} {theme == "light" ? (color ? <SunFill /> : <Sun />) : (color ? <MoonFill />: <Moon />)}
           </Button>{" "}
         </p>
 
