@@ -42,13 +42,13 @@ function LoginForm() {
         <>
             <Container fluid className="mb-3"
                 style={{
-                    border: "solid white 1px",
+                    // border: "solid white 1px",
                     width: "360.5px"
                 }}
             >
                 <h1>Account Login</h1>
             </Container>
-            <Container fluid style={{width: "350px"}}>
+            <Container fluid style={{width: "350px", marginTop: "25px"}}>
                 <Row className="user mb-3">
                     <Col>
                         <FloatingLabel controlId="floatingInputUser" label="Email">

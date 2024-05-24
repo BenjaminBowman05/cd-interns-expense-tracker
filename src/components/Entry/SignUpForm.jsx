@@ -42,9 +42,9 @@ function SignUpForm() {
                 fluid
                 className="mb-3"
                 style={{
-                    border: "solid white 1px",
+                    // border: "solid white 1px",
                     width: "360.5px",
-                    marginTop: "15px",
+                    marginTop: "0px",
                     fontSize: "83%"
                 }}
             >
@@ -53,7 +53,7 @@ function SignUpForm() {
             <Container 
                 fluid
                 style={{
-                    marginTop: "30px",
+                    marginTop: "25px",
                     width: "350px"
                 }}
             >
