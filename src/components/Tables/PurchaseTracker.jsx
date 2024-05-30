@@ -158,9 +158,9 @@ const PurchaseTracker = () => {
 
   function updateReq() {
     modalObj.archive = true;
-      Update(modalObj);
+    Update(modalObj);
     const updateRequest = requests.map((req) => {
-      
+
       // requestUserDataFromApi();
       if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
@@ -177,19 +177,20 @@ const PurchaseTracker = () => {
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-      <Table striped bordered hover size="lg" style={{fontFamily: 'Open Sans', width: '1000px'}}>
+      <Table striped bordered hover size="lg" style={{ fontFamily: 'Open Sans' }}>
+      {/* in table style removed width: "1000px" can be readded but padding in the th need to be removed */}
         <thead>
           <tr>
-            <th>ID</th>
-            <th>Expense</th>
+            <th style={{padding: '15px'}}>ID</th>
+            <th style={{padding: '15px'}}>Expense</th>
             {/* <th>Program</th> */}
-            <th>Item</th>
-            <th>Date Created</th>
-            <th>Date Needed</th>
-            <th>View</th>
+            <th style={{padding: '15px'}}>Item</th>
+            <th style={{padding: '15px'}}>Date Created</th>
+            <th style={{padding: '15px'}}>Date Needed</th>
+            <th style={{padding: '15px'}}>View</th>
             {/* <th>Status</th> */}
-            <th>Receipt</th>
-            <th>Archive Request</th>
+            <th style={{padding: '15px'}}>Receipt</th>
+            <th style={{padding: '15px'}}>Archive Request</th>
           </tr>
         </thead>
         <tbody>
@@ -220,38 +221,39 @@ const PurchaseTracker = () => {
                   requestInfo.receipt == "" ? "" : "d-flex align-items-center"
                 }
               >
-                {requestInfo.CEO && requestInfo.DOO && requestInfo.requesterSupervisor ? (requestInfo.receipt == "" ? (
-                  <Form.Control
-                    onChange={(e) => handleFileSelect(e, requestInfo.id)}
-                    accept=".pdf, .png, .jpeg, .jpg"
-                    id={`file-${requestInfo.id}`}
-                    as="input"
-                    type="file"
-                  ></Form.Control>
-                ) : (
-                  <>
-                    <Button
-                      onClick={() => modalHandle("Reciept", requestInfo.id)}
-                      className="d-inline-block me-2"
-                      variant="outline-info"
-                    >
-                      View Receipt
-                    </Button>
-                    <FloatingLabel
-                      controlId="floatingInput"
-                      label="Name | Date"
-                    >
-                      <Form.Control
-                        className="d-inline-block"
-                        value={
-                          requestInfo.purchaser +
-                          " | " +
-                          requestInfo.dateDelivered
-                        }
-                      />
-                    </FloatingLabel>
-                  </>
-                )) : (requestInfo.reason != "" ? "Denied" : "Pending")}
+                {requestInfo.ceo && requestInfo.doo && requestInfo.requesterSupervisor ?
+                  (requestInfo.receipt == "" ? (
+                    <Form.Control
+                      onChange={(e) => handleFileSelect(e, requestInfo.id)}
+                      accept=".pdf, .png, .jpeg, .jpg"
+                      id={`file-${requestInfo.id}`}
+                      as="input"
+                      type="file"
+                    ></Form.Control>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => modalHandle("Reciept", requestInfo.id)}
+                        className="d-inline-block me-2"
+                        variant="outline-info"
+                      >
+                        View Receipt
+                      </Button>
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Name | Date"
+                      >
+                        <Form.Control
+                          className="d-inline-block"
+                          value={
+                            requestInfo.purchaser +
+                            " | " +
+                            requestInfo.dateDelivered
+                          }
+                        />
+                      </FloatingLabel>
+                    </>
+                  )) : (requestInfo.reason != "" ? "Denied" : "Pending...")}
               </td>
               <td>
                 <ButtonGroup className="mb-2 " size="sm">

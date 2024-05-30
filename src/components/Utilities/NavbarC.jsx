@@ -10,7 +10,7 @@ import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
 // Add more variety to icons to make change more noticable
 import {
-  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill, 
+  DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
   FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open,
 } from "react-bootstrap-icons";
 
@@ -33,18 +33,18 @@ const NavbarC = ({ admin, setAdmin }) => {
     // const currTheme = document
     //   .querySelector("html")
     //   .getAttribute("data-bs-theme");
-    if(cookies.admin){
+    if (cookies.admin) {
       setAdmin(true);
     }
 
     if (cookies.theme === "light") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
       setTheme("dark");
-      setNavStyle({backgroundColor: '#d1d3d4'});
+      setNavStyle({ backgroundColor: '#d1d3d4' });
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
       setTheme("light")
-      setNavStyle({backgroundColor: "#212529"});
+      setNavStyle({ backgroundColor: "#212529" });
     }
   }, []);
 
@@ -57,13 +57,13 @@ const NavbarC = ({ admin, setAdmin }) => {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
       setTheme("dark");
       setCookies("theme", "light");
-      setNavStyle({backgroundColor: '#d1d3d4'});
-      
+      setNavStyle({ backgroundColor: '#d1d3d4' });
+
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
       setCookies("theme", "dark");
       setTheme("light")
-      setNavStyle({backgroundColor: "#212529"});
+      setNavStyle({ backgroundColor: "#212529" });
     }
   }
 
@@ -81,16 +81,28 @@ const NavbarC = ({ admin, setAdmin }) => {
     });
   }
 
+  const handleLogOut = () => {
+    Cookies.remove("name");
+    Cookies.remove("theme");
+    Cookies.remove("admin");
+    setAdmin(false);
+    setForm(false);
+    setFold(false);
+    setHome(false);
+    setLogOut(false);
+    setSett(false);
+  }
+
   return (
     <>
-    
+
       <style>
         @import
         url('https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;1,300&display=swap');
       </style>
-      {location.pathname == "/" ? "" : (<Navbar 
-      style={navStyle}
-      expand="lg" fixed="top">
+      {location.pathname == "/" ? "" : (<Navbar
+        style={navStyle}
+        expand="lg" fixed="top">
         <Container>
           <Navbar.Brand>
             <Nav.Link href="/">
@@ -137,11 +149,13 @@ const NavbarC = ({ admin, setAdmin }) => {
               <Button
                 variant="transparent"
                 size="md"
-                onClick={() => Cookies.remove("name")}
+                onClick={() => {
+                  handleLogOut()
+                }}
                 onMouseEnter={() => setLogOut(true)}
                 onMouseLeave={() => setLogOut(false)}
               >
-                Sign Out{" "}
+                Sign Out
                 {logOut ? <DoorOpenFill size={20} /> : <DoorClosed size={20} />}
               </Button>
             </Nav>
