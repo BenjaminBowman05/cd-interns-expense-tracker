@@ -44,7 +44,7 @@ const NavbarC = ({ admin, setAdmin }) => {
     } else {
       document.querySelector("html").setAttribute("data-bs-theme", "dark");
       setTheme("light")
-      setNavStyle({});
+      setNavStyle({backgroundColor: "#212529"});
     }
   }, []);
 

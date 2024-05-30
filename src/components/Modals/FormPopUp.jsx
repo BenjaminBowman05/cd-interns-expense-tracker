@@ -132,12 +132,12 @@ const FormPopUp = ({ show, close, data, reqId }) => {
               <Col>
                 <FloatingLabel
                   controlId="floatingInput"
-                  label="Requestor Supervisor"
+                  label="Requester Supervisor"
                 >
                   <Form.Control
                     disabled
                     value={
-                      data.requestorSupervisor
+                      data.requesterSupervisor
                         ? "Approved"
                         : data.reason == ""
                         ? "Pending"

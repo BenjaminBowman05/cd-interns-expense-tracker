@@ -31,15 +31,14 @@ const Profile = () => {
           <Card.Img variant="top" src="../src/assets/CDLogo.png" />
           <Card.Body>
             <Card.Title>User Information</Card.Title>
-            <Card.Text>
-              <ul id="user-info">
-                <li>
-                  Username: <b>{user.name}</b>
-                </li>
-                <li>
-                  Admin Status: <b>{String(user.admin)}</b>
-                </li>
-              </ul>
+            <Card.Text className="mb-1">
+                  Username: {user.name}
+            </Card.Text>
+            <Card.Text className="mb-1">
+                  {user.role}
+            </Card.Text>
+            <Card.Text className="mb-1">
+                  {user.admin ? "Admin" : ""}
             </Card.Text>
           </Card.Body>
         </Card>

@@ -50,7 +50,9 @@ const ReviewApproveTable = () => {
   function requestUserDataFromApi() {
     userService.getUserByUsername(cookies.name).then((res) => {
       setUsers(res.data);
-      setRequests(res.data.userExpenses);
+      expenseService.getAllExpenses().then((res) => {
+        setRequests(res.data);
+      });
     });
   }
 
@@ -153,21 +155,33 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-          if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-            req.receipt = "";
-            window.alert("Please fill out all fields and reattach file");
-          } else {
-            req.purchaser = modalObj.purchaser;
-            req.dateDelivered = modalObj.dateDelivered;
-          }
+          req.receipt = "";
+          window.alert("Please fill out all fields and reattach file");
+        } else {
+          req.purchaser = modalObj.purchaser;
+          req.dateDelivered = modalObj.dateDelivered;
         }
-        return req;
+
       }
+      return req;
     });
 
     Update(modalObj);
     setRequests(updateRequest);
   };
+
+  //Modal handle for confirmation
+  const receiptRemove = () => {
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalObj.id) {
+        req.receipt = "";
+      }
+      return req;
+    });
+
+    Update(modalObj);
+    setRequests(updateRequest);
+  }
 
   //Method is responsible looking through array and finding obj with matching id and altering approval
   const setChecked = (btnVal, id) => {
@@ -207,6 +221,7 @@ const ReviewApproveTable = () => {
     setShowConfirmation(false);
     if (modalObj[users.role]) {
       console.log("Approved");
+      modalObj.receipt = "";
     } else {
       console.log("Denied");
       const updateRequest = requests.map((req) => {
@@ -216,17 +231,16 @@ const ReviewApproveTable = () => {
           return req;
         }
       });
-
-      Update(modalObj);
       setRequests(updateRequest);
     }
+    Update(modalObj);
   };
 
   return (
     <div>
       <h2>All User Requests</h2>
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
-      <Table striped bordered hover size="lg" style={{fontFamily: 'Open Sans', width: '1000px'}}>
+      <Table striped bordered hover size="lg" style={{ fontFamily: 'Open Sans', width: '1000px' }}>
         <thead>
           <tr>
             <th>ID</th>
@@ -244,126 +258,109 @@ const ReviewApproveTable = () => {
         <tbody>
           {/* Outputs table rows for each obj display information */}
           {requests.map((data) => (
-            data.archive ? "" :
-            <tr key={data.id}>
-              <td>{data.id}</td>
-              <td>${data.total}</td>
-              {/* <td>
-                  <DropdownButton size="sm" title="Programs" variant="outline-light">
-                    {data.expensePrograms.map((program) => (
-                      <Dropdown.Item disabled
-                        key={program.programName}
-                        as="button"
-                      >
-                        {program.programName}
-                      </Dropdown.Item>
-                    ))}
-                  </DropdownButton> */}
-              {/* {data.expensePrograms.map((program) => (
-                    <p key={program.programName} className="m-0">
-                      {program.programName}
-                    </p>
-                  ))} */}
-              {/* </td> */}
-              <td>{data.dateOfExpense}</td>
-              <td>{data.dateNeeded}</td>
-              {/* View Button will open a version of expense form that is populated with obj data */}
-              <td>
-                <ButtonGroup className="mb-2 " size="sm">
-                  <Button
-                    id={"View-" + data.id}
-                    type="button"
-                    variant={cookies.theme == "light" ? "outline-primary" : "outline-info"}
-                    onClick={() => modalHandle("View", data.id)}
-                  >
-                    View
-                  </Button>
-                </ButtonGroup>
-              </td>
-              {/* Approval Button */}
-              <td>
-                <ToggleButtonGroup
-                  type="radio"
-                  name={"actions " + data.id}
-                  className="mb-2 "
-                  size="sm"
-                  defaultValue={data.doo ? "Approved-" + data.id : data.reason != "" ? "Deny-"+ data.id : ""}
-                >
-                  <ToggleButton
-                    className="me-2"
-                    id={"Approve-" + data.id}
-                    variant="outline-success"
-                    onClick={() => setChecked("Approved", data.id)}
-                    value={"Approved-" + data.id}
-                    disabled = {data.receipt != "" ? true : false}
-                  >
-                    Approve
-                  </ToggleButton>
-                  {/* Deny Button */}
-                  <ToggleButton
-                    id={"Deny-" + data.id}
-                    variant="outline-danger"
-                    value={"Deny-"+ data.id}
-                    onClick={() => setChecked("Denied", data.id)}
-                    disabled = {data.receipt != "" ? true : false}
-                  >
-                    Deny
-                  </ToggleButton>
-                </ToggleButtonGroup>
-              </td>
-              {/* Confirm Button */}
-              <td>
-                <ButtonGroup className="mb-2 " size="sm">
-                  <Button
-                    className="disabled"
-                    id={"Confirm-" + data.id}
-                    type="button"
-                    variant="outline-secondary"
-                    value={"Disabled"}
-                    onClick={() => modalHandle("Confirm", data.id)}
-                  >
-                    Confirmation
-                  </Button>
-                </ButtonGroup>
-              </td>
-              {/* File upload */}
-              <td
-                id={`file ${data.id}`}
-                className={
-                  data.receipt == "" ? "" : "d-flex align-items-center"
-                }
-              >
-                {data.receipt == "" ? (
-                  <Form.Control
-                    onChange={(e) => handleFileSelect(e, data.id)}
-                    accept=".pdf, .png, .jpeg, .jpg"
-                    id={`file-${data.id}`}
-                    as="input"
-                    type="file"
-                    disabled = {data.reason != "" ? true : false}
-                  ></Form.Control>
-                ) : (
-                  <>
+            data.archive ? ("") :
+              (<tr key={data.id}>
+                <td>{data.id}</td>
+                <td>${data.total}</td>
+                <td>{data.dateOfExpense}</td>
+                <td>{data.dateNeeded}</td>
+                {/* View Button will open a version of expense form that is populated with obj data */}
+                <td>
+                  <ButtonGroup className="mb-2 " size="sm">
                     <Button
-                      onClick={() => modalHandle("Reciept", data.id)}
-                      className="d-inline-block me-2"
-                      variant="outline-info"
+                      id={"View-" + data.id}
+                      type="button"
+                      variant={cookies.theme == "light" ? "outline-primary" : "outline-info"}
+                      onClick={() => modalHandle("View", data.id)}
                     >
-                      View Receipt
+                      View
                     </Button>
-                    <FloatingLabel
-                      controlId="floatingInput"
-                      label="Name | Date"
+                  </ButtonGroup>
+                </td>
+                {/* Approval Button */}
+                <td>
+                  <ToggleButtonGroup
+                    type="radio"
+                    name={"actions " + data.id}
+                    className="mb-2 "
+                    size="sm"
+                    defaultValue={data.doo ? "Approved-" + data.id : data.reason != "" ? "Deny-" + data.id : ""}
+                  >
+                    <ToggleButton
+                      className="me-2"
+                      id={"Approve-" + data.id}
+                      variant="outline-success"
+                      onClick={() => setChecked("Approved", data.id)}
+                      value={"Approved-" + data.id}
+                      disabled={data.receipt != "" ? true : false}
                     >
-                      <Form.Control
-                        className="d-inline-block"
-                        value={data.purchaser + " | " + data.dateDelivered}
-                      />
-                    </FloatingLabel>
-                  </>
-                )}
-              </td>
-            </tr>
+                      Approve
+                    </ToggleButton>
+                    {/* Deny Button */}
+                    <ToggleButton
+                      id={"Deny-" + data.id}
+                      variant="outline-danger"
+                      value={"Deny-" + data.id}
+                      onClick={() => setChecked("Denied", data.id)}
+                      disabled={data.receipt != "" ? true : false}
+                    >
+                      Deny
+                    </ToggleButton>
+                  </ToggleButtonGroup>
+                </td>
+                {/* Confirm Button */}
+                <td>
+                  <ButtonGroup className="mb-2 " size="sm">
+                    <Button
+                      className="disabled"
+                      id={"Confirm-" + data.id}
+                      type="button"
+                      variant="outline-secondary"
+                      value={"Disabled"}
+                      onClick={() => modalHandle("Confirm", data.id)}
+                    >
+                      Confirmation
+                    </Button>
+                  </ButtonGroup>
+                </td>
+                {/* File upload */}
+                <td
+                  id={`file ${data.id}`}
+                  className={
+                    data.receipt == "" ? "" : "d-flex align-items-center"
+                  }
+                >
+                  {data.receipt == "" ? (
+                    <Form.Control
+                      onChange={(e) => handleFileSelect(e, data.id)}
+                      accept=".pdf, .png, .jpeg, .jpg"
+                      id={`file-${data.id}`}
+                      as="input"
+                      type="file"
+                      disabled={data.ceo && data.doo && data.requesterSupervisor && data.reason == "" ? "" : true}
+                    ></Form.Control>
+                  ) : (
+                    <>
+                      <Button
+                        onClick={() => modalHandle("Reciept", data.id)}
+                        className="d-inline-block me-2"
+                        variant="outline-info"
+                      >
+                        View Receipt
+                      </Button>
+                      <FloatingLabel
+                        controlId="floatingInput"
+                        label="Name | Date"
+                      >
+                        <Form.Control
+                          className="d-inline-block"
+                          value={data.purchaser + " | " + data.dateDelivered}
+                        />
+                      </FloatingLabel>
+                    </>
+                  )}
+                </td>
+              </tr>)
           ))}
         </tbody>
       </Table>
