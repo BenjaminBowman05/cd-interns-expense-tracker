@@ -25,6 +25,7 @@ const Archived = () => {
     const [requests, setRequests] = useState([]);
     const [showReceipt, setShowReceipt] = useState(false);
     const { cookies, setCookies } = useContext(MyContext);
+    const navigate = useNavigate();
 
     // get users to see if admin -> Probably a better way to do this
     useEffect(() => {
@@ -72,17 +73,27 @@ const Archived = () => {
     };
 
     function updateReq() {
-        modalObj.archive = false;
-        Update(modalObj);
-        // requestDataFromApi();
-        const updateRequest = requests.map((req) => {
-            if (req.id === modalObj.id) {
-                const newTodos = requests.filter((t) => t !== req);
-                setRequests(newTodos);
-            } else {
-                return req;
-            }
+        modalObj.id = null;
+        modalObj.ceo = false;
+        modalObj.doo = false;
+        modalObj.requesterSupervisor = false;
+        modalObj.receipt = "";
+        modalObj.reason = "";
+        modalObj.purchaser = "";
+        modalObj.dateDelivered = "";
+        expenseService.createExpense(modalObj).then((data)=>{
+            // console.log(data)
+            navigate("/home")
         });
+        // requestDataFromApi();
+        // const updateRequest = requests.map((req) => {
+        //     if (req.id === modalObj.id) {
+        //         const newTodos = requests.filter((t) => t !== req);
+        //         setRequests(newTodos);
+        //     } else {
+        //         return req;
+        //     }
+        // });
         
     }
 
@@ -104,7 +115,7 @@ const Archived = () => {
                         <th>View</th>
                         {/* <th>Status</th> */}
                         <th>Receipt</th>
-                        <th>Cancel Archive</th>
+                        <th>Duplicate Request</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -177,7 +188,7 @@ const Archived = () => {
                                         variant="outline-danger"
                                         onClick={() => modalHandle("Archive", requestInfo.id)}
                                     >
-                                        Cancel
+                                        Duplicate
                                     </Button>
                                 </ButtonGroup>
                             </td>

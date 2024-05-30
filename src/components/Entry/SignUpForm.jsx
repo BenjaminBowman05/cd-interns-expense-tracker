@@ -11,7 +11,8 @@ import MyContext from '../../FireBase/MyContext';
 
 function SignUpForm() {
     const [userEmail, setUserEmail] = useState('');
-    const [username, setUsername] = useState('');
+    const [firstname, setFirstname] = useState('');
+    const [lastname, setLastname] = useState('');
     const [password, setPassword] = useState('');
     const { cookies, setCookies } = useContext(MyContext);
 
@@ -21,6 +22,7 @@ function SignUpForm() {
         console.log('Email:', userEmail);
         console.log('Username:', username);
         console.log('Password:', password);
+        const username = lastname + ", " + firstname;
         const fireBaseUser = await signUpFireBase(userEmail, password, username);
         // console.log(fireBaseUser)
         //TODO:need to add check if username
@@ -69,14 +71,26 @@ function SignUpForm() {
                         </FloatingLabel>
                     </Col>
                 </Row>
-                <Row>
-                    <Col className="user mb-3">
-                        <FloatingLabel controlId="floatingInputUser" label="User Name">
+                <Row className="first mb-3">
+                    <Col>
+                        <FloatingLabel controlId="floatingInputEmail" label="First Name">
                             <Form.Control
                                 type="name"
-                                placeholder="User"
-                                onChange={(e) => setUsername(e.target.value)}
-                                onPaste={(e) => setUsername(e.clipboardData.getData("text"))}
+                                placeholder="John"
+                                onChange={(e) => setFirstname(e.target.value)}
+                                onPaste={(e) => setFirstname(e.clipboardData.getData("text"))}
+                            />
+                        </FloatingLabel>
+                    </Col>
+                </Row>
+                <Row>
+                    <Col className="last mb-3">
+                        <FloatingLabel controlId="floatingInputUser" label="Last Name">
+                            <Form.Control
+                                type="name"
+                                placeholder="Doe"
+                                onChange={(e) => setLastname(e.target.value)}
+                                onPaste={(e) => setLastname(e.clipboardData.getData("text"))}
                             />
                         </FloatingLabel>
                     </Col>

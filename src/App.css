@@ -1,11 +1,13 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
-}
+/* #root { */
+  /* max-width: 1280px; */
+  /* margin: 0 auto; */
+  /* margin: ; */
+  /* display: flex; */
+  /* padding: 2rem; */
+  /* text-align: center; */
+/* } */
 
-.logo {
+/* .logo {
   height: 6em;
   padding: 1.5em;
   will-change: filter;
@@ -31,9 +33,9 @@
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
   }
-}
+} */
 
-.card {
+/* .card {
   padding: 2em;
 }
 
@@ -55,4 +57,4 @@ a {
 
 #user-info {
   list-style: none;
-}
+} */
