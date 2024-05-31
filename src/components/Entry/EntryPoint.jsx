@@ -1,4 +1,3 @@
-import { getAllUsers, createUser } from "../../services/UserService";
 import SignUpForm from "./SignUpForm";
 import LoginForm from "./LoginForm";
 import Container from "react-bootstrap/Container";

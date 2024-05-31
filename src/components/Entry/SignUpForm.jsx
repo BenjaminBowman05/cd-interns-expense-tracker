@@ -18,23 +18,12 @@ function SignUpForm() {
 
     const handleSignUp = async (e) => {
         e.preventDefault();
-        console.log('Signing up...');
-        console.log('Email:', userEmail);
-        console.log('Username:', username);
-        console.log('Password:', password);
         const username = lastname + ", " + firstname;
         const fireBaseUser = await signUpFireBase(userEmail, password, username);
-        // console.log(fireBaseUser)
-        //TODO:need to add check if username
         if (fireBaseUser) {
             createUser({ name: username, pass: password, email: userEmail, admin: false, uid: fireBaseUser.uid })
             setCookies('name', username, { maxAge: 3600 });
         }
-        
-        // Reset the form fields after submission
-        // setUserEmail('');
-        // setUsername('');
-        // setPassword('');
 
     };
 

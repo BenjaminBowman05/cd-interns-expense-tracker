@@ -11,7 +11,7 @@ import { useLocation } from "react-router-dom";
 // Add more variety to icons to make change more noticable
 import {
   DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
-  FileText, FileRichtextFill, FileTextFill, Folder2, Folder2Open,
+  FileText, FileTextFill, Folder, FolderFill
 } from "react-bootstrap-icons";
 
 const NavbarC = ({ admin, setAdmin }) => {
@@ -29,10 +29,6 @@ const NavbarC = ({ admin, setAdmin }) => {
   const location = useLocation();
 
   useEffect(() => {
-    // console.log(theme)
-    // const currTheme = document
-    //   .querySelector("html")
-    //   .getAttribute("data-bs-theme");
     if (cookies.admin) {
       setAdmin(true);
     }
@@ -52,7 +48,6 @@ const NavbarC = ({ admin, setAdmin }) => {
     const currTheme = document
       .querySelector("html")
       .getAttribute("data-bs-theme");
-    // console.log(cookies.theme)
     if (currTheme === "dark") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
       setTheme("dark");
@@ -74,9 +69,7 @@ const NavbarC = ({ admin, setAdmin }) => {
   }, []);
 
   function requestDataFromApi() {
-    // console.log(cookies.name)
     userService.getUserByUsername(cookies.name).then((res) => {
-      // console.log(res.data.userExpenses);
       setUsers(res.data);
     });
   }
@@ -138,7 +131,7 @@ const NavbarC = ({ admin, setAdmin }) => {
               >
                 {/* FileRichtextFill instead of FileTextFill */}
                 Archive{" "}
-                {fold ? <Folder2Open size={20} /> : <Folder2 size={20} />}
+                {fold ? <FolderFill size={20} /> : <Folder size={20} />}
               </Nav.Link>
               <Button variant="transparent" size="md" onClick={() => setShowSett(true)}
                 onMouseEnter={() => setSett(true)}

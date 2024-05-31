@@ -18,8 +18,6 @@ import { useNavigate } from "react-router-dom";
 
 const ReviewApproveTable = () => {
   // make method to handle types of filters
-  const [files, setFiles] = useState([]);
-  const [show, setShow] = useState(false);
   const [users, setUsers] = useState();
   //Obj array filled via backend
   const [requests, setRequests] = useState([]);
@@ -69,10 +67,6 @@ const ReviewApproveTable = () => {
     if (!allowedExtensions.exec(filePath)) {
       alert("Invalid file type");
       fileInput.value = "";
-      // const newFileState = [...files];
-      // newFileState[id - 1] = false;
-      // setFiles(newFileState);
-      // console.log(files);
 
       return false;
     }
@@ -81,19 +75,12 @@ const ReviewApproveTable = () => {
 
   //Handles the implentation of a file while calling the other file functions to verify and attach the url
   const handleFileSelect = (event, id) => {
-    // console.log(event);
     let valid = validateFile(id);
 
     if (valid) {
-      // console.log(event.target.files);
       const reader = new FileReader();
       reader.onload = (e) => handleFileLoadPdf(e, id);
       reader.readAsDataURL(event.target.files[0]);
-      // const newFileState = [...files];
-      // newFileState[id - 1] = true;
-      // setFiles(newFileState);
-      // console.log(files);
-      console.log(requests);
       modalHandle("Purchaser", id);
     }
   };
@@ -101,8 +88,6 @@ const ReviewApproveTable = () => {
   //attaches the url of file to the request obj then updates array
   const handleFileLoadPdf = (event, id) => {
     let url = event.target.result;
-    // console.log(url);
-    // console.log(url);
     const newRequest = requests.map((request) => {
       if (request.id === id) {
         request.receipt = url;
@@ -112,19 +97,16 @@ const ReviewApproveTable = () => {
     });
 
     setRequests(newRequest);
-    // Update(modalObj);
   };
 
   //Finds the obj tied to the view button clicked then stores it for later
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
-        // setModalId(req.id);
         setModalObj(req);
         return req;
       }
     });
-    // setModalObj(updateRequest[id - 1]);
   };
 
   //Handles the modal for the view form
@@ -151,7 +133,6 @@ const ReviewApproveTable = () => {
 
   const handlePurchaserShow = () => {
     setShowPurchaser(false);
-    console.log(modalObj.purchaser, modalObj.dateDelivered);
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
@@ -189,10 +170,8 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === id) {
         if (btnVal == "Approved") {
-          console.log("APPROVED BTN VALUE");
           return { ...req, [users.role]: true };
         } else if (btnVal == "Denied") {
-          console.log("DENIED BTN VALUE");
           return { ...req, [users.role]: false };
         }
       } else {
@@ -208,21 +187,14 @@ const ReviewApproveTable = () => {
 
     //sets the array with updated value
     setRequests(updateRequest);
-    console.log(requests);
   };
 
-  //used to keep track of modal info being passed into view and confirmation
-  // const [modalId, setModalId] = useState(0);
-
-  //This handles the confirmation decision of approve and deny
   //This handles the confirmation decision of approve and deny
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
     if (modalObj[users.role]) {
-      console.log("Approved");
       modalObj.receipt = "";
     } else {
-      console.log("Denied");
       const updateRequest = requests.map((req) => {
         if (req.id === modalObj.id) {
           return { ...req, reason: modalObj.reason };
@@ -245,20 +217,20 @@ const ReviewApproveTable = () => {
           bordered
           hover
           size="lg"
-          style={{ fontFamily: "Open Sans", width: "1000px" }}
+          style={{ fontFamily: "Open Sans"}}
         >
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Expense</th>
+              <th style={{ padding: "15px" }}>ID</th>
+              <th style={{ padding: "15px" }}>Expense</th>
               {/* <th>Program</th>
               <th>Description</th> */}
-              <th>Date Created</th>
-              <th>Date Needed</th>
-              <th>View</th>
-              <th>Decision</th>
-              <th>Confirmation</th>
-              <th>Reciept</th>
+              <th style={{ padding: "15px" }}>Date Created</th>
+              <th style={{ padding: "15px" }}>Date Needed</th>
+              <th style={{ padding: "15px" }}>View</th>
+              <th style={{ padding: "15px" }}>Decision</th>
+              <th style={{ padding: "15px" }}>Confirmation</th>
+              <th style={{ padding: "15px" }}>Reciept</th>
             </tr>
           </thead>
           <tbody>
@@ -270,7 +242,7 @@ const ReviewApproveTable = () => {
                 <tr key={data.id}>
                   <td>{data.id}</td>
                   <td>${data.total}</td>
-                  <td>{data.dateOfExpense}</td>
+                  <td>{data.dateOfExpense.substring(0, 10)}</td>
                   <td>{data.dateNeeded}</td>
                   {/* View Button will open a version of expense form that is populated with obj data */}
                   <td>

@@ -198,7 +198,7 @@ const PurchaseRequestForm = () => {
         <Row className="itemsRequested mb-3">
           <Col>
             <Form.Control
-              as="textarea" //is it needed?
+              as="textarea"
               rows="4"
               placeholder="Items Requested..."
               onChange={(e) => (formInfo.items = e.target.value)}
