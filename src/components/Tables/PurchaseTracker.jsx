@@ -136,7 +136,6 @@ const PurchaseTracker = () => {
     modalObj.archive = true;
     Update(modalObj);
     const updateRequest = requests.map((req) => {
-
       // requestUserDataFromApi();
       if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
@@ -153,101 +152,127 @@ const PurchaseTracker = () => {
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-      <Table striped bordered hover size="lg">
-        {/* in table style removed width: "1000px" can be readded but padding in the th need to be removed */}
-        <thead>
-          <tr>
-            <th style={{ padding: '15px' }}>ID</th>
-            <th style={{ padding: '15px' }}>Expense</th>
-            {/* <th>Program</th> */}
-            <th style={{ padding: '15px' }}>Item</th>
-            <th style={{ padding: '15px' }}>Date Created</th>
-            <th style={{ padding: '15px' }}>Date Needed</th>
-            <th style={{ padding: '15px' }}>View</th>
-            {/* <th>Status</th> */}
-            <th style={{ padding: '15px' }}>Receipt</th>
-            <th style={{ padding: '15px' }}>Archive Request</th>
-          </tr>
-        </thead>
-        <tbody>
-          {/* Outputs table rows for each obj display information */}
-          {requests.map((requestInfo) => (
-            requestInfo.archive ? "" :
-              <tr key={requestInfo.id}>
-                <td>{requestInfo.id}</td>
-                <td>${requestInfo.total}</td>
-                {/* <td>{requestInfo.program}</td> */}
-                <td>{requestInfo.items}</td>
-                <td>{requestInfo.dateOfExpense.substring(0, 10)}</td>
-                <td>{requestInfo.dateNeeded}</td>
-                <td>
-                  <ButtonGroup className="mb-2 " size="sm">
-                    <Button
-                      id={"View-" + requestInfo.id}
-                      type="button"
-                      variant={cookies.theme == "light" ? "outline-primary" : "outline-info"}
-                      onClick={() => modalHandle("View", requestInfo.id)}
-                    >
-                      View
-                    </Button>
-                  </ButtonGroup>
-                </td>
-                <td
-                  id={`file ${requestInfo.id}`}
-                  className={
-                    requestInfo.receipt == "" ? "" : "d-flex align-items-center"
-                  }
-                >
-                  {requestInfo.ceo && requestInfo.doo && requestInfo.requesterSupervisor ?
-                    (requestInfo.receipt == "" ? (
-                      <Form.Control
-                        onChange={(e) => handleFileSelect(e, requestInfo.id)}
-                        accept=".pdf, .png, .jpeg, .jpg"
-                        id={`file-${requestInfo.id}`}
-                        as="input"
-                        type="file"
-                      ></Form.Control>
-                    ) : (
-                      <>
-                        <Button
-                          onClick={() => modalHandle("Reciept", requestInfo.id)}
-                          className="d-inline-block me-2"
-                          variant="outline-info"
-                        >
-                          View Receipt
-                        </Button>
-                        <FloatingLabel
-                          controlId="floatingInput"
-                          label="Name | Date"
-                        >
-                          <Form.Control
-                            className="d-inline-block"
-                            value={
-                              requestInfo.purchaser +
-                              " | " +
-                              requestInfo.dateDelivered
+      <div className="table-container">
+        <Table
+          striped
+          bordered
+          hover
+          size="lg"
+          style={{ fontFamily: "Open Sans" }}
+        >
+          {/* in table style removed width: "1000px" can be readded but padding in the th need to be removed */}
+          <thead>
+            <tr>
+              <th style={{ padding: "15px" }}>ID</th>
+              <th style={{ padding: "15px" }}>Expense</th>
+              {/* <th>Program</th> */}
+              <th style={{ padding: "15px" }}>Item</th>
+              <th style={{ padding: "15px" }}>Date Created</th>
+              <th style={{ padding: "15px" }}>Date Needed</th>
+              <th style={{ padding: "15px" }}>View</th>
+              {/* <th>Status</th> */}
+              <th style={{ padding: "15px" }}>Receipt</th>
+              <th style={{ padding: "15px" }}>Archive Request</th>
+            </tr>
+          </thead>
+          <tbody>
+            {/* Outputs table rows for each obj display information */}
+            {requests.map((requestInfo) =>
+              requestInfo.archive ? (
+                ""
+              ) : (
+                <tr key={requestInfo.id}>
+                  <td>{requestInfo.id}</td>
+                  <td>${requestInfo.total}</td>
+                  {/* <td>{requestInfo.program}</td> */}
+                  <td>{requestInfo.items}</td>
+                  <td>{requestInfo.dateOfExpense.substring(0, 10)}</td>
+                  <td>{requestInfo.dateNeeded}</td>
+                  <td>
+                    <ButtonGroup className="mb-2 " size="sm">
+                      <Button
+                        id={"View-" + requestInfo.id}
+                        type="button"
+                        variant={
+                          cookies.theme == "light"
+                            ? "outline-primary"
+                            : "outline-info"
+                        }
+                        onClick={() => modalHandle("View", requestInfo.id)}
+                      >
+                        View
+                      </Button>
+                    </ButtonGroup>
+                  </td>
+                  <td
+                    id={`file ${requestInfo.id}`}
+                    className={
+                      requestInfo.receipt == ""
+                        ? ""
+                        : "d-flex align-items-center"
+                    }
+                  >
+                    {requestInfo.ceo &&
+                    requestInfo.doo &&
+                    requestInfo.requesterSupervisor ? (
+                      requestInfo.receipt == "" ? (
+                        <Form.Control
+                          onChange={(e) => handleFileSelect(e, requestInfo.id)}
+                          accept=".pdf, .png, .jpeg, .jpg"
+                          id={`file-${requestInfo.id}`}
+                          as="input"
+                          type="file"
+                        ></Form.Control>
+                      ) : (
+                        <>
+                          <Button
+                            onClick={() =>
+                              modalHandle("Reciept", requestInfo.id)
                             }
-                          />
-                        </FloatingLabel>
-                      </>
-                    )) : (requestInfo.reason != "" ? "Denied" : "Pending...")}
-                </td>
-                <td>
-                  <ButtonGroup className="mb-2 " size="sm">
-                    <Button
-                      id={"Archive-" + requestInfo.id}
-                      type="button"
-                      variant="outline-danger"
-                      onClick={() => modalHandle("Archive", requestInfo.id)}
-                    >
-                      Archive
-                    </Button>
-                  </ButtonGroup>
-                </td>
-              </tr>
-          ))}
-        </tbody>
-      </Table>
+                            className="d-inline-block me-2"
+                            variant="outline-info"
+                          >
+                            View Receipt
+                          </Button>
+                          <FloatingLabel
+                            controlId="floatingInput"
+                            label="Name | Date"
+                          >
+                            <Form.Control
+                              className="d-inline-block"
+                              value={
+                                requestInfo.purchaser +
+                                " | " +
+                                requestInfo.dateDelivered
+                              }
+                            />
+                          </FloatingLabel>
+                        </>
+                      )
+                    ) : requestInfo.reason != "" ? (
+                      "Denied"
+                    ) : (
+                      "Pending..."
+                    )}
+                  </td>
+                  <td>
+                    <ButtonGroup className="mb-2 " size="sm">
+                      <Button
+                        id={"Archive-" + requestInfo.id}
+                        type="button"
+                        variant="outline-danger"
+                        onClick={() => modalHandle("Archive", requestInfo.id)}
+                      >
+                        Archive
+                      </Button>
+                    </ButtonGroup>
+                  </td>
+                </tr>
+              )
+            )}
+          </tbody>
+        </Table>
+      </div>
 
       {showModal ? (
         <FormPopUp
