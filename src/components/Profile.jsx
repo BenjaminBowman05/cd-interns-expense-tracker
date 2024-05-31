@@ -1,6 +1,5 @@
 import Card from "react-bootstrap/Card";
 import Container from "react-bootstrap/Container";
-import NavbarAlt from "./Utilities/NavbarAlt";
 import { useEffect, useContext, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../FireBase/MyContext.jsx";

@@ -1,5 +1,4 @@
 import Table from "react-bootstrap/Table";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
