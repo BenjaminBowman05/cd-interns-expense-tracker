@@ -1,5 +1,4 @@
 import Table from "react-bootstrap/Table";
-import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
 import Form from "react-bootstrap/Form";
@@ -10,11 +9,8 @@ import { useState, useEffect, useContext } from "react";
 import ConfirmArchiveModal from "../Modals/ConfirmArchiveModal.jsx";
 import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
-import { Update } from "../Utilities/Update.jsx";
-import PurchaserModal from "../Modals/PurchaserModal.jsx";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../FireBase/MyContext.jsx";
-import NavbarC from "../Utilities/NavbarC.jsx";
 
 const Archived = () => {
     const [showModal, setShowModal] = useState(false);
@@ -36,9 +32,7 @@ const Archived = () => {
     const [users, setUsers] = useState();
 
     function requestDataFromApi() {
-        // console.log(cookies.name)
             userService.getUserByUsername(cookies.name).then((res) => {
-                // console.log(res.data.userExpenses);
                 setUsers(res.data);
                 setRequests(res.data.userExpenses);
             });
@@ -53,7 +47,6 @@ const Archived = () => {
                 return req;
             }
         });
-        // setModalObj(updateRequest[id - 1]);
     };
 
     //Handles the modal for the view form
@@ -82,18 +75,8 @@ const Archived = () => {
         modalObj.purchaser = "";
         modalObj.dateDelivered = "";
         expenseService.createExpense(modalObj).then((data)=>{
-            // console.log(data)
             navigate("/home")
         });
-        // requestDataFromApi();
-        // const updateRequest = requests.map((req) => {
-        //     if (req.id === modalObj.id) {
-        //         const newTodos = requests.filter((t) => t !== req);
-        //         setRequests(newTodos);
-        //     } else {
-        //         return req;
-        //     }
-        // });
         
     }
 
@@ -103,19 +86,19 @@ const Archived = () => {
             {/* <NavbarC admin={admin} user={users} setAdmin={setAdmin} /> */}
             {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-            <Table striped bordered hover size="lg">
+            <Table striped bordered hover size="lg" style={{ fontFamily: 'Open Sans'}}>
                 <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Expense</th>
+                        <th style={{padding: '15px'}}>ID</th>
+                        <th style={{padding: '15px'}}>Expense</th>
                         {/* <th>Program</th> */}
-                        <th>Item</th>
-                        <th>Date Created</th>
-                        <th>Date Needed</th>
-                        <th>View</th>
+                        <th style={{padding: '15px'}}>Item</th>
+                        <th style={{padding: '15px'}}>Date Created</th>
+                        <th style={{padding: '15px'}}>Date Needed</th>
+                        <th style={{padding: '15px'}}>View</th>
                         {/* <th>Status</th> */}
-                        <th>Receipt</th>
-                        <th>Duplicate Request</th>
+                        <th style={{padding: '15px'}}>Receipt</th>
+                        <th style={{padding: '15px'}}>Duplicate Request</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -126,7 +109,7 @@ const Archived = () => {
                             <td>${requestInfo.total}</td>
                             {/* <td>{requestInfo.program}</td> */}
                             <td>{requestInfo.items}</td>
-                            <td>{requestInfo.dateOfExpense}</td>
+                            <td>{requestInfo.dateOfExpense.substring(0, 10)}</td>
                             <td>{requestInfo.dateNeeded}</td>
                             <td>
                                 <ButtonGroup className="mb-2 " size="sm">
