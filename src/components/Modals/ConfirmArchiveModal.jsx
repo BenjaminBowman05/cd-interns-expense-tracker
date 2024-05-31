@@ -1,7 +1,4 @@
-import { useState } from "react";
-import { Button, ButtonGroup, Modal } from "react-bootstrap";
-import * as expenseService from "../../services/ExpenseService.jsx";
-import * as programsService from "../../services/ProgramService.jsx";
+import { Button, Modal } from "react-bootstrap";
 
 const ConfirmDeleteModal = ({ show, close, updateUI, data }) => {
 

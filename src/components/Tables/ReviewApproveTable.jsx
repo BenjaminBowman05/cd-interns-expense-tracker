@@ -217,7 +217,6 @@ const ReviewApproveTable = () => {
           bordered
           hover
           size="lg"
-          style={{ fontFamily: "Open Sans"}}
         >
           <thead>
             <tr>

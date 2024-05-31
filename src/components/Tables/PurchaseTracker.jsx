@@ -148,12 +148,12 @@ const PurchaseTracker = () => {
   }
 
   return (
-    <>
+    <div>
       <h2>Your Requests</h2>
 
       {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-      <Table striped bordered hover size="lg" style={{ fontFamily: 'Open Sans' }}>
+      <Table striped bordered hover size="lg">
         {/* in table style removed width: "1000px" can be readded but padding in the th need to be removed */}
         <thead>
           <tr>
@@ -292,7 +292,7 @@ const PurchaseTracker = () => {
       ) : (
         ""
       )}
-    </>
+    </div>
   );
 };
 

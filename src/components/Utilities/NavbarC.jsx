@@ -25,7 +25,6 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
-  const [themeChange, setThemeChange] = useState(false);
   const location = useLocation();
 
   useEffect(() => {

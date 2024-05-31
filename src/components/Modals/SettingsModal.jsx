@@ -1,6 +1,6 @@
 import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import {
   Person,
   PersonLinesFill,

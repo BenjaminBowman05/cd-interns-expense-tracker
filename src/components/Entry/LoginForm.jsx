@@ -27,7 +27,8 @@ function LoginForm() {
         <>
             <Container fluid className="mb-3"
                 style={{
-                    width: "360.5px"
+                    width: "360.5px",
+                    // fontFamily: "Open Sans"
                 }}
             >
                 <h1>Account Login</h1>

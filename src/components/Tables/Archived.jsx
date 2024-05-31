@@ -81,12 +81,12 @@ const Archived = () => {
     }
 
     return (
-        <>
+        <div>
         <h2>Archived Requests</h2>
             {/* <NavbarC admin={admin} user={users} setAdmin={setAdmin} /> */}
             {/*Creates a React Bootstrap Table that alternates from black to dark gray
       with a hover effect*/}
-            <Table striped bordered hover size="lg" style={{ fontFamily: 'Open Sans'}}>
+            <Table striped bordered hover size="lg">
                 <thead>
                     <tr>
                         <th style={{padding: '15px'}}>ID</th>
@@ -212,7 +212,7 @@ const Archived = () => {
             ) : (
                 ""
             )}
-        </>
+        </div>
     );
 };
 

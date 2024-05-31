@@ -5,9 +5,6 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import { useState } from "react";
 
 const ConfirmationModal = ({ show, confirm, close, data, role }) => {
   return (
@@ -32,11 +29,9 @@ const ConfirmationModal = ({ show, confirm, close, data, role }) => {
                   <Form.Control
                     placeholder={""}
                     onChange={(e) => {
-                      // setReason(e.target.value);
                       data.reason = e.target.value;
                     }}
                     onPaste={(e) => {
-                      // setReason(e.clipboardData.getData('text'));
                       data.reason = e.clipboardData.getData("text");
                     }}
                   />

@@ -5,9 +5,6 @@ import Form from "react-bootstrap/Form";
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import InputGroup from "react-bootstrap/InputGroup";
-import Dropdown from "react-bootstrap/Dropdown";
-import { useState } from "react";
 
 const PurchaserModal = ({ show, confirm, close, data }) => {
     return (
@@ -29,11 +26,9 @@ const PurchaserModal = ({ show, confirm, close, data }) => {
                                     <Form.Control
                                         placeholder={""}
                                         onChange={(e) => {
-                                            // setReason(e.target.value);
                                             data.purchaser = e.target.value;
                                         }}
                                         onPaste={(e) => {
-                                            // setReason(e.clipboardData.getData('text'));
                                             data.purchaser = e.clipboardData.getData('text');
                                         }}
                                     />

@@ -191,9 +191,6 @@ const FormPopUp = ({ show, close, data, reqId }) => {
             </Row>
           </Container>
         </Modal.Body>
-        {/* <Modal.Footer>
-        <Button onClick={close}>Cancel</Button>
-      </Modal.Footer> */}
       </Modal>
 
       {showReason ? (

@@ -167,10 +167,7 @@ const PurchaseRequestForm = () => {
 
   //most of the fields are using a controlled input to update on change
   return (
-    <>
-      {/* <NavbarAlt/> */}
-      {/* <NavbarC /> */}
-
+    <div>
       <Container fluid className="mb-3 mt-3">
         <h1>Expense Request Form</h1>
       </Container>
@@ -304,7 +301,7 @@ const PurchaseRequestForm = () => {
           Submit Expense Request
         </Button>
       </Container>
-    </>
+    </div>
   );
 };
 
