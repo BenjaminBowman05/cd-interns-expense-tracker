@@ -28,7 +28,7 @@ body {
 }
 
 .table-container {
-  height: 50vh;
+  height: 73vh;
   overflow: scroll;
   overflow-x: hidden;
 }
@@ -39,8 +39,6 @@ Table thead {
   margin: 0 0 0 0;
   z-index: 15;
 }
-
-
 
 /* h1 {
   font-size: 3.2em;
