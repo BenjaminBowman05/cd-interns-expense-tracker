@@ -23,11 +23,10 @@ const PurchaseRequestForm = () => {
   useEffect(() => {
     // console.log(cookies);
     if (!cookies.name) {
-      navigate('/');
+      navigate("/");
     }
     requestUserDataFromApi();
   }, [cookies.name]);
-
 
   const [user, setUser] = useState();
 
@@ -67,7 +66,7 @@ const PurchaseRequestForm = () => {
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
     //Makes sure all info is filled before submitting
-    formInfo.total = parseInt(document.getElementById("totalBox").value);
+    formInfo.total = parseFloat(document.getElementById("totalBox").value);
     formInfo.userId = user.id;
     if (
       formInfo.firstName != "" &&
@@ -112,8 +111,8 @@ const PurchaseRequestForm = () => {
         programs[i].value = 0;
       }
 
-      if (!isNaN(parseInt(programs[i].value))) {
-        total += parseInt(programs[i].value);
+      if (!isNaN(parseFloat(programs[i].value))) {
+        total += parseFloat(programs[i].value);
       }
     }
     totalBox.value = total;
@@ -126,10 +125,10 @@ const PurchaseRequestForm = () => {
       //maps through the programs to compare indexes and once it finds the right one it updates the cost the returns
       const updateProgram = expensePrograms.map((pro, index) => {
         if (index === dex) {
-          if (isNaN(parseInt(e.target.value))) {
+          if (isNaN(parseFloat(e.target.value))) {
             pro.cost = 0;
           } else {
-            pro.cost = parseInt(e.target.value);
+            pro.cost = parseFloat(e.target.value);
           }
           updateTotal();
           return pro;
