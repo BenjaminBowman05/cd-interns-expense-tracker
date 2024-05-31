@@ -36,6 +36,21 @@ body {
   /* max-height: 90vh; */
 }
 
+.table-container {
+  height: 50vh;
+  overflow: scroll;
+  overflow-x: hidden;
+}
+
+Table thead {
+  position: sticky;
+  top: -1px;
+  margin: 0 0 0 0;
+  z-index: 15;
+}
+
+
+
 /* h1 {
   font-size: 3.2em;
   line-height: 1.1;
