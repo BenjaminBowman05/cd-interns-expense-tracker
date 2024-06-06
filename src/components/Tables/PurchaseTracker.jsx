@@ -10,7 +10,6 @@ import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Update } from "../Utilities/Update.jsx";
 import PurchaserModal from "../Modals/PurchaserModal.jsx";
-import { useNavigate } from "react-router-dom";
 import MyContext from "../../FireBase/MyContext.jsx";
 
 const PurchaseTracker = () => {
@@ -24,20 +23,16 @@ const PurchaseTracker = () => {
   const [showReceipt, setShowReceipt] = useState(false);
   const [showPurchaser, setShowPurchaser] = useState(false);
   const { cookies, setCookies } = useContext(MyContext);
-  const navigate = useNavigate();
 
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
-    if (!cookies.name) {
-      navigate("/");
-    }
     requestUserDataFromApi();
-  }, [cookies.name]);
+  }, []);
 
   const [users, setUsers] = useState();
 
   function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUsers(res.data);
       setRequests(res.data.userExpenses);
     });
@@ -135,7 +130,6 @@ const PurchaseTracker = () => {
     modalObj.archive = true;
     Update(modalObj);
     const updateRequest = requests.map((req) => {
-      // requestUserDataFromApi();
       if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
         setRequests(newTodos);

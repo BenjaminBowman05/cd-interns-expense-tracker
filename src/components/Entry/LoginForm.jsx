@@ -19,7 +19,7 @@ function LoginForm() {
         const fireBaseUser = await signInFireBase(email, password);
         if (fireBaseUser) {
             setCookies('theme', "dark", { maxAge: 3600 });
-            setCookies('name', fireBaseUser.displayName, { maxAge: 3600 });
+            setCookies('key', email, { maxAge: 3600 });
         }
     };
 

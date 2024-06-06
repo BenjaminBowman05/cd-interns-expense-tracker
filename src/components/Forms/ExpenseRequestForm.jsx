@@ -9,6 +9,7 @@ import Dropdown from "react-bootstrap/Dropdown";
 import * as expenseService from "../../services/ExpenseService.jsx";
 import * as programService from "../../services/ProgramService.jsx";
 import * as userService from "../../services/UserService.jsx";
+import * as selectionsService from "../../services/SelectionsService.jsx";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../FireBase/MyContext.jsx";
@@ -19,22 +20,26 @@ const PurchaseRequestForm = () => {
 
   // we could get user object from the cookie and restore the settings button. But how about no.
   useEffect(() => {
-    // console.log(cookies);
-    if (!cookies.name) {
-      navigate("/");
-    }
     requestUserDataFromApi();
-  }, [cookies.name]);
+  }, []);
 
   const [user, setUser] = useState();
 
+
   function requestUserDataFromApi() {
     // console.log(cookies.name)
-    userService.getUserByUsername(cookies.name).then((res) => {
-      // console.log(res.data);
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUser(res.data);
       // setRequests(res.data.userExpenses);
     });
+    console.log(programs.length);
+    if(programs.length == 0){
+      selectionsService.getAllSelections().then((res) => {
+        console.log(res.data);
+        setPrograms(res.data);
+        // setRequests(res.data.userExpenses);
+      });
+    }
   }
 
   //Obj that will hold all of the form information besides the programs
@@ -48,24 +53,22 @@ const PurchaseRequestForm = () => {
     requester: true,
     userId: null,
     recurring: false,
+    requesterEmail: ""
   });
 
   //Array var that will hold the expense programs objs
   const [expensePrograms, setExpensePrograms] = useState([]);
 
   //list of all programs available can be added to if needed
-  const [programs, setPrograms] = useState([
-    "Program 1",
-    "Program 2",
-    "Program 3",
-    "Program 4",
-  ]);
+  const [programs, setPrograms] = useState([]);
 
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
     //Makes sure all info is filled before submitting
     formInfo.total = parseFloat(document.getElementById("totalBox").value);
     formInfo.userId = user.id;
+    console.log(formInfo)
+    formInfo.requesterEmail = user.email;
     if (
       formInfo.firstName != "" &&
       formInfo.lastName != "" &&
@@ -77,22 +80,16 @@ const PurchaseRequestForm = () => {
       console.log(formInfo);
       //Calls back-end to create expense for with the form info OBJ
       expenseService.createExpense(formInfo).then((response) => {
-        // console.log(response.data.id)
         //Maps through all available programs then sets the exepense id to the expense form id so they link
         const newRequest = expensePrograms.map((info) => {
           return { ...info, expenseId: response.data.id };
         });
-
-        // console.log(newRequest)
-        // setExpensePrograms(newRequest);
         //This loops through all programs and creates them
         for (let i = 0; i < newRequest.length; i++) {
           programService.createProgram(newRequest[i]).then((response) => {
-            // console.log(expenseService.getAllExpenses())
             navigate(`/`);
           });
         }
-        // console.log(expenseService.getAllExpenses())
       });
     } else {
       window.alert("Please fillout the entire form");
@@ -117,7 +114,6 @@ const PurchaseRequestForm = () => {
   };
 
   const handleProgram = (e, dex) => {
-    // console.log(expensePrograms);
     //Verifies that the index passed through is not null
     if (dex !== null) {
       //maps through the programs to compare indexes and once it finds the right one it updates the cost the returns
@@ -136,7 +132,6 @@ const PurchaseRequestForm = () => {
       //after the complete mapping it updates the obj
       setExpensePrograms(updateProgram);
     }
-    // console.log(expensePrograms)
   };
 
   //adds the selected program to the obj array
@@ -145,19 +140,16 @@ const PurchaseRequestForm = () => {
       ...expensePrograms,
       {
         expenseId: 0,
-        programName: program,
+        programName: program.selectionName,
         cost: 0,
       },
     ]);
-    // console.log(formInfo);
-    // console.log(expensePrograms)
   };
 
   const deleteProgram = (event) => {
     /**Delete program from UI and Obj */
     let array1 = [...expensePrograms];
     array1.splice(event.target.id - 1, 1);
-    // console.log(array1)
 
     setExpensePrograms(array1);
   };
@@ -165,11 +157,11 @@ const PurchaseRequestForm = () => {
   //most of the fields are using a controlled input to update on change
   return (
     <div>
-      <Container fluid className="mb-3 mt-3">
+      <Container fluid>
         <h1>Expense Request Form</h1>
       </Container>
       <Container fluid>
-        <Row className="user mb-3">
+        <Row className="user mb-2">
           <Col>
             <FloatingLabel controlId="firstName" label="First Name">
               <Form.Control
@@ -189,11 +181,11 @@ const PurchaseRequestForm = () => {
             </FloatingLabel>
           </Col>
         </Row>
-        <Row className="itemsRequested mb-3">
+        <Row className="itemsRequested mb-2">
           <Col>
             <Form.Control
               as="textarea"
-              rows="4"
+              rows="2"
               placeholder="Items Requested..."
               onChange={(e) => (formInfo.items = e.target.value)}
             />
@@ -237,7 +229,7 @@ const PurchaseRequestForm = () => {
             ))}
           </ul>
         </Row>
-        <Row className="program-dropdown mb-3">
+        <Row className="program-dropdown mb-2">
           <Col>
             <InputGroup size="lg">
               <InputGroup.Text>Programs</InputGroup.Text>
@@ -251,9 +243,10 @@ const PurchaseRequestForm = () => {
                       as="button"
                       onClick={(e) => appendProgram(e, program)}
                     >
-                      {program}
+                      {program.selectionName}
                     </Dropdown.Item>
                   ))}
+                  
                 </Dropdown.Menu>
               </Dropdown>
             </InputGroup>
@@ -272,7 +265,7 @@ const PurchaseRequestForm = () => {
             </InputGroup>
           </Col>
         </Row>
-        <Row className="w-25 mx-auto mb-3">
+        <Row className="w-25 mx-auto mb-2">
           <Col>
             <Form.Check
               type={"checkbox"}
@@ -284,7 +277,7 @@ const PurchaseRequestForm = () => {
             />
           </Col>
         </Row>
-        <Row className="dateNeeded mb-3">
+        <Row className="dateNeeded mb-2">
           <Col>
             <FloatingLabel controlId="date" label="Date Needed">
               <Form.Control

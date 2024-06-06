@@ -7,7 +7,7 @@ import { useState, useContext, useEffect } from "react";
 import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 // Add more variety to icons to make change more noticable
 import {
   DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
@@ -25,11 +25,20 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
+  const [cookieHold, setCookieHold] = useState(cookies.key);
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (cookies.admin) {
       setAdmin(true);
+    }
+    if (!cookies.key) {
+      navigate("/");
+    }
+    if(!(cookies.key == cookieHold)){
+      // navigate("/")
+      handleLogOut()
     }
 
     if (cookies.theme === "light") {
@@ -41,7 +50,7 @@ const NavbarC = ({ admin, setAdmin }) => {
       setTheme("light")
       setNavStyle({ backgroundColor: "#212529" });
     }
-  }, []);
+  }, [cookies.key]);
 
   function toggleTheme() {
     const currTheme = document
@@ -68,13 +77,13 @@ const NavbarC = ({ admin, setAdmin }) => {
   }, []);
 
   function requestDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUsers(res.data);
     });
   }
 
   const handleLogOut = () => {
-    Cookies.remove("name");
+    Cookies.remove("key");
     Cookies.remove("theme");
     Cookies.remove("admin");
     setAdmin(false);

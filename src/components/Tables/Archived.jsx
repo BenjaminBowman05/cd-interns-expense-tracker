@@ -21,18 +21,17 @@ const Archived = () => {
     const [requests, setRequests] = useState([]);
     const [showReceipt, setShowReceipt] = useState(false);
     const { cookies, setCookies } = useContext(MyContext);
-    const navigate = useNavigate();
 
     // get users to see if admin -> Probably a better way to do this
     useEffect(() => {
         requestDataFromApi();
-    }, []);
+    }, [cookies.key]);
 
 
     const [users, setUsers] = useState();
 
     function requestDataFromApi() {
-            userService.getUserByUsername(cookies.name).then((res) => {
+            userService.getUserByEmail(cookies.key).then((res) => {
                 setUsers(res.data);
                 setRequests(res.data.userExpenses);
             });

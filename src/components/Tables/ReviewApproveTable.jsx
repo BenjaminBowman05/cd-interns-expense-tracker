@@ -14,7 +14,6 @@ import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import { Update } from "../Utilities/Update.jsx";
 import PurchaserModal from "../Modals/PurchaserModal.jsx";
 import MyContext from "../../FireBase/MyContext.jsx";
-import { useNavigate } from "react-router-dom";
 
 const ReviewApproveTable = () => {
   // make method to handle types of filters
@@ -35,18 +34,13 @@ const ReviewApproveTable = () => {
 
   const [showPurchaser, setShowPurchaser] = useState(false);
   const { cookies, setCookies } = useContext(MyContext);
-  const navigate = useNavigate();
 
   useEffect(() => {
-    console.log(cookies);
-    if (!cookies.name) {
-      navigate("/");
-    }
     requestUserDataFromApi();
-  }, [cookies.name]);
+  }, []);
 
   function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUsers(res.data);
       expenseService.getAllExpenses().then((res) => {
         setRequests(res.data);
