@@ -44,54 +44,55 @@ const ReviewApproveTable = () => {
       setUsers(res.data);
       expenseService.getAllExpenses().then((res) => {
         setRequests(res.data);
+        console.log(res.data);
       });
     });
   }
 
-  //validates files passed into table and obj
-  const validateFile = (id) => {
-    var fileInput = document.getElementById(`file-${id}`);
+  function previewFiles(event, id) {
+    const files = document.querySelector("#file-" + id).files;
+    console.log("EVENT:");
+    console.log(event);
+    console.log("FILES HERE::");
+    console.log(files);
 
-    var filePath = fileInput.value;
+    function readAndPreview(file, indexOfFile) {
+      // Make sure `file.name` matches our extensions criteria
+      if (/(\.pdf|\.png|\.jpg|\.jpeg)$/i.test(file.name)) {
+        const reader = new FileReader();
+        console.log("FILE HERE");
+        console.log(file);
 
-    // Allowing file type
-    var allowedExtensions = /(\.pdf|\.png|\.jpg|\.jpeg)$/i;
+        reader.addEventListener("load", () => {
+          const newRequest = requests.map((request) => {
+            if (request.id === id) {
+              console.log("REQUESTTT");
+              console.log(request);
+              request.receipts[indexOfFile] = reader.result;
 
-    //If the give file is not part of the allowed extension it will remove it and throw error
-    if (!allowedExtensions.exec(filePath)) {
-      alert("Invalid file type");
-      fileInput.value = "";
+              console.log("arrayidxing test, INDEX: " + indexOfFile);
+              console.log(request.receipts[indexOfFile]);
+              return request;
+            }
+            return request;
+          });
 
-      return false;
+          setRequests(newRequest);
+        });
+
+        console.log("RECIEPTS ARRAY HEREERER");
+        console.log(requests.receipts);
+        reader.readAsDataURL(file);
+      }
     }
-    return true;
-  };
 
-  //Handles the implentation of a file while calling the other file functions to verify and attach the url
-  const handleFileSelect = (event, id) => {
-    let valid = validateFile(id);
-
-    if (valid) {
-      const reader = new FileReader();
-      reader.onload = (e) => handleFileLoadPdf(e, id);
-      reader.readAsDataURL(event.target.files[0]);
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        readAndPreview(files.item(i), i);
+      }
       modalHandle("Purchaser", id);
     }
-  };
-
-  //attaches the url of file to the request obj then updates array
-  const handleFileLoadPdf = (event, id) => {
-    let url = event.target.result;
-    const newRequest = requests.map((request) => {
-      if (request.id === id) {
-        request.receipt = url;
-        return request;
-      }
-      return request;
-    });
-
-    setRequests(newRequest);
-  };
+  }
 
   //Finds the obj tied to the view button clicked then stores it for later
   const retrieveModalObj = (id) => {
@@ -130,7 +131,7 @@ const ReviewApproveTable = () => {
     const updateRequest = requests.map((req) => {
       if (req.id === modalObj.id) {
         if (modalObj.purchaser == "" && modalObj.dateDelivered == "") {
-          req.receipt = "";
+          req.receipts = [""]; // change later?
           window.alert("Please fill out all fields and reattach file");
         } else {
           req.purchaser = modalObj.purchaser;
@@ -139,6 +140,9 @@ const ReviewApproveTable = () => {
       }
       return req;
     });
+
+    console.log("MODAL OBJECT");
+    console.log(modalObj);
 
     Update(modalObj);
     setRequests(updateRequest);
@@ -187,7 +191,7 @@ const ReviewApproveTable = () => {
   const handleConfirmationShow = () => {
     setShowConfirmation(false);
     if (modalObj[users.role]) {
-      modalObj.receipt = "";
+      modalObj.receipts[0] = ""; // CHANGE LATER?
     } else {
       const updateRequest = requests.map((req) => {
         if (req.id === modalObj.id) {
@@ -206,12 +210,7 @@ const ReviewApproveTable = () => {
       <h2>All User Requests</h2>
       {/* Creates a React Bootstrap Table that alternates from black to dark gray with a hover effect */}
       <div className="table-container">
-        <Table
-          striped
-          bordered
-          hover
-          size="lg"
-        >
+        <Table striped bordered hover size="lg">
           <thead>
             <tr>
               <th style={{ padding: "15px" }}>ID</th>
@@ -310,24 +309,27 @@ const ReviewApproveTable = () => {
                   <td
                     id={`file ${data.id}`}
                     className={
-                      data.receipt == "" ? "" : "d-flex align-items-center"
+                      data.receipts[0] == "" ? "" : "d-flex align-items-center"
                     }
                   >
-                    {data.receipt == "" ? (
+                    {data.receipts[0] == "" ? (
                       <Form.Control
-                        onChange={(e) => handleFileSelect(e, data.id)}
+                        onChange={(e) => {
+                          previewFiles(e, data.id);
+                        }}
                         accept=".pdf, .png, .jpeg, .jpg"
                         id={`file-${data.id}`}
                         as="input"
                         type="file"
-                        disabled={
-                          data.ceo &&
-                          data.doo &&
-                          data.requesterSupervisor &&
-                          data.reason == ""
-                            ? ""
-                            : true
-                        }
+                        multiple
+                        // disabled={
+                        //   data.ceo &&
+                        //   data.doo &&
+                        //   data.requesterSupervisor &&
+                        //   data.reason == ""
+                        //     ? ""
+                        //     : true
+                        // }
                       ></Form.Control>
                     ) : (
                       <>
@@ -336,7 +338,11 @@ const ReviewApproveTable = () => {
                           className="d-inline-block me-2"
                           variant="outline-info"
                         >
-                          View Receipt
+                          {data.receipts.length > 1 ? (
+                            <>View Receipts</>
+                          ) : (
+                            <>View Receipt</>
+                          )}
                         </Button>
                         <FloatingLabel
                           controlId="floatingInput"

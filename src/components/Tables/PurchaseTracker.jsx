@@ -200,7 +200,7 @@ const PurchaseTracker = () => {
                   <td
                     id={`file ${requestInfo.id}`}
                     className={
-                      requestInfo.receipt == ""
+                      requestInfo.receipts[0] == ""
                         ? ""
                         : "d-flex align-items-center"
                     }
@@ -208,7 +208,7 @@ const PurchaseTracker = () => {
                     {requestInfo.ceo &&
                     requestInfo.doo &&
                     requestInfo.requesterSupervisor ? (
-                      requestInfo.receipt == "" ? (
+                      requestInfo.receipts[0] == "" ? (
                         <Form.Control
                           onChange={(e) => handleFileSelect(e, requestInfo.id)}
                           accept=".pdf, .png, .jpeg, .jpg"
@@ -305,7 +305,7 @@ const PurchaseTracker = () => {
         <ShowReceipt
           show={showReceipt}
           close={() => setShowReceipt(false)}
-          data={modalObj}
+          data={modalObj.receipts}
         />
       ) : (
         ""
