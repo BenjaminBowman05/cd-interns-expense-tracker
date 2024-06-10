@@ -25,21 +25,30 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
-  const [cookieHold, setCookieHold] = useState(cookies.key);
+  const [cookieHold, setCookieHold] = useState();
   const location = useLocation();
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (cookies.admin) {
-      setAdmin(true);
-    }
-    if (!cookies.key) {
-      navigate("/");
-    }
-    if(!(cookies.key == cookieHold)){
+    if (cookieHold + "" == "undefined") {
+      setCookieHold(cookies.key);
+    } else if ((cookies.key != cookieHold)) {
       // navigate("/")
+      // console.log("help me please end my suffering")
       handleLogOut()
     }
+    if (cookies.admin) {
+      setAdmin(true);
+    } else {
+      setCookies("admin", false, {maxAge: 3600})
+      setAdmin(false);
+    }
+    if (!cookies.key) {
+      // window.location.reload()
+      navigate("/");
+    }
+
+
 
     if (cookies.theme === "light") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
@@ -85,7 +94,11 @@ const NavbarC = ({ admin, setAdmin }) => {
   const handleLogOut = () => {
     Cookies.remove("key");
     Cookies.remove("theme");
-    Cookies.remove("admin");
+
+    if (cookies.admin) {
+      Cookies.remove("admin");
+    }
+
     setAdmin(false);
     setForm(false);
     setFold(false);

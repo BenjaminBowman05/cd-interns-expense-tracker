@@ -322,14 +322,14 @@ const ReviewApproveTable = () => {
                         as="input"
                         type="file"
                         multiple
-                        // disabled={
-                        //   data.ceo &&
-                        //   data.doo &&
-                        //   data.requesterSupervisor &&
-                        //   data.reason == ""
-                        //     ? ""
-                        //     : true
-                        // }
+                        disabled={
+                          data.ceo &&
+                          data.doo &&
+                          data.requesterSupervisor &&
+                          data.reason == []
+                            ? ""
+                            : true
+                        }
                       ></Form.Control>
                     ) : (
                       <>
@@ -338,11 +338,7 @@ const ReviewApproveTable = () => {
                           className="d-inline-block me-2"
                           variant="outline-info"
                         >
-                          {data.receipts.length > 1 ? (
-                            <>View Receipts</>
-                          ) : (
-                            <>View Receipt</>
-                          )}
+                          View Receipt{data.receipts.length > 1 ? "s" : ""}
                         </Button>
                         <FloatingLabel
                           controlId="floatingInput"
@@ -350,7 +346,7 @@ const ReviewApproveTable = () => {
                         >
                           <Form.Control
                             className="d-inline-block"
-                            value={data.purchaser + " | " + data.dateDelivered}
+                            defaultValue={data.purchaser + " | " + data.dateDelivered}
                           />
                         </FloatingLabel>
                       </>

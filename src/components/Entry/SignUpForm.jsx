@@ -23,6 +23,7 @@ function SignUpForm() {
         if (fireBaseUser) {
             createUser({ name: username, pass: password, email: userEmail, admin: false, uid: fireBaseUser.uid })
             setCookies('key', email, { maxAge: 3600 });
+            setCookies('theme', "dark", { maxAge: 3600 });
         }
 
     };
