@@ -8,6 +8,7 @@ import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
 import { useLocation } from "react-router-dom";
+import EmailSend from "../Email/EmailSend.jsx";
 // Add more variety to icons to make change more noticable
 import {
   DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
@@ -59,6 +60,20 @@ const NavbarC = ({ admin, setAdmin }) => {
       setTheme("light")
       setNavStyle({ backgroundColor: "#212529" });
     }
+
+    // const UInfo = {
+    //   FirstName: cookies.name,      
+    //   LastName: '',     
+    //   Email: 'Tommy.Montoya@cdpipelinedevshop.com',
+    // };
+
+    // const MInfo = {
+    //   FirstName: 'Manager',      
+    //   LastName: 'Man',     
+    //   Email: 'Tommy.Montoya@cdpipelinedevshop.com',  
+    //   URL: 'http://localhost:5173',
+    // };
+    // EmailSend(UInfo, MInfo);
   }
 
   const [user, setUsers] = useState();
@@ -69,6 +84,7 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   function requestDataFromApi() {
     userService.getUserByUsername(cookies.name).then((res) => {
+      console.log(res.data)
       setUsers(res.data);
     });
   }

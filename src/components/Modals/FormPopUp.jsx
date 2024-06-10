@@ -65,7 +65,7 @@ const FormPopUp = ({ show, close, data, reqId }) => {
               </Col>
             </Row>
             <Row className="selectedPrograms">
-              <ul className="selectedPrograms-List">
+              <ul style={{listStyle: "none"}} className="selectedPrograms-List">
                 {data.expensePrograms.map((program) => (
                   <li key={Math.random()}>
                     <InputGroup className="mt-3">

@@ -10,6 +10,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@emailjs/browser": "^4.3.3",
     "@react-email/components": "0.0.16",
     "@react-email/render": "^0.0.12",
     "axios": "^1.6.8",

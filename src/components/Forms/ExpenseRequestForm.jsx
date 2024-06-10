@@ -12,6 +12,7 @@ import * as userService from "../../services/UserService.jsx";
 import { useState, useEffect, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import MyContext from "../../FireBase/MyContext.jsx";
+import EmailSend from "../Email/EmailSend.jsx";
 
 const PurchaseRequestForm = () => {
   const navigate = useNavigate();
@@ -19,7 +20,7 @@ const PurchaseRequestForm = () => {
 
   // we could get user object from the cookie and restore the settings button. But how about no.
   useEffect(() => {
-    // console.log(cookies);
+    console.log(cookies);
     if (!cookies.name) {
       navigate("/");
     }
@@ -27,12 +28,14 @@ const PurchaseRequestForm = () => {
   }, [cookies.name]);
 
   const [user, setUser] = useState();
+  const [userEmail, setUserEmail] = useState();
 
   function requestUserDataFromApi() {
     // console.log(cookies.name)
     userService.getUserByUsername(cookies.name).then((res) => {
       // console.log(res.data);
       setUser(res.data);
+      setUserEmail(res.data.email);
       // setRequests(res.data.userExpenses);
     });
   }
@@ -93,6 +96,21 @@ const PurchaseRequestForm = () => {
           });
         }
         // console.log(expenseService.getAllExpenses())
+        const UInfo = {
+          FirstName: cookies.name,      
+          LastName: '',     
+          Email: userEmail,
+        };
+    
+        const MInfo = {
+          FirstName: 'Manager',      
+          LastName: 'Man',     
+          Email: 'Tommy.Montoya@cdpipelinedevshop.com',
+          //Official site domain should go below
+          URL: 'http://localhost:5173',
+        };
+
+        EmailSend(UInfo);
       });
     } else {
       window.alert("Please fillout the entire form");
@@ -211,7 +229,7 @@ const PurchaseRequestForm = () => {
           </Col>
         </Row>
         <Row className="selectedPrograms">
-          <ul className="selectedPrograms-List">
+          <ul style={{listStyle: "none"}} className="selectedPrograms-List">
             {expensePrograms.map((program, index) => (
               <li key={index + 1} id={index + 1}>
                 <InputGroup className="mt-3">
