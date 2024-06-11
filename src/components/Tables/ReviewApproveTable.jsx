@@ -340,7 +340,7 @@ const ReviewApproveTable = () => {
                         >
                           View Receipt{data.receipts.length > 1 ? "s" : ""}
                         </Button>
-                        <FloatingLabel
+                        {/* <FloatingLabel
                           controlId="floatingInput"
                           label="Name | Date"
                         >
@@ -348,7 +348,7 @@ const ReviewApproveTable = () => {
                             className="d-inline-block"
                             defaultValue={data.purchaser + " | " + data.dateDelivered}
                           />
-                        </FloatingLabel>
+                        </FloatingLabel> */}
                       </>
                     )}
                   </td>

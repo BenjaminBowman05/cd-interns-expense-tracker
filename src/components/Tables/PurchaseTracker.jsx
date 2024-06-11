@@ -268,12 +268,12 @@ const PurchaseTracker = () => {
                             onClick={() =>
                               modalHandle("Reciept", requestInfo.id)
                             }
-                            className="d-inline-block me-2"
+                            className="d-inline-block"
                             variant="outline-info"
                           >
                             View Receipt{requestInfo.receipts.length > 1 ? "s" : ""}
                           </Button>
-                          <FloatingLabel
+                          {/* <FloatingLabel
                             controlId="floatingInput"
                             label="Name | Date"
                           >
@@ -285,7 +285,7 @@ const PurchaseTracker = () => {
                                 requestInfo.dateDelivered
                               }
                             />
-                          </FloatingLabel>
+                          </FloatingLabel> */}
                         </>
                       )
                     ) : requestInfo.reason != [] ? (

@@ -32,10 +32,10 @@ const PurchaseRequestForm = () => {
       setUser(res.data);
       // setRequests(res.data.userExpenses);
     });
-    console.log(programs.length);
+    // console.log(programs.length);
     if(programs.length == 0){
       selectionsService.getAllSelections().then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPrograms(res.data);
         // setRequests(res.data.userExpenses);
       });
@@ -44,8 +44,9 @@ const PurchaseRequestForm = () => {
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
-    firstName: "",
-    lastName: "",
+    // firstName: "",
+    // lastName: "",
+    name: "",
     items: "",
     purpose: "",
     total: 0,
@@ -67,15 +68,17 @@ const PurchaseRequestForm = () => {
     //Makes sure all info is filled before submitting
     formInfo.total = parseFloat(document.getElementById("totalBox").value);
     formInfo.userId = user.id;
-    console.log(formInfo)
+    // console.log(formInfo)
+    // console.log(expensePrograms.length != 0)
     formInfo.requesterEmail = user.email;
+    formInfo.name = user.name;
     if (
-      formInfo.firstName != "" &&
-      formInfo.lastName != "" &&
+      // formInfo.firstName != "" &&
+      // formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
       formInfo.dateNeeded != "" &&
-      expensePrograms != []
+      expensePrograms.length != 0
     ) {
       console.log(formInfo);
       //Calls back-end to create expense for with the form info OBJ
@@ -161,7 +164,7 @@ const PurchaseRequestForm = () => {
         <h1>Expense Request Form</h1>
       </Container>
       <Container fluid>
-        <Row className="user mb-2">
+        {/* <Row className="user mb-2">
           <Col>
             <FloatingLabel controlId="firstName" label="First Name">
               <Form.Control
@@ -180,7 +183,7 @@ const PurchaseRequestForm = () => {
               />
             </FloatingLabel>
           </Col>
-        </Row>
+        </Row> */}
         <Row className="itemsRequested mb-2">
           <Col>
             <Form.Control
