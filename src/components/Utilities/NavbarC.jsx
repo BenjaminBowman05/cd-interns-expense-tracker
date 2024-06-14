@@ -7,13 +7,17 @@ import { useState, useContext, useEffect } from "react";
 import * as userService from "../../services/UserService.jsx";
 import MyContext from "../../FireBase/MyContext";
 import Cookies from "js-cookie";
-import { useLocation } from "react-router-dom";
-import EmailSend from "../Email/EmailSend.jsx";
+import { useLocation, useNavigate } from "react-router-dom";
+
 // Add more variety to icons to make change more noticable
 import {
   DoorClosed, DoorOpenFill, House, HouseFill, Gear, GearFill,
   FileText, FileTextFill, Folder, FolderFill
 } from "react-bootstrap-icons";
+
+// TESTING PURPOSES ONLY
+// import EmailSend from "../Email/EmailSend.jsx";
+// TESTING PURPOSES ONLY
 
 const NavbarC = ({ admin, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
@@ -26,12 +30,30 @@ const NavbarC = ({ admin, setAdmin }) => {
 
   const [theme, setTheme] = useState("");
   const [navStyle, setNavStyle] = useState({});
+  const [cookieHold, setCookieHold] = useState();
   const location = useLocation();
+  const navigate = useNavigate();
 
   useEffect(() => {
+    if (cookieHold + "" == "undefined") {
+      setCookieHold(cookies.key);
+    } else if ((cookies.key != cookieHold)) {
+      // navigate("/")
+      // console.log("help me please end my suffering")
+      handleLogOut()
+    }
     if (cookies.admin) {
       setAdmin(true);
+    } else {
+      setCookies("admin", false, {maxAge: 3600})
+      setAdmin(false);
     }
+    if (!cookies.key) {
+      // window.location.reload()
+      navigate("/");
+    }
+
+
 
     if (cookies.theme === "light") {
       document.querySelector("html").setAttribute("data-bs-theme", "light");
@@ -42,7 +64,7 @@ const NavbarC = ({ admin, setAdmin }) => {
       setTheme("light")
       setNavStyle({ backgroundColor: "#212529" });
     }
-  }, []);
+  }, [cookies.key]);
 
   function toggleTheme() {
     const currTheme = document
@@ -61,6 +83,7 @@ const NavbarC = ({ admin, setAdmin }) => {
       setNavStyle({ backgroundColor: "#212529" });
     }
 
+    // TESTING PURPOSES ONLY
     // const UInfo = {
     //   FirstName: cookies.name,      
     //   LastName: '',     
@@ -74,6 +97,7 @@ const NavbarC = ({ admin, setAdmin }) => {
     //   URL: 'http://localhost:5173',
     // };
     // EmailSend(UInfo, MInfo);
+    // TESTING PURPOSES ONLY
   }
 
   const [user, setUsers] = useState();
@@ -83,16 +107,20 @@ const NavbarC = ({ admin, setAdmin }) => {
   }, []);
 
   function requestDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
-      console.log(res.data)
+    userService.getUserByEmail(cookies.key).then((res) => {
+      // console.log(res.data)
       setUsers(res.data);
     });
   }
 
   const handleLogOut = () => {
-    Cookies.remove("name");
+    Cookies.remove("key");
     Cookies.remove("theme");
-    Cookies.remove("admin");
+
+    if (cookies.admin) {
+      Cookies.remove("admin");
+    }
+
     setAdmin(false);
     setForm(false);
     setFold(false);

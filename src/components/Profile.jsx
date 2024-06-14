@@ -11,14 +11,11 @@ const Profile = () => {
   const [user, setUser] = useState({});
 
   useEffect(() => {
-    if (!cookies.name) {
-      navigate("/");
-    }
     requestUserDataFromApi();
   }, [cookies.name]);
 
   function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUser(res.data);
     });
   }

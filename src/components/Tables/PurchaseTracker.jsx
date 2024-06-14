@@ -10,7 +10,6 @@ import ShowReceipt from "../Modals/ShowReceipt.jsx";
 import FloatingLabel from "react-bootstrap/FloatingLabel";
 import { Update } from "../Utilities/Update.jsx";
 import PurchaserModal from "../Modals/PurchaserModal.jsx";
-import { useNavigate } from "react-router-dom";
 import MyContext from "../../FireBase/MyContext.jsx";
 
 const PurchaseTracker = () => {
@@ -24,20 +23,16 @@ const PurchaseTracker = () => {
   const [showReceipt, setShowReceipt] = useState(false);
   const [showPurchaser, setShowPurchaser] = useState(false);
   const { cookies, setCookies } = useContext(MyContext);
-  const navigate = useNavigate();
 
   // get users to see if admin -> Probably a better way to do this
   useEffect(() => {
-    if (!cookies.name) {
-      navigate("/");
-    }
     requestUserDataFromApi();
-  }, [cookies.name]);
+  }, []);
 
   const [users, setUsers] = useState();
 
   function requestUserDataFromApi() {
-    userService.getUserByUsername(cookies.name).then((res) => {
+    userService.getUserByEmail(cookies.key).then((res) => {
       setUsers(res.data);
       setRequests(res.data.userExpenses);
     });
@@ -102,6 +97,51 @@ const PurchaseTracker = () => {
     setRequests(newRequest);
   };
 
+  function previewFiles(event, id) {
+    const files = document.querySelector("#file-" + id).files;
+    console.log("EVENT:");
+    console.log(event);
+    console.log("FILES HERE::");
+    console.log(files);
+
+    function readAndPreview(file, indexOfFile) {
+      // Make sure `file.name` matches our extensions criteria
+      if (/(\.pdf|\.png|\.jpg|\.jpeg)$/i.test(file.name)) {
+        const reader = new FileReader();
+        console.log("FILE HERE");
+        console.log(file);
+
+        reader.addEventListener("load", () => {
+          const newRequest = requests.map((request) => {
+            if (request.id === id) {
+              console.log("REQUESTTT");
+              console.log(request);
+              request.receipts[indexOfFile] = reader.result;
+
+              console.log("arrayidxing test, INDEX: " + indexOfFile);
+              console.log(request.receipts[indexOfFile]);
+              return request;
+            }
+            return request;
+          });
+
+          setRequests(newRequest);
+        });
+
+        console.log("RECIEPTS ARRAY HEREERER");
+        console.log(requests.receipts);
+        reader.readAsDataURL(file);
+      }
+    }
+
+    if (files) {
+      for (let i = 0; i < files.length; i++) {
+        readAndPreview(files.item(i), i);
+      }
+      modalHandle("Purchaser", id);
+    }
+  }
+
   //Finds the obj tied to the view button clicked then stores it for later
   const retrieveModalObj = (id) => {
     const updateRequest = requests.map((req) => {
@@ -135,7 +175,6 @@ const PurchaseTracker = () => {
     modalObj.archive = true;
     Update(modalObj);
     const updateRequest = requests.map((req) => {
-      // requestUserDataFromApi();
       if (req.id === modalObj.id) {
         const newTodos = requests.filter((t) => t !== req);
         setRequests(newTodos);
@@ -206,21 +245,22 @@ const PurchaseTracker = () => {
                   <td
                     id={`file ${requestInfo.id}`}
                     className={
-                      requestInfo.receipt == ""
+                      requestInfo.receipts[0] == ""
                         ? ""
                         : "d-flex align-items-center"
                     }
                   >
                     {requestInfo.ceo &&
-                    requestInfo.doo &&
-                    requestInfo.requesterSupervisor ? (
-                      requestInfo.receipt == "" ? (
+                      requestInfo.doo &&
+                      requestInfo.requesterSupervisor ? (
+                      requestInfo.receipts[0] == "" ? (
                         <Form.Control
-                          onChange={(e) => handleFileSelect(e, requestInfo.id)}
+                          onChange={(e) => previewFiles(e, requestInfo.id)}
                           accept=".pdf, .png, .jpeg, .jpg"
                           id={`file-${requestInfo.id}`}
                           as="input"
                           type="file"
+                          multiple
                         ></Form.Control>
                       ) : (
                         <>
@@ -231,7 +271,7 @@ const PurchaseTracker = () => {
                             className="d-inline-block me-2"
                             variant="outline-info"
                           >
-                            View Receipt
+                            View Receipt{requestInfo.receipts.length > 1 ? "s" : ""}
                           </Button>
                           <FloatingLabel
                             controlId="floatingInput"
@@ -239,7 +279,7 @@ const PurchaseTracker = () => {
                           >
                             <Form.Control
                               className="d-inline-block"
-                              value={
+                              defaultValue={
                                 requestInfo.purchaser +
                                 " | " +
                                 requestInfo.dateDelivered
@@ -248,7 +288,7 @@ const PurchaseTracker = () => {
                           </FloatingLabel>
                         </>
                       )
-                    ) : requestInfo.reason != "" ? (
+                    ) : requestInfo.reason != [] ? (
                       "Denied"
                     ) : (
                       "Pending..."

@@ -13,10 +13,10 @@ const EntryPoint = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (cookies.name) {
+    if (cookies.key) {
       navigate("/home");
     }
-  }, [cookies.name]);
+  }, [cookies.key]);
 
   return (
     <Container

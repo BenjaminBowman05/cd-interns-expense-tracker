@@ -22,7 +22,8 @@ function SignUpForm() {
         const fireBaseUser = await signUpFireBase(userEmail, password, username);
         if (fireBaseUser) {
             createUser({ name: username, pass: password, email: userEmail, admin: false, uid: fireBaseUser.uid })
-            setCookies('name', username, { maxAge: 3600 });
+            setCookies('key', email, { maxAge: 3600 });
+            setCookies('theme', "dark", { maxAge: 3600 });
         }
 
     };

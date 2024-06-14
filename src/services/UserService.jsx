@@ -18,6 +18,10 @@ export async function getUserByUsername(name) {
   return axios.get(`${USER_BASE_API_URL}/name/${name}`);
 }
 
+export async function getUserByEmail(email) {
+  return axios.get(`${USER_BASE_API_URL}/email/${email}`);
+}
+
 export async function updateUser(id, user) {
   return axios.put(`${USER_BASE_API_URL}/${id}`, user);
 }
