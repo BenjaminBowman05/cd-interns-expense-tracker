@@ -99,27 +99,15 @@ const PurchaseTracker = () => {
 
   function previewFiles(event, id) {
     const files = document.querySelector("#file-" + id).files;
-    console.log("EVENT:");
-    console.log(event);
-    console.log("FILES HERE::");
-    console.log(files);
 
     function readAndPreview(file, indexOfFile) {
       // Make sure `file.name` matches our extensions criteria
       if (/(\.pdf|\.png|\.jpg|\.jpeg)$/i.test(file.name)) {
         const reader = new FileReader();
-        console.log("FILE HERE");
-        console.log(file);
-
         reader.addEventListener("load", () => {
           const newRequest = requests.map((request) => {
             if (request.id === id) {
-              console.log("REQUESTTT");
-              console.log(request);
               request.receipts[indexOfFile] = reader.result;
-
-              console.log("arrayidxing test, INDEX: " + indexOfFile);
-              console.log(request.receipts[indexOfFile]);
               return request;
             }
             return request;
@@ -127,9 +115,6 @@ const PurchaseTracker = () => {
 
           setRequests(newRequest);
         });
-
-        console.log("RECIEPTS ARRAY HEREERER");
-        console.log(requests.receipts);
         reader.readAsDataURL(file);
       }
     }
@@ -151,6 +136,42 @@ const PurchaseTracker = () => {
       }
     });
   };
+
+  // this code deletes the current receipt the user has selected
+  // could close both modals to fix any bugs
+  const receiptDelete = (index) => {
+    // const updateRequest = requests.map((req) => {
+    //   if (req.id === modalObj.id) {
+    //     if (modalObj.receipts.length != 1) {
+    //       req.receipts = req.receipts.filter((t) => t !== modalObj.receipts[index]);
+    //       setModalObj(req)
+    //     } else {
+    //       req.receipts = [""]
+    //       req.purchaser = "";
+    //       req.dateDelivered = "";
+    //       setModalObj(req)
+    //     }
+    //   } return req;
+    // });
+    // setRequests(updateRequest);
+    // Update(modalObj);
+  }
+
+  const deleteAllReceipts = () => {
+    modalObj.receipts = [];
+    modalObj.purchaser = "";
+    modalObj.dateDelivered = "";
+    Update(modalObj);
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalObj.id) {
+        req.receipts = [""];
+        req.purchaser = "";
+        req.dateDelivered = "";
+      }
+      return req;
+    });
+    setRequests(updateRequest);
+  }
 
   //Handles the modal for the view form
   const modalHandle = (status, id) => {
@@ -268,24 +289,11 @@ const PurchaseTracker = () => {
                             onClick={() =>
                               modalHandle("Reciept", requestInfo.id)
                             }
-                            className="d-inline-block me-2"
+                            className="d-inline-block"
                             variant="outline-info"
                           >
                             View Receipt{requestInfo.receipts.length > 1 ? "s" : ""}
                           </Button>
-                          <FloatingLabel
-                            controlId="floatingInput"
-                            label="Name | Date"
-                          >
-                            <Form.Control
-                              className="d-inline-block"
-                              defaultValue={
-                                requestInfo.purchaser +
-                                " | " +
-                                requestInfo.dateDelivered
-                              }
-                            />
-                          </FloatingLabel>
                         </>
                       )
                     ) : requestInfo.reason != [] ? (
@@ -352,6 +360,8 @@ const PurchaseTracker = () => {
           show={showReceipt}
           close={() => setShowReceipt(false)}
           data={modalObj}
+          deleteIndex={receiptDelete}
+          deleteAll={() => deleteAllReceipts()}
         />
       ) : (
         ""

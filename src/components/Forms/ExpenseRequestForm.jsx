@@ -32,8 +32,10 @@ const PurchaseRequestForm = () => {
       setUser(res.data);
     });
     // console.log(programs.length);
+    // console.log(programs.length);
     if(programs.length == 0){
       selectionsService.getAllSelections().then((res) => {
+        // console.log(res.data);
         // console.log(res.data);
         setPrograms(res.data);
       });
@@ -42,6 +44,9 @@ const PurchaseRequestForm = () => {
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
+    // firstName: "",
+    // lastName: "",
+    name: "",
     // firstName: "",
     // lastName: "",
     name: "",
@@ -73,10 +78,12 @@ const PurchaseRequestForm = () => {
     if (
       // formInfo.firstName != "" &&
       // formInfo.lastName != "" &&
+      // formInfo.firstName != "" &&
+      // formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
       formInfo.dateNeeded != "" &&
-      expensePrograms != []
+      expensePrograms.length != 0
     ) {
       // console.log(formInfo);
       //Calls back-end to create expense for with the form info OBJ
