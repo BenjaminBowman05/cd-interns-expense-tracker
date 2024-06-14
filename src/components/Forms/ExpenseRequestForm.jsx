@@ -93,23 +93,23 @@ const PurchaseRequestForm = () => {
         }
         // console.log(expenseService.getAllExpenses())
         
-        // User information relevant for Confirmation_Email goes below
-        const UInfo = {
-          FirstName: user.name.slice(user.name.indexOf(",")+2),
-          LastName: user.name.slice(0, user.name.indexOf(",")),
-          Email: user.email,
-        };
+        // // User information relevant for Confirmation_Email goes below
+        // const UInfo = {
+        //   FirstName: user.name.slice(user.name.indexOf(",")+2),
+        //   LastName: user.name.slice(0, user.name.indexOf(",")),
+        //   Email: user.email,
+        // };
     
-        // All user's manager info relevant for Approval_Email template goes below
-        const MInfo = {
-          FirstName: user.managerName.slice(user.name.indexOf(",")+2),
-          LastName: user.managerName.slice(0, user.name.indexOf(",")),
-          Email: user.managerEmail,
-          // Official site domain should go below
-          URL: "http://localhost:5173",
-        };
+        // // All user's manager info relevant for Approval_Email template goes below
+        // const MInfo = {
+        //   FirstName: user.managerName.slice(user.name.indexOf(",")+2),
+        //   LastName: user.managerName.slice(0, user.name.indexOf(",")),
+        //   Email: user.managerEmail,
+        //   // Official site domain should go below
+        //   URL: "http://localhost:5173",
+        // };
 
-        EmailSend(UInfo, MInfo);
+        // EmailSend(UInfo, MInfo);
       });
     } else {
       window.alert("Please fillout the entire form");
