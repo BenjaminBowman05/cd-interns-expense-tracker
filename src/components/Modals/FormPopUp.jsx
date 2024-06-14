@@ -23,20 +23,11 @@ const FormPopUp = ({ show, close, data, reqId }) => {
           <Container fluid>
             <Row className="user mb-3">
               <Col>
-                <FloatingLabel controlId="floatingInput" label="First Name">
+                <FloatingLabel controlId="floatingInput" label="Requester Name">
                   <Form.Control
                     disabled
-                    value={data.firstName}
-                    placeholder={data.firstName}
-                  />
-                </FloatingLabel>
-              </Col>
-              <Col>
-                <FloatingLabel controlId="floatingInput" label="Last Name">
-                  <Form.Control
-                    disabled
-                    value={data.lastName}
-                    placeholder={data.lastName}
+                    value={data.name}
+                    placeholder={data.name}
                   />
                 </FloatingLabel>
               </Col>

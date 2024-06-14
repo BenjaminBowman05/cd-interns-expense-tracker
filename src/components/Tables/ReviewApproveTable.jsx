@@ -205,6 +205,42 @@ const ReviewApproveTable = () => {
     Update(modalObj);
   };
 
+  // this code deletes the current receipt the user has selected
+  // could close both modals to fix any bugs
+  const receiptDelete = (index) => {
+    // const updateRequest = requests.map((req) => {
+    //   if (req.id === modalObj.id) {
+    //     if (modalObj.receipts.length != 1) {
+    //       req.receipts = req.receipts.filter((t) => t !== modalObj.receipts[index]);
+    //       setModalObj(req)
+    //     } else {
+    //       req.receipts = [""]
+    //       req.purchaser = "";
+    //       req.dateDelivered = "";
+    //       setModalObj(req)
+    //     }
+    //   } return req;
+    // });
+    // setRequests(updateRequest);
+    // Update(modalObj);
+  }
+
+  const deleteAllReceipts = () => {
+    modalObj.receipts = [];
+    modalObj.purchaser = "";
+    modalObj.dateDelivered = "";
+    Update(modalObj);
+    const updateRequest = requests.map((req) => {
+      if (req.id === modalObj.id) {
+        req.receipts = [""];
+        req.purchaser = "";
+        req.dateDelivered = "";
+      }
+      return req;
+    });
+    setRequests(updateRequest);
+  }
+
   return (
     <div>
       <h2>All User Requests</h2>
@@ -398,6 +434,8 @@ const ReviewApproveTable = () => {
           show={showReceipt}
           close={() => setShowReceipt(false)}
           data={modalObj}
+          deleteIndex={receiptDelete}
+          deleteAll={() => deleteAllReceipts()}
         />
       ) : (
         ""
