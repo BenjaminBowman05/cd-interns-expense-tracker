@@ -21,6 +21,12 @@ function LoginForm() {
             setCookies('theme', "dark", { maxAge: 3600 });
             setCookies('key', email, { maxAge: 3600 });
         }
+        else if (email == '' && password == '') {
+            window.alert("Please insert an email and password");
+        }
+        else {
+            window.alert("Invalid email or password");
+        }
     };
 
     return (

@@ -25,29 +25,26 @@ const PurchaseRequestForm = () => {
   }, []);
 
   const [user, setUser] = useState();
-  const [userEmail, setUserEmail] = useState();
 
   function requestUserDataFromApi() {
-    // console.log(cookies.name)
+    // console.log(cookies)
     userService.getUserByEmail(cookies.key).then((res) => {
       setUser(res.data);
-      setUserEmail(res.data.email);
-      // setRequests(res.data.userExpenses);
     });
-    console.log(programs.length);
+    // console.log(programs.length);
     if(programs.length == 0){
       selectionsService.getAllSelections().then((res) => {
-        console.log(res.data);
+        // console.log(res.data);
         setPrograms(res.data);
-        // setRequests(res.data.userExpenses);
       });
     }
   }
 
   //Obj that will hold all of the form information besides the programs
   const [formInfo, setFormInfo] = useState({
-    firstName: "",
-    lastName: "",
+    // firstName: "",
+    // lastName: "",
+    name: "",
     items: "",
     purpose: "",
     total: 0,
@@ -66,20 +63,22 @@ const PurchaseRequestForm = () => {
 
   //Handles the form submit and post to back-end
   const handleSubmit = () => {
+    // console.log(user)
     //Makes sure all info is filled before submitting
     formInfo.total = parseFloat(document.getElementById("totalBox").value);
     formInfo.userId = user.id;
-    console.log(formInfo)
+    // console.log(formInfo)
     formInfo.requesterEmail = user.email;
+    formInfo.name = user.name
     if (
-      formInfo.firstName != "" &&
-      formInfo.lastName != "" &&
+      // formInfo.firstName != "" &&
+      // formInfo.lastName != "" &&
       formInfo.items != "" &&
       formInfo.purpose != "" &&
       formInfo.dateNeeded != "" &&
       expensePrograms != []
     ) {
-      console.log(formInfo);
+      // console.log(formInfo);
       //Calls back-end to create expense for with the form info OBJ
       expenseService.createExpense(formInfo).then((response) => {
         //Maps through all available programs then sets the exepense id to the expense form id so they link
@@ -93,21 +92,24 @@ const PurchaseRequestForm = () => {
           });
         }
         // console.log(expenseService.getAllExpenses())
+        
+        // User information relevant for Confirmation_Email goes below
         const UInfo = {
-          FirstName: cookies.name,      
-          LastName: '',     
-          Email: userEmail,
+          FirstName: user.name.slice(user.name.indexOf(",")+2),
+          LastName: user.name.slice(0, user.name.indexOf(",")),
+          Email: user.email,
         };
     
+        // All user's manager info relevant for Approval_Email template goes below
         const MInfo = {
-          FirstName: 'Manager',      
-          LastName: 'Man',     
-          Email: 'Tommy.Montoya@cdpipelinedevshop.com',
-          //Official site domain should go below
-          URL: 'http://localhost:5173',
+          FirstName: user.managerName.slice(user.name.indexOf(",")+2),
+          LastName: user.managerName.slice(0, user.name.indexOf(",")),
+          Email: user.managerEmail,
+          // Official site domain should go below
+          URL: "http://localhost:5173",
         };
 
-        EmailSend(UInfo);
+        EmailSend(UInfo, MInfo);
       });
     } else {
       window.alert("Please fillout the entire form");
@@ -179,7 +181,7 @@ const PurchaseRequestForm = () => {
         <h1>Expense Request Form</h1>
       </Container>
       <Container fluid>
-        <Row className="user mb-2">
+        {/* <Row className="user mb-2">
           <Col>
             <FloatingLabel controlId="firstName" label="First Name">
               <Form.Control
@@ -198,7 +200,7 @@ const PurchaseRequestForm = () => {
               />
             </FloatingLabel>
           </Col>
-        </Row>
+        </Row> */}
         <Row className="itemsRequested mb-2">
           <Col>
             <Form.Control
@@ -221,7 +223,7 @@ const PurchaseRequestForm = () => {
           </Col>
         </Row>
         <Row className="selectedPrograms">
-          <ul style={{listStyle: "none"}} className="selectedPrograms-List">
+          <ul className="selectedPrograms-List">
             {expensePrograms.map((program, index) => (
               <li key={index + 1} id={index + 1}>
                 <InputGroup className="mt-3">
@@ -264,7 +266,6 @@ const PurchaseRequestForm = () => {
                       {program.selectionName}
                     </Dropdown.Item>
                   ))}
-                  
                 </Dropdown.Menu>
               </Dropdown>
             </InputGroup>
@@ -312,5 +313,5 @@ const PurchaseRequestForm = () => {
     </div>
   );
 };
-
+ 
 export default PurchaseRequestForm;

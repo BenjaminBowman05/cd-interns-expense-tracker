@@ -15,10 +15,6 @@ import {
   FileText, FileTextFill, Folder, FolderFill
 } from "react-bootstrap-icons";
 
-// TESTING PURPOSES ONLY
-// import EmailSend from "../Email/EmailSend.jsx";
-// TESTING PURPOSES ONLY
-
 const NavbarC = ({ admin, setAdmin }) => {
   const [showSett, setShowSett] = useState(false);
   const [home, setHome] = useState(false);
@@ -82,22 +78,6 @@ const NavbarC = ({ admin, setAdmin }) => {
       setTheme("light")
       setNavStyle({ backgroundColor: "#212529" });
     }
-
-    // TESTING PURPOSES ONLY
-    // const UInfo = {
-    //   FirstName: cookies.name,      
-    //   LastName: '',     
-    //   Email: 'Tommy.Montoya@cdpipelinedevshop.com',
-    // };
-
-    // const MInfo = {
-    //   FirstName: 'Manager',      
-    //   LastName: 'Man',     
-    //   Email: 'Tommy.Montoya@cdpipelinedevshop.com',  
-    //   URL: 'http://localhost:5173',
-    // };
-    // EmailSend(UInfo, MInfo);
-    // TESTING PURPOSES ONLY
   }
 
   const [user, setUsers] = useState();
